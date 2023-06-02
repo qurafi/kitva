@@ -1,0 +1,49 @@
+{
+    "name": "kitva",
+    "version": "0.0.1-alpha",
+    "description": "A validation kit for sveltekit",
+    "keywords": [],
+    "main": "./dist/index.js",
+    "module": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "type": "module",
+    "exports": {
+        ".": {
+            "import": "./dist/index.js",
+            "types": "./dist/index.d.ts"
+        }
+    },
+    "files": [
+        "dist",
+        "*.d.ts",
+        "README.md",
+        "LICENSE"
+    ],
+    "scripts": {
+        "test": "DEBUG_COLORS=1 vitest",
+        "build": "tsc",
+        "dev": "tsc -w",
+        "tscheck": "tsc --noEmit",
+        "pkglint": "publint"
+    },
+    "author": "",
+    "license": "MIT",
+    "devDependencies": {
+        "@sveltejs/kit": "^1.5.0",
+        "@types/debug": "^4.1.8",
+        "publint": "^0.1.12",
+        "puppeteer": "^20.5.0",
+        "typescript": "^5.0.0",
+        "vitest": "^0.31.4"
+    },
+    "dependencies": {
+        "debug": "^4.3.4",
+        "kleur": "^4.1.5",
+        "svelte": "^3.59.1"
+    },
+    "pnpm": {
+        "overrides": {
+            "ajv-build-tools": "link:../ajv-build-tools"
+        }
+    }
+}

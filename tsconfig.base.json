@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "moduleResolution": "nodenext",
+        "module": "ESNext",
+        "target": "ES2022",
+        "skipLibCheck": true,
+        "sourceMap": true,
+        "strict": true,
+        "declaration": true,
+        "allowSyntheticDefaultImports": true,
+        "declarationMap": true,
+        "allowJs": true,
+        "outDir": "./dist"
+    },
+    "include": ["src"],
+    "exclude": ["dist", "playground/*"]
+}
