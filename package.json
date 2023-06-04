@@ -11,6 +11,45 @@
         ".": {
             "import": "./dist/index.js",
             "types": "./dist/index.d.ts"
+        },
+        "./hook/*": {
+            "import": "./dist/hook/*.js",
+            "types": "./dist/hook/*.d.ts"
+        },
+        "./vite": {
+            "import": "./dist/vite/index.js",
+            "types": "./dist/vite/index.d.ts"
+        },
+        "./presets/ajv/*": {
+            "import": "./dist/presets/ajv/*.js",
+            "types": "./dist/presets/ajv/*.d.ts"
+        },
+        "./utils/*": {
+            "import": "./dist/utils/*.js",
+            "types": "./dist/utils/*.d.ts"
+        },
+        "./forms/*": {
+            "import": "./dist/forms/*.js",
+            "types": "./dist/forms/*.d.ts"
+        }
+    },
+    "typesVersions": {
+        "*": {
+            "hook/*": [
+                "dist/hook/*.d.ts"
+            ],
+            "vite": [
+                "dist/vite/index.d.ts"
+            ],
+            "presets/ajv/*": [
+                "dist/presets/ajv/*.d.ts"
+            ],
+            "utils/*": [
+                "dist/utils/*.d.ts"
+            ],
+            "forms/*": [
+                "dist/forms/*.d.ts"
+            ]
         }
     },
     "files": [
@@ -20,23 +59,35 @@
         "LICENSE"
     ],
     "scripts": {
-        "test": "DEBUG_COLORS=1 vitest",
+        "test:e2e": "DEBUG_COLORS=1 pnpm -r test",
+        "test:spec": "DEBUG_COLORS=1 pnpm vitest",
         "build": "tsc",
-        "dev": "tsc -w",
+        "dev": "tsc -w --p ./tsconfig.base.json",
         "tscheck": "tsc --noEmit",
         "pkglint": "publint"
     },
     "author": "",
     "license": "MIT",
     "devDependencies": {
+        "@sinclair/typebox": "^0.28.14",
         "@sveltejs/kit": "^1.5.0",
         "@types/debug": "^4.1.8",
+        "@types/node": "^20.2.5",
+        "@typescript-eslint/eslint-plugin": "^5.56.0",
+        "@typescript-eslint/parser": "^5.56.0",
+        "ajv": "^8.12.0",
+        "eslint": "^8.36.0",
+        "eslint-config-prettier": "^8.8.0",
+        "prettier": "^2.8.7",
         "publint": "^0.1.12",
         "puppeteer": "^20.5.0",
-        "typescript": "^5.0.0",
+        "typescript": "^5.0.2",
+        "undici": "^5.22.1",
+        "vite": "^4.3.0",
         "vitest": "^0.31.4"
     },
     "dependencies": {
+        "ajv-build-tools": "^0.0.1",
         "debug": "^4.3.4",
         "kleur": "^4.1.5",
         "svelte": "^3.59.1"
