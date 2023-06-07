@@ -5,6 +5,7 @@ const config: PlaywrightTestConfig = {
     webServer: {
         command: use_build ? "npm run build && npm run preview" : "pnpm dev",
         port: use_build ? 4173 : 5173,
+        stdout: "pipe",
     },
     testDir: "tests",
     testMatch: /(.+\.)?(test|spec)\.[jt]s/,
