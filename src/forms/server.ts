@@ -1,4 +1,4 @@
-import type { Actions } from "@sveltejs/kit";
+import { Actions, fail } from "@sveltejs/kit";
 import { createDebug } from "../utils/index.js";
 import type { AnyMap } from "kitva/types.js";
 
@@ -15,12 +15,12 @@ export function withValidation<T extends Record<string, any>>(t: T) {
 
             // currently we only handle body validation
             if (!validation.valid && validation.body?.input) {
-                return {
+                return fail(400, {
                     [`__form_${name}`]: {
                         input: validation.body.input,
                         errors: validation.formErrors,
                     },
-                };
+                });
             }
             debug("running action");
             return action(event);
