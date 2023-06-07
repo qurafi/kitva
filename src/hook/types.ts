@@ -1,8 +1,10 @@
-import { AnyError, AnyValue, JSONType, ValidationResult } from "../types.js";
-import { HttPMethod, HttpPart, MaybePromise } from "../utils/index.js";
-import { Modules } from "../svelte_helpers/index.js";
+import type { AnyError, AnyValue, JSONType, ValidationResult } from "../types.js";
+import type { HttPMethod, HttpPart, MaybePromise } from "../utils/index.js";
+import type { Modules } from "../svelte_helpers/index.js";
 
-export type ValidateFn<Data=AnyValue, Error extends AnyError = AnyError> = (data: JSONType) => ValidationResult<Data, Error>;
+export type ValidateFn<Data = AnyValue, Error extends AnyError = AnyError> = (
+    data: JSONType
+) => ValidationResult<Data, Error>;
 
 type ActionValidationContext = {
     isEndpoint: false;

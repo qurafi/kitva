@@ -1,4 +1,4 @@
-import { HttpPart } from "./utils/index.js";
+import type { HttpPart } from "./utils/index.js";
 
 export type JSONType = boolean | number | string | null | JSONType[] | AnyMap;
 

@@ -1,14 +1,19 @@
-import { ValidationOptions } from "./types.js";
-import { Handle, RequestEvent } from "@sveltejs/kit";
+import { type Handle, type RequestEvent } from "@sveltejs/kit";
 import {
     getActionName,
     getRequestContent,
     getRouteSrc,
     is_endpoint_request,
-    Modules,
+    type Modules,
 } from "../svelte_helpers/index.js";
-import { createDebug, HttPMethod, HttpPart, HTTP_PARTS } from "../utils/index.js";
-import { ValidationResults } from "../types.js";
+import type { ValidationResults } from "../types.js";
+import {
+    HTTP_PARTS,
+    createDebug,
+    type HttPMethod,
+    type HttpPart,
+} from "../utils/index.js";
+import type { ValidationOptions } from "./types.js";
 
 const debug = createDebug("hook:core");
 
@@ -17,7 +22,6 @@ const routes = import.meta.glob("/src/routes/**/*.{ts,js,svelte}") as Modules;
 
 export function validationHook(opts: ValidationOptions): Handle {
     return async ({ event, resolve }) => {
-        console.log("incoming request");
         const response = await validateRequest(event, routes, opts);
 
         if (response instanceof Response) {
