@@ -1,5 +1,7 @@
+import { text } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 
 export const POST: RequestHandler = async () => {
-    return new Response("ok");
+    console.log("POST");
+    return text("ok");
 };
