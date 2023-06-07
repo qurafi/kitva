@@ -11,7 +11,6 @@ test("should pass with correct data", async ({ request }) => {
     console.log(response);
 
     expect(response.ok()).toBeTruthy();
-    // await expect(page.getByRole('heading', { name: 'Welcome to SvelteKit' })).toBeVisible();
 });
 
 test("should not pass with incorrect data", async ({ request }) => {
@@ -43,7 +42,6 @@ test("content negotiation validation: invalid data", async ({ request }) => {
         code: "VALIDATION_ERROR",
         message: "queries must have required property 'a'",
     });
-    // awa
 });
 
 test("content negotiation validation: valid data", async ({ request }) => {
@@ -59,7 +57,6 @@ test("content negotiation validation: valid data", async ({ request }) => {
 
     expect(response.status()).toBe(200);
     await expect(response.text()).resolves.toEqual("endpoint");
-    // awa
 });
 
 test("content negotiation: render html", async ({ request }) => {
@@ -71,5 +68,4 @@ test("content negotiation: render html", async ({ request }) => {
 
     expect(response.status()).toBe(200);
     await expect(response.text()).resolves.toContain("<h1>Page</h1>");
-    // awa
 });

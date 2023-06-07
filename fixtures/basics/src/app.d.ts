@@ -3,7 +3,9 @@
 declare global {
     namespace App {
         // interface Error {}
-        // interface Locals {}
+        interface Locals {
+            validation: import("kitva/types").ValidationResults;
+        }
         // interface PageData {}
         // interface Platform {}
     }
