@@ -1,20 +1,20 @@
-import { unpluginAjvTools, PluginOptions as AjvToolsOptions } from "ajv-build-tools";
-import { PluginOption } from "vite";
+import { unpluginAjvTools, type PluginOptions as AjvToolsOptions } from "ajv-build-tools";
+import type { PluginOption } from "vite";
 import { resolveRoutesSchemas } from "./resolve_route_schemas.js";
-import { viteSvelteFormClientGenPlugin } from "./client.js";
+
 interface PluginOptions {
     ajvTools?: AjvToolsOptions;
 }
 
 export function vitePluginSvelteValidation(opts: PluginOptions) {
     const ajvTools = unpluginAjvTools.vite({
-        // TODO
-        exclude: ["**/*.d.ts"],
         ...opts.ajvTools,
         include: [
             "./src/routes/**/schemas.{ts,js,\\.d.ts}",
-            "./src/schemas/**/*.{ts,js,\\.d.ts}",
+            "./src/lib/schemas/**/*.{ts,js,\\.d.ts}",
         ],
+        // TODO support ts to json schema
+        exclude: ["**/*.d.ts"],
         async resolveModule(module, file) {
             if (file.startsWith("routes/")) {
                 return resolveRoutesSchemas(module, file);
@@ -24,5 +24,5 @@ export function vitePluginSvelteValidation(opts: PluginOptions) {
         },
     });
 
-    return [ajvTools, viteSvelteFormClientGenPlugin()] as PluginOption;
+    return [ajvTools] as PluginOption;
 }

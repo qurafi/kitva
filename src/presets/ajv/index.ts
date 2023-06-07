@@ -1,9 +1,12 @@
-import { type ErrorObject, type ValidateFunction } from "ajv";
-import type { ValidateFn } from "kitva/hook/types.js";
-import type { AnyValue, ValidationResult } from "kitva/types.js";
+import type { ErrorObject, ValidateFunction } from "ajv";
+import type { AnyValue, JSONType, ValidationResult } from "kitva/types.js";
+import { BROWSER } from "esm-env";
+import rfdc from "rfdc";
 
 // the message is always defined when ajv option "messages" is true(default),
 export type AjvError = ErrorObject & { message: string };
+
+export type AppLocal = ValidationResult<AnyValue, AjvError>;
 
 // for errors that aren't related to a field
 export const GLOBAL_ERROR = "$$error";
@@ -32,26 +35,22 @@ export function generateErrorMap(_errors: AjvError[]) {
 
 export const getFormErrors = generateErrorMap;
 
-export function createValidateFn(validate: ValidateFunction, clone = false) {
-    return ((input) => {
-        let data = input;
-        if (clone) {
-            data = JSON.parse(JSON.stringify(data));
-        }
+const clone = BROWSER ? (data: unknown) => JSON.parse(JSON.stringify(data)) : rfdc();
+
+export function createValidateFn(validate: ValidateFunction, clone_data = false) {
+    return (input: unknown) => {
+        const data = clone_data ? clone(input) : input;
 
         const valid = validate(data);
-        if (!valid) {
-            return {
-                valid: false,
-                errors: validate.errors as AjvError[],
-                input,
-            };
-        }
 
+        // ajv assigns last errors globally on the validate function
+        // also it mutates directly its input data if configured(e.g. defaults and coercion)
+        // ajv will mutate the data as it validate if the property is valid
         return {
-            valid: true,
-            data,
+            valid,
+            errors: validate.errors,
             input,
-        };
-    }) satisfies ValidateFn<AnyValue, AjvError>;
+            data: valid ? data : undefined,
+        } as ValidationResult<JSONType, AjvError>;
+    };
 }
