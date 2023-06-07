@@ -61,11 +61,12 @@ export function negotiate(accept, types) {
  * @param {Request} request
  * @param  {...string} types
  */
-function is_content_type(request, ...types) {
+export function is_content_type(request, ...types) {
     const type = request.headers.get("content-type")?.split(";", 1)[0].trim() ?? "";
     return types.includes(type.toLowerCase());
 }
 
+export const form_urlencoded = "application/x-www-form-urlencoded";
 /**
  * @param {Request} request
  */
@@ -74,7 +75,7 @@ export function is_form_content_type(request) {
     // https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/enctype
     return is_content_type(
         request,
-        "application/x-www-form-urlencoded",
+        form_urlencoded,
         "multipart/form-data"
         // "text/plain"
     );

@@ -1,5 +1,6 @@
-import { RequestEvent } from "@sveltejs/kit";
+import type { RequestEvent } from "@sveltejs/kit";
 import { is_form_content_type } from "./http.js";
+import { DEV } from "esm-env";
 
 export * from "./http.js";
 
@@ -23,10 +24,26 @@ export async function getRequestContent({ request, params, url }: RequestEvent) 
 
 export async function getRequestBody(request: Request, clone = true) {
     const content_type = request.headers.get("content-type");
+
     if (content_type == "application/json") {
-        return clone_if(request, clone).json();
+        return clone_if(request, clone)
+            .json()
+            .catch((v) => {}); // return nothing when json is invalid
     } else if (is_form_content_type(request)) {
-        return Object.fromEntries(await clone_if(request, clone).formData());
+        const formdata = await clone_if(request, clone).formData();
+        const data: Record<string, any> = {};
+        for (const [field, value] of formdata.entries()) {
+            const not_string = typeof value != "string";
+            if (value != "" || not_string) {
+                data[field] = value;
+            }
+
+            if (DEV && not_string) {
+                throw new Error("kitva: files are not supported");
+            }
+        }
+
+        return data;
     }
 }
 // sometimes if you don't have another hook accessing the data, it is better to just use the orignal request
