@@ -1,6 +1,7 @@
 import { unpluginAjvTools, type PluginOptions as AjvToolsOptions } from "ajv-build-tools";
 import type { PluginOption } from "vite";
 import { resolveRoutesSchemas } from "./resolve_route_schemas.js";
+import { viteSvelteFormClientGenPlugin } from "./client_gen.js";
 
 interface PluginOptions {
     ajvTools?: AjvToolsOptions;
@@ -24,5 +25,5 @@ export function vitePluginSvelteValidation(opts: PluginOptions) {
         },
     });
 
-    return [ajvTools] as PluginOption;
+    return [ajvTools, viteSvelteFormClientGenPlugin()] as PluginOption;
 }
