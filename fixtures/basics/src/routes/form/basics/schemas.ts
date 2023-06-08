@@ -14,14 +14,33 @@ export const actions = {
             }),
             first_name: t.String({ minLength: 1 }),
             last_name: t.Optional(t.String()),
-            accept_tos: t.Boolean({ default: false }),
+            accept_tos: t.Optional(t.Boolean({ default: false })),
+            // another: t.String(),
+            another: t.Unsafe({
+                description: "hello world",
+                title: "World",
+                $ref: "#/defs/a",
+            }),
         },
         {
+            title: "TheDefault",
+            description: "age in years",
+            $comment: "My comment",
             additionalProperties: false,
+            defs: {
+                a: {
+                    type: "string",
+                    // additionalProperties: false,
+                },
+            },
         }
     ),
     another_action: t.Object({
         foo: t.String({ minLength: 1, format: "email" }),
         bar: t.String(),
+    }),
+
+    test: t.String({
+        title: "MyTest",
     }),
 };
