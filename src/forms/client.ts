@@ -2,8 +2,8 @@ import { page } from "$app/stores";
 import { type Writable, get, writable } from "svelte/store";
 import { objectMap } from "../utils/objectMap.js";
 import type { FormValidationClient } from "./types.js";
-import type { AnyError, AnyMap } from "kitva/types.js";
-import type { GetFormErrors, ValidateFn } from "kitva/hook/types.js";
+import type { AnyMap } from "../types.js";
+import type { GetFormErrors, ValidateFn } from "../hook/types.js";
 import { form_urlencoded } from "../svelte_helpers/http.js";
 
 export function createValidationClient(
@@ -111,8 +111,3 @@ function filterEmptyFields(input: AnyMap) {
     });
     return Object.fromEntries(filtered);
 }
-
-export type GeneratedValidationClient<
-    Data extends AnyMap = AnyMap,
-    Errors extends AnyError = AnyError
-> = (initial_fields: Partial<Data>) => FormValidationClient<Data, Errors>;

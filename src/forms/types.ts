@@ -1,4 +1,4 @@
-import type { AnyError, AnyValue } from "kitva/types.js";
+import type { AnyError, AnyMap, AnyValue } from "../types.js";
 import type { Writable } from "svelte/store";
 
 export interface FormValidationClient<
@@ -11,3 +11,8 @@ export interface FormValidationClient<
     action(form: HTMLFormElement): void;
     action_url: string;
 }
+
+export type GeneratedValidationClient<
+    Data extends AnyMap = AnyMap,
+    Errors extends AnyError = AnyError
+> = (initial_fields: Partial<Data>) => FormValidationClient<Data, Errors>;

@@ -1,5 +1,5 @@
 import type { ErrorObject, ValidateFunction } from "ajv";
-import type { AnyValue, JSONType, ValidationResult } from "kitva/types.js";
+import type { AnyValue, JSONType, ValidationResult } from "../../types.js";
 import { BROWSER } from "esm-env";
 import rfdc from "rfdc";
 

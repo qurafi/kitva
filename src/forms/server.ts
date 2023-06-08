@@ -1,6 +1,6 @@
 import { Actions, fail } from "@sveltejs/kit";
 import { createDebug } from "../utils/index.js";
-import type { AnyMap } from "kitva/types.js";
+import type { AnyMap } from "../types.js";
 
 const debug = createDebug("ajv:server:actions");
 
