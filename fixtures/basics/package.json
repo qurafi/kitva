@@ -24,7 +24,7 @@
     },
     "pnpm": {
         "overrides": {
-            "kitva": "link:.."
+            "kitva": "link:../../"
         }
     },
     "type": "module",
