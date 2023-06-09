@@ -14,7 +14,7 @@ interface PluginOptions {
 
 export function vitePluginSvelteValidation(opts: PluginOptions) {
     const ajvTools = unpluginAjvTools.vite({
-        ...opts.ajvTools,
+        ...opts?.ajvTools,
         include: [
             "./src/routes/**/schemas.{ts,js,\\.d.ts}",
             "./src/lib/schemas/**/*.{ts,js,\\.d.ts}",
