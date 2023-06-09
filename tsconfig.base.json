@@ -17,5 +17,5 @@
         "rootDir": "src"
     },
     "include": ["src"],
-    "exclude": ["dist", "playground/*"]
+    "exclude": ["dist", "fixtures/", "src/**/tests/fixtures"]
 }
