@@ -1,4 +1,10 @@
-# Kitva
+# Kitva - Validation Kit for sveltekit
+
+Validate your endpoints and forms with no boilerplate, Just define your schemas alongside your routes and this plugin will take care of validation, form client, type generation.
+
+## Showcase
+
+![showcase](./res/kitva.mp4)
 
 [WIP]
 
