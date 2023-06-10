@@ -69,8 +69,7 @@
         "build": "tsc",
         "dev": "tsc -w --p ./tsconfig.base.json",
         "tscheck": "tsc --noEmit",
-        "pkglint": "publint",
-        "postversion": "git push"
+        "pkglint": "publint"
     },
     "author": "",
     "license": "MIT",
