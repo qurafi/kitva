@@ -54,12 +54,15 @@ test("test compilation from json schema to typescript", async () => {
       export interface Test {
       c?: FileSchemasRefCJson
       d_a?: DA
+      [k: string]: unknown
       }
       interface FileSchemasRefCJson{
       prop?: FileSchemasBJson
+      [k: string]: unknown
       }
       interface FileSchemasBJson{
       c?: string
+      [k: string]: unknown
       }
       "
     `);
