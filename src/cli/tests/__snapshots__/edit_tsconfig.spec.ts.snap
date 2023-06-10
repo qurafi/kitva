@@ -1,0 +1,103 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`should edit tsconfig config correctly: already_edited 1`] = `
+"{
+    \\"extends\\": \\"./.svelte-kit/tsconfig.json\\",
+    \\"compilerOptions\\": {
+        \\"rootDirs\\":[\\".\\",\\".svelte-kit/types\\",\\".schemas/types\\"],
+        \\"allowJs\\": true,
+        \\"checkJs\\": true,
+        \\"esModuleInterop\\": true,
+        \\"forceConsistentCasingInFileNames\\": true,
+        \\"resolveJsonModule\\": true,
+        \\"skipLibCheck\\": true,
+        \\"sourceMap\\": true,
+        \\"strict\\": true
+    }
+    // Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias
+    //
+    // If you want to overwrite includes/excludes, make sure to copy over the relevant includes/excludes
+    // from the referenced tsconfig.json - TypeScript does not merge them in
+}
+"
+`;
+
+exports[`should edit tsconfig config correctly: already_edited_lines 1`] = `
+"{
+    \\"extends\\": \\"./.svelte-kit/tsconfig.json\\",
+    \\"compilerOptions\\": {
+        \\"rootDirs\\": [
+            \\".\\",
+            \\".svelte-kit/types\\",
+            \\".schemas/types\\",
+            \\"userRootDir\\",
+        ],
+        \\"allowJs\\": true,
+        \\"checkJs\\": true,
+        \\"esModuleInterop\\": true,
+        \\"forceConsistentCasingInFileNames\\": true,
+        \\"resolveJsonModule\\": true,
+        \\"skipLibCheck\\": true,
+        \\"sourceMap\\": true,
+        \\"strict\\": true
+    }
+    // Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias
+    //
+    // If you want to overwrite includes/excludes, make sure to copy over the relevant includes/excludes
+    // from the referenced tsconfig.json - TypeScript does not merge them in
+}
+"
+`;
+
+exports[`should edit tsconfig config correctly: default_file 1`] = `
+"{
+    \\"extends\\": \\"./.svelte-kit/tsconfig.json\\",
+    \\"compilerOptions\\": {
+        \\"rootDirs\\": [\\".svelte-kit/types\\",\\".schemas/types\\",\\".\\"],
+        \\"allowJs\\": true,
+        \\"checkJs\\": true,
+        \\"esModuleInterop\\": true,
+        \\"forceConsistentCasingInFileNames\\": true,
+        \\"resolveJsonModule\\": true,
+        \\"skipLibCheck\\": true,
+        \\"sourceMap\\": true,
+        \\"strict\\": true
+    }
+    // Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias
+    //
+    // If you want to overwrite includes/excludes, make sure to copy over the relevant includes/excludes
+    // from the referenced tsconfig.json - TypeScript does not merge them in
+}
+"
+`;
+
+exports[`should edit tsconfig config correctly: empty 1`] = `""`;
+
+exports[`should edit tsconfig config correctly: empty_obj 1`] = `"{}"`;
+
+exports[`should edit tsconfig config correctly: invalid_syntax 1`] = `
+"{
+    \\"extends\\": \\"./.svelte-kit/tsconfig.json\\",
+    \\"compilerOptions\\": {
+        \\"rootDirs\\": [
+            \\".\\",
+            \\".svelte-kit/types\\",
+            \\".schemas/types\\",
+            \\"userRootDir\\",
+        ],
+        \\"allowJs\\": true,
+        \\"checkJs\\": true,
+        \\"esModuleInterop\\": true,
+        \\"forceConsistentCasingInFileNames\\": true,
+        \\"resolveJsonModule\\": true,
+        \\"skipLibCheck\\": true,
+        \\"sourceMap\\": true,
+        \\"strict\\": true
+    }
+    // Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias
+    //
+    // If you want to overwrite includes/excludes, make sure to copy over the relevant includes/excludes
+    // from the referenced tsconfig.json - TypeScript does not merge them in
+}
+"
+`;

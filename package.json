@@ -2,34 +2,31 @@
     "name": "kitva",
     "version": "1.0.0-next.2",
     "description": "A validation kit for sveltekit",
-    "main": "./dist/index.js",
-    "module": "./dist/index.js",
-    "types": "./dist/index.d.ts",
     "type": "module",
     "exports": {
         ".": {
-            "import": "./dist/index.js",
-            "types": "./dist/index.d.ts"
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js"
         },
         "./hook/*": {
-            "import": "./dist/hook/*.js",
-            "types": "./dist/hook/*.d.ts"
+            "types": "./dist/hook/*.d.ts",
+            "import": "./dist/hook/*.js"
         },
         "./vite": {
-            "import": "./dist/vite/index.js",
-            "types": "./dist/vite/index.d.ts"
+            "types": "./dist/vite/index.d.ts",
+            "import": "./dist/vite/index.js"
         },
         "./presets/ajv/*": {
-            "import": "./dist/presets/ajv/*.js",
-            "types": "./dist/presets/ajv/*.d.ts"
+            "types": "./dist/presets/ajv/*.d.ts",
+            "import": "./dist/presets/ajv/*.js"
         },
         "./utils/*": {
-            "import": "./dist/utils/*.js",
-            "types": "./dist/utils/*.d.ts"
+            "types": "./dist/utils/*.d.ts",
+            "import": "./dist/utils/*.js"
         },
         "./forms/*": {
-            "import": "./dist/forms/*.js",
-            "types": "./dist/forms/*.d.ts"
+            "types": "./dist/forms/*.d.ts",
+            "import": "./dist/forms/*.js"
         },
         "./types": {
             "types": "./dist/types.d.ts"
@@ -67,11 +64,15 @@
     "scripts": {
         "test:e2e": "DEBUG_COLORS=1 pnpm -r test",
         "test:spec": "DEBUG_COLORS=1 pnpm vitest",
+        "test": "export CI=true && pnpm test:e2e && pnpm test:spec",
         "build": "tsc",
         "dev": "tsc -w --p ./tsconfig.base.json",
         "tscheck": "tsc --noEmit",
-        "pkglint": "publint"
+        "pkglint": "publint",
+        "postinstall": "echo 'Run pnpm kitva'",
+        "prepublishOnly": "publint && pnpm test"
     },
+    "bin": "./dist/cli/bin.js",
     "author": "",
     "license": "MIT",
     "devDependencies": {
@@ -83,6 +84,7 @@
         "@typescript-eslint/parser": "^5.56.0",
         "ajv": "^8.12.0",
         "ajv-i18n": "^4.2.0",
+        "create-svelte": "^4.2.0",
         "esbuild": "^0.17.19",
         "eslint": "^8.36.0",
         "eslint-config-prettier": "^8.8.0",

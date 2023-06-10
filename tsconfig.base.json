@@ -16,6 +16,6 @@
         "outDir": "./dist",
         "rootDir": "src"
     },
-    "include": ["src"],
-    "exclude": ["dist", "playground/*"]
+    "include": ["src", "ambient.d.ts"],
+    "exclude": ["dist", "fixtures/", "src/**/tests/fixtures"]
 }
