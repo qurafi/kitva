@@ -1,8 +1,7 @@
 {
     "name": "kitva",
-    "version": "0.0.1-alpha",
+    "version": "1.0.0-next-0",
     "description": "A validation kit for sveltekit",
-    "keywords": [],
     "main": "./dist/index.js",
     "module": "./dist/index.js",
     "types": "./dist/index.d.ts",
@@ -70,7 +69,8 @@
         "build": "tsc",
         "dev": "tsc -w --p ./tsconfig.base.json",
         "tscheck": "tsc --noEmit",
-        "pkglint": "publint"
+        "pkglint": "publint",
+        "postversion": "git push"
     },
     "author": "",
     "license": "MIT",
