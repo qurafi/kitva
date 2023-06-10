@@ -8,3 +8,5 @@
 - [ ] Improve some tests
 - [ ] Improve the validation client
 - [ ] Test form types
+- [ ] Handle inconsistent logs
+- [ ] Ignore GET_body does not have schema warning
