@@ -3,8 +3,7 @@
 Validate your endpoints and forms with no boilerplate, Just define your schemas alongside your routes and this plugin will take care of validation, form client, type generation.
 
 ## Showcase
-
-![showcase](./res/kitva.mp4)
+https://github.com/qurafi/kitva/assets/15172611/0557a8bb-d3e5-4f45-b608-6d35cb1de313
 
 [WIP]
 
@@ -16,4 +15,8 @@ Validate your endpoints and forms with no boilerplate, Just define your schemas 
 - [ ] Test form types
 - [ ] Handle inconsistent logs
 - [ ] Ignore GET_body does not have schema warning
-- [ ] Patch $types.d.ts to generate types separately for each endpoint/action.
+- [ ] Patch $types.d.ts to generate types s
+
+
+
+eparately for each endpoint/action.
