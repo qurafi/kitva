@@ -96,7 +96,7 @@
         "zod": "^3.21.4"
     },
     "dependencies": {
-        "ajv-build-tools": "^0.0.1",
+        "ajv-build-tools": "^1.0.0-next",
         "debug": "^4.3.4",
         "fast-uri": "^2.2.0",
         "json-schema-to-typescript": "^13.0.1",
