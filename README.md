@@ -10,3 +10,4 @@
 - [ ] Test form types
 - [ ] Handle inconsistent logs
 - [ ] Ignore GET_body does not have schema warning
+- [ ] Patch $types.d.ts to generate types separately for each endpoint/action.
