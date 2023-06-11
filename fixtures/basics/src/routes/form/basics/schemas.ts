@@ -25,6 +25,7 @@ export const actions = {
         bar: t.String({ format: "date-time" }),
     }),
 
+    // test type=object warning
     test: t.String({
         title: "MyTest",
     }),
