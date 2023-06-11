@@ -7,7 +7,7 @@ import type {
     ValidationResult,
 } from "../types.js";
 import type { MaybePromise } from "../utils/index.js";
-import type { Modules } from "../svelte_helpers/index.js";
+import type { Modules } from "../utils/svelte.js";
 
 export type ValidateFn<Data = AnyValue, Error extends AnyError = AnyError> = (
     data: JSONType

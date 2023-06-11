@@ -2,8 +2,6 @@ import type { RequestEvent } from "@sveltejs/kit";
 import { is_form_content_type } from "./http.js";
 import { DEV } from "esm-env";
 
-export * from "./http.js";
-
 export type Modules = Record<string, () => Promise<Record<string, unknown>>>;
 
 export async function getRequestContent({ request, params, url }: RequestEvent) {

@@ -4,7 +4,7 @@ import { objectMap } from "../utils/objectMap.js";
 import type { FormValidationClient } from "./types.js";
 import type { AnyMap } from "../types.js";
 import type { GetFormErrors, ValidateFn } from "../hook/types.js";
-import { form_urlencoded } from "../svelte_helpers/http.js";
+import { form_urlencoded } from "../utils/http.js";
 import { DEV } from "esm-env";
 import { warn } from "../utils/index.js";
 
