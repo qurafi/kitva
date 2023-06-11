@@ -43,7 +43,6 @@ for (const fixture of fixtures) {
             await testSetup(fixture.types, fixture.template);
             const pkg_path = resolve(project, "package.json");
             const pkg = JSON.parse(await readFile(pkg_path, "utf-8"));
-            console.log(cwd(), pkg_path);
             pkg.pnpm = {
                 overrides: {
                     kitva: "link:" + relative(project, cwd()),
