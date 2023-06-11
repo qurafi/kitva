@@ -42,8 +42,6 @@ export async function viteSvelteFormClientGenPlugin(): Promise<Plugin> {
                 const action = source.slice(`./${abs_form_prefix}`.length);
                 const route = dirname.slice(routes_dir.length);
 
-                console.log({ dirname, rel_importer, action, route });
-
                 if (!action) {
                     throw new Error("No form action provided");
                 }
@@ -61,12 +59,6 @@ export async function viteSvelteFormClientGenPlugin(): Promise<Plugin> {
                 const route = id.slice(resolved_abs_form_prefix.length, action_idx);
                 const schema = `$schemas/routes/${route ? route + "/" : ""}schemas`;
                 const action = id.slice(action_idx + 1);
-
-                console.log({
-                    route,
-                    schema,
-                    action,
-                });
 
                 const code = generateClientCode(schema, action);
 

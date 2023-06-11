@@ -44,8 +44,8 @@ export function typeGenPlugin(): Plugin {
 
         if (code) {
             await writeFile(out, code);
-            // console.log("writing types", out, code);
         }
+
         if (is_route_schema) {
             const src_$types2 = path.resolve(__dirname, "./$types.template.d.ts");
             await copyFile(src_$types2, path.resolve(base_dir, "$types2.d.ts"));
@@ -64,11 +64,9 @@ export function typeGenPlugin(): Plugin {
 
     return {
         async onFile(ctx) {
-            if (ctx.initial) {
-                return;
+            if (!ctx.initial) {
+                await handleFile(ctx.builder, ctx.relativePath);
             }
-
-            await handleFile(ctx.builder, ctx.relativePath);
         },
 
         async buildEnd(builder) {
