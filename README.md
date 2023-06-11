@@ -1,10 +1,10 @@
 # Kitva - Validation Kit for Sveltekit
 
-Validate your endpoints and forms with no boilerplate, Just define your schemas alongside your routes and this tool will take care of validation, type generation and form client generation
+Validate your endpoints and forms with no boilerplate, Just define your schemas alongside your routes and this tool will take care of validation, type generation and form client generation.
 
 ## Showcase
-https://github.com/qurafi/kitva/assets/15172611/e45b5441-7961-43ab-8515-a6a362a85fe1
 
+<https://github.com/qurafi/kitva/assets/15172611/e45b5441-7961-43ab-8515-a6a362a85fe1>
 
 ## Features
 
@@ -13,7 +13,6 @@ https://github.com/qurafi/kitva/assets/15172611/e45b5441-7961-43ab-8515-a6a362a8
 * **Less boilerplate**: Endpoints and forms are automatically validated by a global sveltekit hook.
 * **Typesafety**: Types are automatically generated and handled for you.
 * **Form client**: Client to handle form validation with full type-safety and no boilerplate as possible and it's designed to work without any javascript.
-* **HMR support**: Enhance your dev expereince with hot module reloading.
 
 ## Get Started
 
@@ -22,7 +21,7 @@ https://github.com/qurafi/kitva/assets/15172611/e45b5441-7961-43ab-8515-a6a362a8
 and then run:
 `npm run kitva` / `pnpm kitva`
 
-**NOTE:** This command will edit your vite.config, tsconfig, app.d.ts, so it's recommended to commit your work.
+**NOTE:** This command will edit your vite.config, tsconfig, so it's recommended to commit your work.
 
 ## Writing schemas
 
@@ -32,8 +31,9 @@ Json schemas are used as schema format by default. All schema validation is hand
 
 For more information about json schemas. Consult one of the following links:
 
-* Ajv docs
-* Json schema org
+* [Ajv docs](https://ajv.js.org/json-schema.html)
+* [Understanding JSON Schema](https://json-schema.org/understanding-json-schema/)
+* [JSON Schema Spec Draft-07](https://datatracker.ietf.org/doc/html/draft-handrews-json-schema-validation-00)
 
 ### Define schemas
 
@@ -80,7 +80,7 @@ export const POST = {
 }
 ```
 
-You could use some type builders such as fluent-json-schema and typebox to make life easier:
+You could use some type builders such as [fluent-json-schema](https://github.com/fastify/fluent-json-schema) and [TypeBox](https://github.com/sinclairzx81/typebox) to make life easier:
 
 ```typescript
 // typebox example:
@@ -108,6 +108,8 @@ export const POST = {
     ),
 };
 ```
+
+**NOTE:** TypeBox support type interference but currently all schemas are converted to types by [json-schema-to-typescript](https://github.com/bcherny/json-schema-to-typescript)
 
 **Form actions:**
 
@@ -170,6 +172,9 @@ const { fields, errors, is_valid, action, action_url } = my_form;
 ...
 </form>
 ```
+
+## More Guide
+* Forms
 
 [WIP]
 
