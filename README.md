@@ -175,8 +175,6 @@ const { fields, errors, is_valid, action, action_url } = my_form;
 
 [WIP]
 
-* [ ] Ignore GET_body does not have schema warning
-* [ ] Form schemas should resolves to the body instead of {body: {...}}
 * [ ] Input component to render form fields with errors and binding and everything.
 * [ ] attachValidation options to skip validation and assign the validation function to locals.validate
 * [ ] Some Real world example
