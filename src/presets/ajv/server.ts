@@ -6,8 +6,6 @@ import { type AjvError, createValidateFn, generateErrorMap } from "./index.js";
 import type { ValidationOptions } from "../../hook/types.js";
 import { DEV } from "esm-env";
 
-const debug = createDebug("ajv:server");
-
 export function createPreset(schemas: Schemas): ValidationOptions {
     const preset: ValidationOptions = {
         async getValidation(ctx) {
@@ -25,7 +23,7 @@ export function createPreset(schemas: Schemas): ValidationOptions {
 
             const validate = route_schemas[schema];
             if (!validate) {
-                if (DEV) {
+                if (DEV && schema !== "GET_body") {
                     console.log("%s does not have a schema for %s", ctx.routeId, schema);
                 }
                 return;
