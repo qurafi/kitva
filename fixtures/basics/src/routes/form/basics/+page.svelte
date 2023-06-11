@@ -1,6 +1,6 @@
 <script lang="ts">
     import { enhance } from "$app/forms";
-    import type { ActionData, PageData } from "./$types.js";
+    import type { PageData } from "./$types.js";
     import { page } from "$app/stores";
 
     //TODO generated types
@@ -24,10 +24,12 @@
     export let data: PageData;
 
     // form result typed
-    export let form: ActionData;
+    export let form;
 
     // form result in __form_action format
     // will contains the "input" data and the "errors"
+    form?.__form_default;
+
     form?.__form_default;
 
     // create form validation with initial values

@@ -1,6 +1,7 @@
 import { Actions, fail } from "@sveltejs/kit";
 import { createDebug } from "../utils/index.js";
 import type { AnyMap } from "../types.js";
+import { AnyError } from "../types.js";
 
 const debug = createDebug("ajv:server:actions");
 
@@ -22,7 +23,6 @@ export function withValidation<T extends Record<string, any>>(t: T) {
                     },
                 });
             }
-            debug("running action");
             return action(event);
         };
     }
@@ -34,7 +34,7 @@ type WithValidation<T extends Record<string, any>> = T & {
     __hacky_ts_prop_to_inject_form_errors_on_action_data: () => {
         [k in `__form_${keyof T & string}`]: {
             input: AnyMap;
-            errors: App.Locals["validation"];
+            errors: Record<string, AnyError>;
         };
     };
 };

@@ -50,7 +50,7 @@ export async function setup(cwd: string) {
     await addValidationHook(cwd, ext);
 
     if (tsconfig) {
-        await addTypes(cwd);
+        // await addTypes(cwd);
         await addTsRootDir(tsconfig);
     } else {
         warn("Could not add setup types because tsconfig/jsconfig is missing");

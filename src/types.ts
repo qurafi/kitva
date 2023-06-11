@@ -1,4 +1,7 @@
-import type { HttpPart } from "./utils/index.js";
+import type { HTTP_METHODS, HTTP_PARTS } from "./utils/index.js";
+
+export type HttpMethod = (typeof HTTP_METHODS)[number];
+export type HttpPart = (typeof HTTP_PARTS)[number];
 
 export type JSONType = boolean | number | string | null | JSONType[] | AnyMap;
 
@@ -11,14 +14,18 @@ export type DefaultData = Record<HttpPart, any>;
 export type AnyError = { message: string; [key: string]: any };
 export type ErrorMap = Record<string, AnyError>;
 
-export type ValidationResult<Data = AnyValue, Error extends AnyError = AnyError> =
+export type ValidationResult<
+    Data = AnyValue,
+    Error extends AnyError = AnyError,
+    Invalid extends boolean = boolean
+> =
     | {
           valid: true;
           data: Data;
           errors: undefined | null;
           input: AnyValue;
       }
-    | {
+    | ({
           valid: false | undefined;
           data: undefined;
 
@@ -28,41 +35,52 @@ export type ValidationResult<Data = AnyValue, Error extends AnyError = AnyError>
           input: AnyValue;
 
           errors: Error[];
-      };
+      } & { valid: Invalid });
 
-export type ValidationParts<Data extends DefaultData> = {
-    [k in keyof Data]: ValidationResult<Data[k]>;
+export type ValidationParts<
+    Data extends DefaultData,
+    Error extends AnyError = AnyError,
+    Invalid extends boolean = boolean
+> = {
+    [k in keyof Data]: ValidationResult<Data[k], Error, Invalid>;
 };
 
 export type ValidationResults<
     Data extends DefaultData = DefaultData,
-    Error = AnyError
-> = ValidationParts<Data> & {
-    valid: boolean;
+    Error extends AnyError = AnyError,
+    Invalid extends boolean = boolean
+> = ValidationParts<Data, Error, Invalid> &
+    (
+        | {
+              valid: false;
 
-    /**
-     *
-     * params, headers, queries validated first
-     * and if there's errors, the first error will be assigned
-     * with globalError symbol
-     *
-     * for body(form inputs). errors assigned by fields.
-     *
-     * @example
-     * {
-     *  valid: false,
-     *  formErrors: {
-     *      // for params, headers, querystring, or global errors
-     *      // first error only
-     *      $$error: Error,
-     *
-     *      // for body(form inputs) it's assigned by field
-     *      user: Error,
-     *      password: Error,
-     *
-     *  }
-     * }
-     *
-     */
-    formErrors?: Record<string, Error>;
-};
+              /**
+               *
+               * params, headers, queries validated first
+               * and if there's errors, the first error will be assigned
+               * with globalError symbol
+               *
+               * for body(form inputs). errors assigned by fields.
+               *
+               * @example
+               * {
+               *  valid: false,
+               *  formErrors: {
+               *      // for params, headers, querystring, or global errors
+               *      // first error only
+               *      $$error: Error,
+               *
+               *      // for body(form inputs) it's assigned by field
+               *      user: Error,
+               *      password: Error,
+               *
+               *  }
+               * }
+               *
+               */
+              formErrors?: Record<keyof Data["body"], Error>;
+          }
+        | {
+              valid: true;
+          }
+    ) & { valid: Invalid };

@@ -3,10 +3,13 @@ import path from "path";
 import { compileFileJsonSchemaToTs } from "../typegen/index.js";
 import { generate$formDts } from "../typegen/form.js";
 import { HTTP_METHODS } from "../utils/index.js";
-import { mkdir, rm, writeFile } from "fs/promises";
+import { copyFile, mkdir, rm, writeFile } from "fs/promises";
+import { fileURLToPath } from "url";
 
 //TODO deal with the awkward plugin types
 // type OnFile = NonNullable<Plugin["onFile"]>;
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export function typeGenPlugin(): Plugin {
     // we need to wait for all schemas in order for cross reference to work
@@ -42,6 +45,10 @@ export function typeGenPlugin(): Plugin {
         if (code) {
             await writeFile(out, code);
             // console.log("writing types", out, code);
+        }
+        if (is_route_schema) {
+            const src_$types2 = path.resolve(__dirname, "./$types.template.d.ts");
+            await copyFile(src_$types2, path.resolve(base_dir, "$types2.d.ts"));
         }
 
         await rm($form_dir, { recursive: true, force: true });
@@ -101,8 +108,11 @@ async function generateTypes(
                 name.startsWith(method + "_")
             );
             if (is_method_schema || is_action_schema) {
-                const [method, part] = name.split("_");
-                (exported_schemas[method] ??= []).push(`${part}: ${name}`);
+                const [method] = name.split("_", 1);
+
+                (exported_schemas[method] ??= []).push(
+                    `${name.slice(method.length + 1)}: ${name}`
+                );
             }
 
             // write ./$form/action types

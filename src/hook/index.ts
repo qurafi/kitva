@@ -6,13 +6,8 @@ import {
     is_endpoint_request,
     type Modules,
 } from "../svelte_helpers/index.js";
-import type { ValidationResults } from "../types.js";
-import {
-    HTTP_PARTS,
-    createDebug,
-    type HttPMethod,
-    type HttpPart,
-} from "../utils/index.js";
+import type { HttpMethod, HttpPart, ValidationResults } from "../types.js";
+import { HTTP_PARTS, createDebug } from "../utils/index.js";
 import type { ValidationOptions } from "./types.js";
 
 const debug = createDebug("hook:core");
@@ -82,7 +77,7 @@ async function validateRequest(
             isEndpoint: is_endpoint as any,
             routeId: routeId!,
             module: schema_module!,
-            method: event.request.method as HttPMethod,
+            method: event.request.method as HttpMethod,
             part: part,
             action: is_form ? getActionName(event.url.search) : undefined,
         });
@@ -103,6 +98,7 @@ async function validateRequest(
                 return getEndpointError(result.errors, part);
             }
 
+            //@ts-expect-error already false
             validation.formErrors = getFormErrors(result.errors);
         }
     }
