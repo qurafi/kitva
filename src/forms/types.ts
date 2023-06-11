@@ -1,6 +1,6 @@
 import type { AnyError, AnyMap, AnyValue } from "../types.js";
 import type { Writable } from "svelte/store";
-
+import type { ValidationResult } from "../types.js";
 export interface FormValidationClient<
     Data = AnyValue,
     Error extends AnyError = AnyError
@@ -10,6 +10,7 @@ export interface FormValidationClient<
     errors: Writable<Record<keyof Data, Error>>;
     action(form: HTMLFormElement): void;
     action_url: string;
+    validateForm(field?: string): ValidationResult;
 }
 
 export type GeneratedValidationClient<

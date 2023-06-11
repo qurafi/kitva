@@ -5,6 +5,8 @@ import type { FormValidationClient } from "./types.js";
 import type { AnyMap } from "../types.js";
 import type { GetFormErrors, ValidateFn } from "../hook/types.js";
 import { form_urlencoded } from "../svelte_helpers/http.js";
+import { DEV } from "esm-env";
+import { warn } from "../utils/index.js";
 
 export function createValidationClient(
     validate: ValidateFn,
@@ -16,7 +18,6 @@ export function createValidationClient(
     const fields: Writable<AnyMap> = {
         ..._fields,
         set(value) {
-            console.log({ value });
             _fields.set(filterEmptyFields(value));
         },
     };
@@ -77,10 +78,12 @@ export function createValidationClient(
         fields,
         errors,
         is_valid,
+        validateForm,
         action: (form) => {
-            if (form.enctype !== form_urlencoded) {
-                console.warn(`it's better to use ${form_urlencoded} enctype for forms`);
+            if (DEV && form.enctype !== form_urlencoded) {
+                warn(`it's better to use ${form_urlencoded} enctype for forms`);
             }
+
             let timeout: any;
 
             form.addEventListener("input", (e) => {
