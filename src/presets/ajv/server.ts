@@ -1,6 +1,6 @@
 type Schemas = typeof import("$schemas?t=all").default;
 
-import { createDebug } from "../../utils/index.js";
+import { createDebug, warn } from "../../utils/index.js";
 import { json } from "@sveltejs/kit";
 import { type AjvError, createValidateFn, generateErrorMap } from "./index.js";
 import type { ValidationOptions } from "../../hook/types.js";
@@ -24,7 +24,7 @@ export function createPreset(schemas: Schemas): ValidationOptions {
             const validate = route_schemas[schema];
             if (!validate) {
                 if (DEV && schema !== "GET_body") {
-                    console.log("%s does not have a schema for %s", ctx.routeId, schema);
+                    warn("%s does not have a schema for %s", ctx.routeId, schema);
                 }
                 return;
             }
