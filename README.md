@@ -173,9 +173,6 @@ const { fields, errors, is_valid, action, action_url } = my_form;
 </form>
 ```
 
-## More Guide
-* Forms
-
 [WIP]
 
 * [ ] Ignore GET_body does not have schema warning
