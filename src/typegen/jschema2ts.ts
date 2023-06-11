@@ -27,6 +27,7 @@ export async function compileJsonSchemaTypes(
         {
             declareExternallyReferenced: true,
             additionalProperties: true,
+            unknownAny: false,
 
             format: false,
             cwd: base_id,
