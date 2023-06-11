@@ -22,7 +22,7 @@ export const actions = {
     ),
     another_action: t.Object({
         foo: t.String({ minLength: 1, format: "email" }),
-        bar: t.String(),
+        bar: t.String({ format: "date-time" }),
     }),
 
     test: t.String({

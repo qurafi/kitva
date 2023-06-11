@@ -69,7 +69,6 @@
         "dev": "tsc -w --p ./tsconfig.base.json",
         "tscheck": "tsc --noEmit",
         "pkglint": "publint",
-        "postinstall": "echo 'Run pnpm kitva'",
         "prepublishOnly": "publint && pnpm test"
     },
     "bin": "./dist/cli/bin.js",
@@ -83,7 +82,7 @@
         "@typescript-eslint/eslint-plugin": "^5.56.0",
         "@typescript-eslint/parser": "^5.56.0",
         "ajv": "^8.12.0",
-        "ajv-i18n": "^4.2.0",
+        "ajv-formats": "3.0.0-rc.0",
         "create-svelte": "^4.2.0",
         "esbuild": "^0.17.19",
         "eslint": "^8.36.0",

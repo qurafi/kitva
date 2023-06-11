@@ -30,7 +30,6 @@
     "type": "module",
     "dependencies": {
         "@sinclair/typebox": "^0.28.14",
-        "ajv-formats": "^2.1.1",
-        "kitva": "^0.0.1-alpha"
+        "kitva": "^1.0.0-next"
     }
 }
