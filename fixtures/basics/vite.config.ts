@@ -14,14 +14,7 @@ export default defineConfig({
 
     build: {
         minify: false,
-        // commonjsOptions: {
-        //     esmExternals: true,
-        //     include: ["ajv", /node_modules/],
-        // },
     },
 
-    ssr: {
-        //     //TODO add this to the ajv-build-tools
-        // noExternal: ["ajv", "ajv-formats"],
-    },
+
 });

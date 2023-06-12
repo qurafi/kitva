@@ -1,4 +1,4 @@
-import { Plugin, SchemaBuilder } from "ajv-build-tools";
+import type { Plugin, SchemaBuilder } from "ajv-build-tools";
 import path from "path";
 import { compileFileJsonSchemaToTs } from "../typegen/index.js";
 import { generate$formDts } from "../typegen/form.js";

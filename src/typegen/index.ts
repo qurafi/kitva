@@ -1,4 +1,4 @@
-import { SchemaBuilder, resolveSchemaRef } from "ajv-build-tools";
+import { type SchemaBuilder, resolveSchemaRef } from "ajv-build-tools";
 import { compileJsonSchemaTypes } from "./jschema2ts.js";
 
 interface CompileContext {

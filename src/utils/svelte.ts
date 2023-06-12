@@ -26,7 +26,7 @@ export async function getRequestBody(request: Request, clone = true) {
     if (content_type == "application/json") {
         return clone_if(request, clone)
             .json()
-            .catch((v) => {}); // return nothing when json is invalid
+            .catch((_) => {}); // return nothing when json is invalid
     } else if (is_form_content_type(request)) {
         const formdata = await clone_if(request, clone).formData();
         const data: Record<string, any> = {};

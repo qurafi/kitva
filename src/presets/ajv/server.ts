@@ -1,6 +1,6 @@
 type Schemas = typeof import("$schemas?t=all").default;
 
-import { createDebug, warn } from "../../utils/index.js";
+import { warn } from "../../utils/index.js";
 import { json } from "@sveltejs/kit";
 import { type AjvError, createValidateFn, generateErrorMap } from "./index.js";
 import type { ValidationOptions } from "../../hook/types.js";

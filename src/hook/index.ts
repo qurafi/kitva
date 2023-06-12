@@ -1,4 +1,4 @@
-import { type Handle, type RequestEvent } from "@sveltejs/kit";
+import type { Handle, RequestEvent } from "@sveltejs/kit";
 import type { HttpMethod, HttpPart, ValidationResults } from "../types.js";
 import { is_endpoint_request } from "../utils/http.js";
 import { HTTP_PARTS, createDebug } from "../utils/index.js";

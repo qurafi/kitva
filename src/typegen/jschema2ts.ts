@@ -1,6 +1,6 @@
 import { randomInt } from "crypto";
 import { compile } from "json-schema-to-typescript";
-import Ajv from "ajv";
+import type Ajv from "ajv";
 import { resolveUrl } from "ajv/dist/compile/resolve.js";
 import fastUri from "fast-uri";
 import { dirname } from "path";

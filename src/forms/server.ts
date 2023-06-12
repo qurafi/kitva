@@ -1,9 +1,5 @@
-import { Actions, fail } from "@sveltejs/kit";
-import { createDebug } from "../utils/index.js";
-import type { AnyMap } from "../types.js";
-import { AnyError } from "../types.js";
-
-const debug = createDebug("ajv:server:actions");
+import { type Actions, fail } from "@sveltejs/kit";
+import type { AnyMap, AnyError } from "../types.js";
 
 export function withValidation<T extends Record<string, any>>(t: T) {
     const out: Actions = {};

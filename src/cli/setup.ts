@@ -3,7 +3,6 @@ import { resolve } from "path";
 import { addVitePlugin } from "./edit_vite_config.js";
 import { addTsRootDir } from "./edit_tsconfig.js";
 import { addValidationHook } from "./add_hook.js";
-import { addTypes } from "./add_types.js";
 import { warn } from "../utils/index.js";
 import { bold, green } from "kleur/colors";
 
