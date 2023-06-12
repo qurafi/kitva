@@ -103,7 +103,7 @@ export function createValidationClient(
                 }
             });
         },
-        action_url: action == "default" ? "" : `/?${action}`,
+        action_url: action == "default" ? "" : `?/${action}`,
     };
 }
 
