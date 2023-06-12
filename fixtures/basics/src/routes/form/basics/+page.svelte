@@ -4,7 +4,7 @@
     import { page } from "$app/stores";
 
     //TODO generated types
-    import { createValidate } from "./$form/default";
+    import { createValidate } from "./$form/default_action";
 
     const enhance_ =
         $page.url.searchParams.get("enhance") == "false" ? () => {} : enhance;
@@ -28,9 +28,7 @@
 
     // form result in __form_action format
     // will contains the "input" data and the "errors"
-    form?.__form_default;
-
-    form?.__form_default;
+    form?.__form_default_action;
 
     // create form validation with initial values
     // this will take form.__form_action and the validation function

@@ -3,7 +3,7 @@ import type { Actions } from "./$types2";
 // import type { Actions } from "./$types";
 
 export const actions: Actions = withValidation({
-    default(event) {
+    default_action(event) {
         // if (!event.locals.validation.valid) {
         event.locals.validation.body.data;
         // }

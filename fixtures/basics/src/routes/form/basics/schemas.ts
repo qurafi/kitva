@@ -1,7 +1,7 @@
 import { Type as t } from "@sinclair/typebox";
 
 export const actions = {
-    default: t.Object(
+    default_action: t.Object(
         {
             username: t.String({ minLength: 1, maxLength: 16 }),
             email: t.String({
