@@ -6,7 +6,7 @@ import { setTimeout } from "timers/promises";
 export const actions: Actions = withValidation({
 	async default_action(event) {
 		console.log("submitted");
-		await setTimeout(process.env.TEST ? 0 : 1150);
+		await setTimeout(process.env.PLAYWRIGHT_TEST_BASE_URL ? 0 : 1150);
 		return {
 			success: true
 		};

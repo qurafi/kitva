@@ -58,7 +58,7 @@
     "scripts": {
         "test:e2e": "DEBUG_COLORS=1 pnpm -r test",
         "test:spec": "DEBUG_COLORS=1 pnpm vitest",
-        "test": "export CI=true && pnpm test:e2e && pnpm test:spec",
+        "test": "export CI=true && pnpm run '/^test:/'",
 		"build:cmps": "svelte-package -o dist/lib",
 		"watch:cmps": "pnpm build:cmps -w",
         "dev:ts": "tsc -w -p ./tsconfig.base.json",
