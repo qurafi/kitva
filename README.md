@@ -1,6 +1,6 @@
 # Kitva - Validation Kit for Sveltekit
 
-Validate your endpoints and forms with no boilerplate, Just define your schemas alongside your routes and this tool will take care of validation, type generation and form client generation.
+Validate your endpoints and forms with no boilerplate, Just define your **schemas.ts** alongside your routes and this tool will take care of validation, type generation and form client generation.
 
 ## Showcase
 
@@ -8,22 +8,27 @@ Validate your endpoints and forms with no boilerplate, Just define your schemas 
 
 ## Features
 
-* **Standard**: Uses json schema standard as the default schema format
-* **Performance**: Compile your schemas into highly optmized validation code, thanks to Ajv.
-* **Less boilerplate**: Endpoints and forms are automatically validated by a global sveltekit hook.
+* **Standard**: Uses Json Schema standard as the default schema format
+* **Performance**: Compiles your schemas into highly optmized validation code, thanks to Ajv.
+* **Less boilerplate**: Endpoints and forms are automatically validated by a global Sveltekit hook.
+* **Small bundle sizes**: Just your validation function and the form client and nothing else!
 * **Typesafety**: Types are automatically generated and handled for you.
-* **Form client**: Client to handle form validation with full type-safety and no boilerplate as possible and it's designed to work without any javascript.
+* **Full featured form client**: Just import `./$form` inside your page and your form client is ready to use. With features including:
+  * Fully typed, No need to bring types with you.
+  * Save your form in session storage.
+  * Warning before navigating away.
+  * and more.
 
 ## Get Started
 
-`npm i kitva` / `pnpm i kitva`
+`npm i kitva`
+`pnpm i kitva`
 
-and then run:
-`npm run kitva` / `pnpm kitva`
+And then:
+`npm run kitva`
+`pnpm kitva`
 
-**NOTE:** This command will edit your vite.config, tsconfig, so it's recommended to commit your work.
-
-## Writing schemas
+**NOTE:** This command will edit your vite config, tsconfig and create $lib/validation/hook file, so it's recommended to commit your work.
 
 ### Schema format
 
@@ -37,20 +42,23 @@ For more information about json schemas. Consult one of the following links:
 
 **NOTE**: This library does not handle any schema compilation or any schema specific logic. It uses [ajv-build-tools](https://github.com/qurafi/ajv-tools) plugin under the hood to manage the compilation. If you have any issue regarding compilation, please open issue there.
 
-### Define schemas
+### Defining Schemas
 
 There's two kind of schema files:
 
 * A shared one that's defined in `$lib/schemas`
-* A route schema which include some enhancement including type generation for forms and endpoints.
+* A route schema which included with some enhancement including type generation for forms and endpoints.
 
 **Example of an endpoint schema file**
 
 ```typescript
-/* routes/api/login
-    +server
-    schema.ts
+/* 
+    routes/api/login
+        +server.ts
+        schemas.ts
 */
+
+// or GET, DELETE, etc.
 export const POST = {
     body: {
         type: "object",
@@ -78,24 +86,38 @@ export const POST = {
         // properties are optional by default
         required: ["username", "password", "email"]
     },
+    // validate other parts
     // queries, headers, params
 }
+
 ```
 
-And that's it. Your endpoint will automatically validated. To get the parsed data use the event.locals.validation.body
+And that's it. Your endpoint will automatically validated. To get the parsed data use the `event.locals.validation.*` and
 
 ```typescript
 // all related types available in the new $types2 file
-
 import type { POSTHandler } from "./$types2";
 
 export const POST: POSTHandler = async (event) => {
     // data is fully typed
+    // {email:string, username: string, ...}
     const { data } = event.locals.validation.body;
     return text("ok");
 };
 ```
 
+The event local is automatically set by the hook and it contains:
+```typescript
+event.locals.validation = {
+    valid: boolean, // if any part failed
+    body/headers/queries/params: {
+        valid: boolean,
+        data: Data,
+        input: JSONType,
+        errors: AjvError[]
+    },
+}
+```
 **Type builders**
 
 You could use some type builders such as [fluent-json-schema](https://github.com/fastify/fluent-json-schema) and [TypeBox](https://github.com/sinclairzx81/typebox) to make life easier:
@@ -143,39 +165,46 @@ export const actions = {
         }
         
     },
-    // queries, headers, params
 }
 ```
 
-This will require calling withValidation as there's no current possible way to intercept and change form result in Sveltekit:
+This will require aditional step by calling withValidation as there's no current possible way to intercept and change form result in Sveltekit:
 
 ```typescript
 import { withValidation } from "kitva/forms/server";
-import type { Actions } from "./$types";
+// NOTE: use $types2
+import type { Actions } from "./$types2";
 
 export const actions: Actions = withValidation({
-    default(event) {
+    signup(event) {
+        // do something
+
         return {
             success: true,
         };
     },
+    another: ..., // TS error
 });
 ```
 
 **Using the client:**
-To use the client simply import `./$form/action`. The types will be automatically handled.
+
+To use the client, simply import `./$form`. The types will be automatically handled.
+
+All clients are exported by the format, `action_name = createActionNameForm`, e.g., `default = createDefaultForm`.
 
 ```svelte
 <script>
-import { createValidate } from "./$form/default";
+import { createDefaultForm } from "./$form";
 
-const my_form = createValidate(initial_fields);
-const { fields, errors, is_valid, action, action_url } = my_form;
-// fields, errors are fully type safe
+const my_form = createDefaultForm(initial_fields);
+
+const { fields, errs, is_valid, action, action_url } = my_form;
+
 </script>
 
 
-<form>
+<form method="post" action={action_url}>
     <label>
         Username
         <input
@@ -184,14 +213,71 @@ const { fields, errors, is_valid, action, action_url } = my_form;
             autocomplete="username"
             bind:value={$fields.username}
         />
-        <p class="error">{$errors.username || ""}</p>
+        {#if $errs.username}
+            <p class="error">{$errs.username}</p>
+        {/if}
     </label>
 ...
 </form>
 ```
 
+The client returns the following:
+
+```typescript
+my_form = {
+    /** 
+     * Usage with binding values
+     * Not type safe because fields could be invalid or missing
+     * */
+    fields: Writable<Partial<Record<keyof Data, any>>>;
+
+    /** 
+     * Readable store returns the data when it's valid and it's type safe
+     * 
+     * alias for $validate_result.data
+    */
+    form_data: Readable<Data | undefined>;
+
+    /** alias of $validate_result.valid */
+    is_valid: Readable<boolean>;
+
+    /**
+     * Optmized error messages for UI
+     * - errors are set to the specific field user start typing into
+     * - errors are delayed 250ms after the start of typing
+     *
+    */
+    errs: Readable<Partial<Record<keyof Data, string>>>;
+
+    /**
+     * Raw errors, alias for $validation_result.errors
+    */
+    errors: Readable<Record<keyof Data, Error>>;
+
+    /**
+     * Returns {valid: boolean, data: Data, errors: Error[], input: JSONType}
+     * */
+    validate_result: Readable<ValidationResult<Data, Error>>;
+
+    // all self explanatory
+    loading: Readable<boolean>;
+    action_url: string;
+    action(form:HTMLFormElement)
+
+    // advanced, used for custom validation logic
+    validateForm(field?: string): void;
+}
+```
+
+### Standalone Validation
+To directly import and use the compiled validation function for schemas. refer to [ajv-build-tools](https://github.com/qurafi/ajv-tools#importing-the-compiled-schemas)
+
 [WIP]
 
-* [ ] Input component to render form fields with errors and binding and everything.
+* [ ] Refactor some code generation code and how the code is organized.
+* [ ] Add ability for the user to customize the behavior of submission
 * [ ] attachValidation options to skip validation and assign the validation function to locals.validate
-* [ ] Some Real world example
+* [ ] Input component to render form fields with errors and binding and everything.
+* [ ] Improve the docs and some real world examples.
+* [ ] (low priority) a debug tool to visualize the form, the schema code, and the data flow.
+* [ ] (low priority) Form renderer: automatically render all form fields from the schema.
