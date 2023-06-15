@@ -9,7 +9,7 @@ Validate your endpoints and forms with no boilerplate, Just define your schemas 
 ## Features
 
 * **Standard**: Uses json schema standard as the default schema format
-* **Performance**: Compile your schemas to highly optmized validation code, thanks to Ajv.
+* **Performance**: Compile your schemas into highly optmized validation code, thanks to Ajv.
 * **Less boilerplate**: Endpoints and forms are automatically validated by a global sveltekit hook.
 * **Typesafety**: Types are automatically generated and handled for you.
 * **Form client**: Client to handle form validation with full type-safety and no boilerplate as possible and it's designed to work without any javascript.
@@ -34,6 +34,8 @@ For more information about json schemas. Consult one of the following links:
 * [Ajv docs](https://ajv.js.org/json-schema.html)
 * [Understanding JSON Schema](https://json-schema.org/understanding-json-schema/)
 * [JSON Schema Spec Draft-07](https://datatracker.ietf.org/doc/html/draft-handrews-json-schema-validation-00)
+
+**NOTE**: This library does not handle any schema compilation or any schema specific logic. It uses [ajv-build-tools](https://github.com/qurafi/ajv-tools) plugin under the hood to manage the compilation. If you have any issue regarding compilation, please open issue there.
 
 ### Define schemas
 
@@ -80,10 +82,25 @@ export const POST = {
 }
 ```
 
+And that's it. Your endpoint will automatically validated. To get the parsed data use the event.locals.validation.body
+
+```typescript
+// all related types available in the new $types2 file
+
+import type { POSTHandler } from "./$types2";
+
+export const POST: POSTHandler = async (event) => {
+    // data is fully typed
+    const { data } = event.locals.validation.body;
+    return text("ok");
+};
+```
+
+**Type builders**
+
 You could use some type builders such as [fluent-json-schema](https://github.com/fastify/fluent-json-schema) and [TypeBox](https://github.com/sinclairzx81/typebox) to make life easier:
 
 ```typescript
-// typebox example:
 import { Type as t } from "@sinclair/typebox";
 
 export const POST = {
@@ -154,7 +171,7 @@ import { createValidate } from "./$form/default";
 
 const my_form = createValidate(initial_fields);
 const { fields, errors, is_valid, action, action_url } = my_form;
-
+// fields, errors are fully type safe
 </script>
 
 
