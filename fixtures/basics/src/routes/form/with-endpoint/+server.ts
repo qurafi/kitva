@@ -1,7 +1,8 @@
 import { text } from "@sveltejs/kit";
-import type { RequestHandler } from "./$types";
+import type { POSTHandler } from "./$types2";
 
-export const POST: RequestHandler = async () => {
-    console.log("POST");
-    return text("ok");
+export const POST: POSTHandler = async (event) => {
+	// data is fully typed
+	const { data } = event.locals.validation.body;
+	return text("ok");
 };
