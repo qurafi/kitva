@@ -31,7 +31,8 @@ export function createValidationClient(
 ): FormValidationClient {
 	const fields = writable<AnyMap>({});
 	const set_fields = fields.set;
-	const storage_key = BROWSER ? `${location.pathname}/${action}:${key}` : "";
+
+	const storage_key = BROWSER ? `kitva_form_${action}:${key}` : "";
 	fields.set = function (value) {
 		const new_value = filterEmptyFields(value);
 		set_fields(new_value);
