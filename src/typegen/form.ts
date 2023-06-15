@@ -5,7 +5,7 @@ import { Schemas } from "./schema_types";
 
 ${forms
 	.map((form) => {
-		return `export const ${camelCase(`create_${form}`)}: GeneratedValidationClient<
+		return `export const ${getExportName(form)}: GeneratedValidationClient<
     Schemas["actions"]["${form}"],
     AjvError
 >;`;
@@ -13,8 +13,8 @@ ${forms
 	.join("\n\n")}`;
 }
 
-function camelCase(s: string) {
-	return s.replace(/(_\w)/g, (str) => str[1].toUpperCase());
+function getExportName(action: string) {
+	return `create_${action}_form`.replace(/(_\w)/g, (str) => str[1].toUpperCase());
 }
 
 export function generateClientCode(schema_import: string, forms: string[]) {
@@ -28,7 +28,7 @@ export function generateClientCode(schema_import: string, forms: string[]) {
     ${forms
 		.map((form) => {
 			return `let i_${form} = 0;
-        export function ${camelCase(`create_${form}`)}(opts) {
+        export function ${getExportName(form)}Form(opts) {
             const validate = createValidateFn(actions_${form}, true);
         
             return createValidationClient(
