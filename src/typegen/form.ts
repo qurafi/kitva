@@ -28,7 +28,7 @@ export function generateClientCode(schema_import: string, forms: string[]) {
     ${forms
 		.map((form) => {
 			return `let i_${form} = 0;
-        export function ${getExportName(form)}Form(opts) {
+        export function ${getExportName(form)}(opts) {
             const validate = createValidateFn(actions_${form}, true);
         
             return createValidationClient(
