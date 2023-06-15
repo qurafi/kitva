@@ -1,9 +1,8 @@
 <script lang="ts">
-	import { enhance } from "$app/forms";
 	import type { PageData } from "./$types.js";
 	import { page } from "$app/stores";
 
-	import { createDefaultAction as createValidate } from "./$form";
+	import { createDefaultActionForm as createValidate } from "./$form";
 
 	const use_enhance = $page.url.searchParams.get("enhance") == "true";
 
@@ -39,7 +38,7 @@
 
 	const { fields, errs, is_valid, action, action_url, form_data, loading } = my_form;
 
-	let x = $fields.accept_tos;
+	// let x = $fields.accept_tos;
 
 	// $: console.log($fields);
 
