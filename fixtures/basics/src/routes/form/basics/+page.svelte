@@ -3,7 +3,7 @@
 	import type { PageData } from "./$types.js";
 	import { page } from "$app/stores";
 
-	import { createValidate } from "./$form/default_action";
+	import { createDefaultAction as createValidate } from "./$form";
 
 	const use_enhance = $page.url.searchParams.get("enhance") == "true";
 
