@@ -10,7 +10,7 @@ import type {
 
 import type { Schemas } from "./schema_types";
 
-import { AjvError } from "../lib/presets/ajv/index.js";
+import { AjvError } from "kitva/presets/ajv/index.js";
 
 type ActionSchemas = Schemas["actions"];
 
