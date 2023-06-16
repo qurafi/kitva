@@ -20,16 +20,17 @@ function getViteConfig(cwd: string) {
 	}
 }
 
-export async function setup(cwd: string) {
+interface SetupOptions {
+	steps: string[];
+}
+
+export async function setup(cwd: string, { steps }: SetupOptions) {
 	console.log(bold("Setting up Kitva...."));
 
 	console.log("Running svelte-kit sync ...");
 	execSync("npx svelte-kit sync");
 
 	const r = (p: string) => resolve(cwd, p);
-
-	const sk_tsconfig_path = r(".svelte-kit/tsconfig.json");
-	const sk_tsconfig = readFileSync(sk_tsconfig_path, "utf-8");
 
 	const vite_config = getViteConfig(cwd);
 	const is_svelte_project = existsSync(r("svelte.config.js"));
@@ -53,16 +54,27 @@ export async function setup(cwd: string) {
 
 	const ext = is_ts_project ? ".ts" : ".js";
 
-	await addVitePlugin(vite_config);
+	if (steps.includes("vite")) {
+		console.log("Adding vite plugin...");
+		await addVitePlugin(vite_config);
+	}
 
-	console.log("adding hook...");
-	await addValidationHook(cwd, ext);
+	if (steps.includes("hook")) {
+		console.log("Adding sveltekit hook...");
+		await addValidationHook(cwd, ext);
+	}
 
 	if (tsconfig) {
-		await addTypes(cwd);
-		const new_tsconfig = await editTsConfig(tsconfig, sk_tsconfig);
-		if (new_tsconfig) {
-			writeFileSync(typescript_config_path, new_tsconfig);
+		if (steps.includes("types")) {
+			console.log("Editing tsconfig and app.d.ts...");
+			await addTypes(cwd);
+
+			const sk_tsconfig_path = r(".svelte-kit/tsconfig.json");
+			const sk_tsconfig = readFileSync(sk_tsconfig_path, "utf-8");
+			const new_tsconfig = await editTsConfig(tsconfig, sk_tsconfig);
+			if (new_tsconfig) {
+				writeFileSync(typescript_config_path, new_tsconfig);
+			}
 		}
 	} else {
 		warn("Could not add setup types because tsconfig/jsconfig is missing");
