@@ -1,9 +1,9 @@
 import { readFile, writeFile } from "fs/promises";
 import { warn } from "../utils/index.js";
 
-const import_statement = "import { vitePluginSvelteValidation } from 'kitva/vite';";
+const import_statement = "import { vitePluginSvelteKitva } from 'kitva/vite';";
 
-export const plugin_call = `vitePluginSvelteValidation({})`;
+export const plugin_call = `vitePluginSvelteKitva()`;
 
 export function editViteConfig(content: string) {
 	const new_content = content.replace(/sveltekit\(\)/, (str) => {
