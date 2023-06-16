@@ -1,62 +1,74 @@
-import { readFile, writeFile } from "fs/promises";
-import { warn } from "../utils/index.js";
+import jsonc from "jsonc-parser";
+import { red } from "kleur/colors";
+import { error, warn } from "../utils/index.js";
+import path from "path";
 
-const root_dirs = [".svelte-kit/types", ".schemas/types", "."];
+const root_dir = ".schemas/types";
 
-function loadTsconfig(content: string) {
-    if (content == "") return;
-    try {
-        return (0, eval)(`(${content})`);
-    } catch (e) {
-        return;
-    }
+export async function editTsConfig(tsconfig: string, sk_tsconfig: string) {
+	const sk_config = parseJsonc(sk_tsconfig);
+	const tsconfig_parsed = parseJsonc(tsconfig);
+	if (!sk_config || !tsconfig_parsed) {
+		warn("skipping due to invalid tsconfig");
+		return;
+	}
+
+	const sk_include = sk_config.include.map((p: string) => {
+		return path.join(".svelte-kit", p);
+	});
+
+	const include_new = tsconfig_parsed.include || sk_include;
+	if (!include_new.includes(root_dir)) {
+		include_new.push(root_dir);
+	}
+
+	let new_tsconfig = jsonc.applyEdits(
+		tsconfig,
+		jsonc.modify(tsconfig, ["include"], include_new, {
+			formattingOptions: {
+				insertSpaces: true,
+				keepLines: true
+			}
+		})
+	);
+
+	const sk_root_dirs = sk_config.compilerOptions.rootDirs.map((p: string) => {
+		return path.join(".svelte-kit", p);
+	});
+
+	const rootDirs = tsconfig_parsed.compilerOptions?.rootDirs || sk_root_dirs;
+	if (!rootDirs.includes(root_dir)) {
+		rootDirs.push(root_dir);
+	}
+
+	new_tsconfig = jsonc.applyEdits(
+		new_tsconfig,
+		jsonc.modify(new_tsconfig, ["compilerOptions", "rootDirs"], rootDirs, {
+			formattingOptions: {
+				insertSpaces: true,
+				keepLines: true
+			}
+		})
+	);
+
+	return new_tsconfig;
 }
 
-const rootDir_key = '"rootDirs":';
-
-export function editTsConfig(content: string) {
-    const rootDirs_idx = content.indexOf(rootDir_key);
-    if (rootDirs_idx >= 0) {
-        return mergeRootDirs(content, rootDirs_idx);
-    }
-
-    const new_content = content.replace(/"compilerOptions": {([^"]*)/, (str, indent) => {
-        return `${str}"rootDirs": ${JSON.stringify(root_dirs)},${indent}`;
-    });
-
-    if (!loadTsconfig(new_content)) {
-        return content;
-    }
-
-    return new_content;
+function printParseError(text: string, err: jsonc.ParseError) {
+	const text_start = text.slice(err.offset - 100, err.offset);
+	const text_end = text.slice(err.offset, Math.min(text.length, err.offset + err.length + 50));
+	return `${text_start}<${red(jsonc.printParseErrorCode(err.error))}>${text_end}`;
 }
 
-function mergeRootDirs(content: string, idx: number) {
-    try {
-        const rootDirs_json = content.slice(
-            idx + rootDir_key.length,
-            content.indexOf("]") + 1
-        );
-        const parsed = JSON.parse(rootDirs_json);
-        const merged = [...new Set([...parsed, ...root_dirs])];
-        return content.replace(rootDirs_json, JSON.stringify(merged));
-    } catch (e) {
-        return content;
-    }
-}
-
-export async function addTsRootDir(config_path: string) {
-    const content = await readFile(config_path, "utf-8");
-    const tsconfig = loadTsconfig(content);
-    if (!tsconfig) {
-        throw new Error("invalid tsconfig syntax");
-    }
-
-    if (tsconfig?.compilerOptions?.rootDirs?.includes(".schemas/types")) {
-        warn("Skipping adding rootDirs to tsconfig/jsconfig");
-        return;
-    }
-
-    const new_content = editTsConfig(content);
-    return writeFile(config_path, new_content);
+function parseJsonc(content: string) {
+	const errors: jsonc.ParseError[] = [];
+	const parsed = jsonc.parse(content, errors, {
+		allowTrailingComma: true,
+		allowEmptyContent: false
+	});
+	if (errors.length) {
+		error("invalid config", printParseError(content, errors[0]));
+		return;
+	}
+	return parsed;
 }

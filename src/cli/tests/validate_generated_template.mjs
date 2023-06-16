@@ -13,9 +13,14 @@ const project = process.cwd();
 
 log("validating vite project setup", project);
 
-execSync("pnpm --ignore-workspace i", {
+execSync("pnpm i", {
     cwd: cwd(),
     stdio: ["ignore", "ignore", "inherit"],
+});
+
+execSync("pnpm kitva", {
+    cwd: cwd(),
+    stdio: ["ignore", "inherit", "inherit"],
 });
 
 const server = await createServer({
@@ -24,8 +29,8 @@ const server = await createServer({
 
 await server.pluginContainer.buildStart({});
 
-const ext = existsSync(resolve(project, "src/hook.server.ts")) ? "ts" : "js";
+const ext = existsSync(resolve(project, "src/hooks.server.ts")) ? "ts" : "js";
 
-const mod = await server.ssrLoadModule("src/hook.server." + ext);
+const mod = await server.ssrLoadModule("src/hooks.server." + ext);
 
 process.exit(0);

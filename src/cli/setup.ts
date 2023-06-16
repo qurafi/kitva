@@ -1,11 +1,12 @@
-import { existsSync } from "fs";
+import { existsSync, readFileSync, writeFileSync } from "fs";
 import { resolve } from "path";
 import { addVitePlugin } from "./edit_vite_config.js";
-import { addTsRootDir } from "./edit_tsconfig.js";
+import { editTsConfig } from "./edit_tsconfig.js";
 import { addValidationHook } from "./add_hook.js";
 import { warn } from "../utils/index.js";
 import { bold, green } from "kleur/colors";
 import { addTypes } from "./add_types.js";
+import { execSync } from "child_process";
 
 function getViteConfig(cwd: string) {
 	const vite_js = resolve(cwd, "vite.config.js");
@@ -22,7 +23,13 @@ function getViteConfig(cwd: string) {
 export async function setup(cwd: string) {
 	console.log(bold("Setting up Kitva...."));
 
+	console.log("Running svelte-kit sync ...");
+	execSync("npx svelte-kit sync");
+
 	const r = (p: string) => resolve(cwd, p);
+
+	const sk_tsconfig_path = r(".svelte-kit/tsconfig.json");
+	const sk_tsconfig = readFileSync(sk_tsconfig_path, "utf-8");
 
 	const vite_config = getViteConfig(cwd);
 	const is_svelte_project = existsSync(r("svelte.config.js"));
@@ -31,7 +38,8 @@ export async function setup(cwd: string) {
 	const is_ts_project = existsSync(tsconfig_path);
 	const is_js_project = existsSync(jsconfig_path);
 
-	const tsconfig = is_ts_project ? tsconfig_path : is_js_project && jsconfig_path;
+	const typescript_config_path = is_ts_project ? tsconfig_path : is_js_project && jsconfig_path;
+	const tsconfig = typescript_config_path && readFileSync(typescript_config_path, "utf-8");
 
 	if (!is_svelte_project) {
 		throw new Error(
@@ -47,14 +55,22 @@ export async function setup(cwd: string) {
 
 	await addVitePlugin(vite_config);
 
+	console.log("adding hook...");
 	await addValidationHook(cwd, ext);
 
 	if (tsconfig) {
 		await addTypes(cwd);
-		await addTsRootDir(tsconfig);
+		const new_tsconfig = await editTsConfig(tsconfig, sk_tsconfig);
+		if (new_tsconfig) {
+			writeFileSync(typescript_config_path, new_tsconfig);
+		}
 	} else {
 		warn("Could not add setup types because tsconfig/jsconfig is missing");
 	}
 
-	console.log(green("Setup done"), "Make sure to install kitva package");
+	console.log(green("Setup done"));
+
+	console.log(
+		"\nIf you have any issue in setup. Please see https://github.com/qurafi/kitva/tree/master#manual-setup"
+	);
 }

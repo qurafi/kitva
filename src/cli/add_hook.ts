@@ -1,7 +1,7 @@
-import { existsSync } from "fs";
-import { mkdir, writeFile } from "fs/promises";
-import { resolve } from "path";
-import { error } from "../utils/index.js";
+import { existsSync, readFileSync } from "fs";
+import { mkdir, readFile, writeFile } from "fs/promises";
+import { relative, resolve } from "path";
+import { warn } from "../utils/index.js";
 
 // TODO just export the whole hook with the preset from kiva/presets/ajv
 const validation_hook = `import schemas from "$schemas?t=all";
@@ -35,24 +35,35 @@ const mainHandle: Handle = async ({event, resolve}) => {
 
 export const handle = sequence(validationHook, mainHandle)`;
 export async function addValidationHook(cwd: string, ext: string) {
-    const lib_dir = resolve(cwd, "./src/lib/validation");
-    await mkdir(lib_dir, { recursive: true });
+	const lib_dir = resolve(cwd, "./src/lib/validation");
+	await mkdir(lib_dir, { recursive: true });
 
-    //TODO add ambient types
+	// add hook preset to the $lib/validation
+	const lib_hook = resolve(lib_dir, "hook" + ext);
+	if (!checkAlreadySetup(cwd, lib_hook, validation_hook)) {
+		await writeFile(lib_hook, validation_hook);
+	}
 
-    // add hook preset to the $lib/validation
-    await writeFile(resolve(lib_dir, "hook" + ext), validation_hook);
+	// hooks.server
+	const hooks_server = resolve(cwd, "src/hooks.server" + ext);
+	if (!checkAlreadySetup(cwd, hooks_server, "$lib/validation/hook")) {
+		const content = ext == ".ts" ? hook_server_code_ts : hook_server_code_js;
 
-    // hook.server
-    const hook_server = resolve(cwd, "src/hook.server" + ext);
-    if (existsSync(hook_server)) {
-        error(
-            "Could not create hook.server.ts because it's already exists. Manual setup is required"
-        );
-        return;
-    }
+		await writeFile(hooks_server, content);
+	}
+}
 
-    const content = ext == ".ts" ? hook_server_code_ts : hook_server_code_js;
-
-    await writeFile(hook_server, content);
+function checkAlreadySetup(cwd: string, file: string, expected_content: string) {
+	if (existsSync(file)) {
+		const content = readFileSync(file, "utf-8");
+		const rel_path = relative(cwd, file);
+		if (content.includes(expected_content)) {
+			warn(`Skipping ${rel_path} because it's already setup`);
+		} else {
+			warn(
+				`Could not create ${rel_path} because it's already exists. You may need to manually setup the file`
+			);
+		}
+		return true;
+	}
 }

@@ -41,9 +41,7 @@ exports[`should edit app.d.ts file correctly: default 1`] = `
 declare global {
     namespace App {
         // interface Error {}
-        interface Locals {
-	validation: import(\\"kitva/presets/ajv/index\\").AppLocal;
-	}
+        // interface Locals {}
         // interface PageData {}
         // interface Platform {}
     }
@@ -59,9 +57,7 @@ exports[`should edit app.d.ts file correctly: with_locals 1`] = `
 declare global {
     namespace App {
         // interface Error {}
-       interface Locals {
-	validation: import(\\"kitva/presets/ajv/index\\").AppLocal;
-	
+        interface Locals {
             user: {name:string, id:string}
         }
         // interface PageData {}
@@ -79,9 +75,7 @@ exports[`should edit app.d.ts file correctly: with_locals_inline 1`] = `
 declare global {
     namespace App {
         // interface Error {}
-       interface Locals {
-	validation: import(\\"kitva/presets/ajv/index\\").AppLocal;
-	user: {name:string, id:string}}
+        interface Locals {user: {name:string, id:string}}
         // interface PageData {}
         // interface Platform {}
     }
