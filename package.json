@@ -113,7 +113,6 @@
     "dependencies": {
         "ajv-build-tools": "^1.0.0-next",
         "debug": "^4.3.4",
-        "fast-uri": "^2.2.0",
         "json-schema-to-typescript": "^13.0.1",
         "jsonc-parser": "^3.2.0",
         "kleur": "^4.1.5",
