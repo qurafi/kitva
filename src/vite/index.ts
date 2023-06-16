@@ -13,7 +13,7 @@ interface PluginOptions {
 	ajvTools?: AjvToolsOptions;
 }
 
-export function vitePluginSvelteValidation(opts: PluginOptions) {
+export function vitePluginSvelteKitva(opts?: PluginOptions) {
 	const ajvTools = unpluginAjvTools.vite({
 		...opts?.ajvTools,
 		include: [

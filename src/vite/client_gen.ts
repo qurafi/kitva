@@ -12,7 +12,7 @@ export async function viteSvelteFormClientGenPlugin(): Promise<VitePlugin> {
 	const resolved_abs_form_prefix = `\0${abs_form_prefix}`;
 
 	return {
-		name: "vite-plugin-svelte-validation",
+		name: "vite-plugin-svelte-kitva-form-client-gen",
 		configResolved(config) {
 			root = config.root;
 		},
