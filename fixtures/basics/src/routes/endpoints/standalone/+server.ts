@@ -1,5 +1,5 @@
-import type { RequestHandler } from "@sveltejs/kit";
+import type { POSTHandler } from "./$types2";
 
-export const POST: RequestHandler = async () => {
-    return new Response("ok");
+export const POST: POSTHandler = async (event) => {
+	return new Response("ok");
 };

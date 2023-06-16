@@ -1,20 +1,11 @@
-import { sveltekit } from "@sveltejs/kit/vite";
 import { defineConfig } from "vite";
-import { vitePluginSvelteValidation } from "kitva/vite";
-import { readFileSync } from "fs";
-
-const pkg = JSON.parse(readFileSync("package.json", "utf8"));
+import { sveltekit } from "@sveltejs/kit/vite";
+import { vitePluginSvelteKitva } from "kitva/vite";
 
 export default defineConfig({
-    plugins: [sveltekit(), vitePluginSvelteValidation({})],
+	plugins: [sveltekit(), vitePluginSvelteKitva()],
 
-    // optimizeDeps: {
-    //     exclude: ["kitva"],
-    // },
-
-    build: {
-        minify: false,
-    },
-
-
+	build: {
+		minify: false
+	}
 });

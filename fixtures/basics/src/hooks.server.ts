@@ -1,10 +1,10 @@
-import schemas from "$schemas?t=all";
+import type { Handle } from "@sveltejs/kit";
 
-import { validationHook as getValidationHook } from "kitva/hook/index";
-import { createPreset } from "kitva/presets/ajv/server";
+import { handle as validationHook } from "$lib/validation/hook";
+import { sequence } from "@sveltejs/kit/hooks";
 
-console.log({ schemas });
+const mainHandle: Handle = async ({event, resolve}) => {
+    return resolve(event);
+}
 
-export const preset = createPreset(schemas);
-
-export const handle = getValidationHook(preset);
+export const handle = sequence(validationHook, mainHandle)
