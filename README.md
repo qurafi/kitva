@@ -272,6 +272,83 @@ my_form = {
 ### Standalone Validation
 To directly import and use the compiled validation function for schemas. refer to [ajv-build-tools](https://github.com/qurafi/ajv-tools#importing-the-compiled-schemas)
 
+
+### **CLI** options
+
+Running the command without arguments will setup every thing listed in [Manual Setup](#manual-setup), but in case you want to setup a specific setup add --only=steps, where steps are comma seperated:
+`pnpm kitva --only=hook,vite,types`
+
+### Manual Setup
+Usually the CLI will handle most of the setup steps automatically, but just in case, here is the step required to setup Kitva:
+
+
+1. **Vite plugin**
+   ```javascript
+    import { defineConfig } from "vite";
+    import { sveltekit } from "@sveltejs/kit/vite";
+    import { vitePluginSvelteKitva } from "kitva/vite";
+
+    export default defineConfig({
+        plugins: [sveltekit(), vitePluginSvelteKitva()],
+    });
+   ```
+2. **Sveltekit hook**
+   ```javascript
+    // virtual import used to import all the compiled schemas
+    import schemas from "$schemas?t=all";
+
+    import { validationHook } from "kitva/hook/index";
+    import { createPreset } from "kitva/presets/ajv/server";
+
+    export const preset = createPreset(schemas);
+
+    export const handle = validationHook(preset);
+   ```
+3. **Setting up rootDir**
+   Similar to ".svelte-kit/types" for route types(./$types). Add ".schemas/types" to your rootDirs and include.
+\
+   **NOTE:** Because tsconfig does not merge rootDirs and include, you have to copy them from .svelte-kit/tsconfig.json.
+
+   ```json
+    {
+        "extends": "./.svelte-kit/tsconfig.json",
+        "compilerOptions": {
+            "rootDirs": [
+                ".",
+                ".svelte-kit/types",
+                ".schemas/types"
+            ],
+            "allowJs": true,
+            "checkJs": true,
+            "esModuleInterop": true,
+            "forceConsistentCasingInFileNames": true,
+            "resolveJsonModule": true,
+            "skipLibCheck": true,
+            "sourceMap": true,
+            "strict": true
+        },
+        "include": [
+            ".schemas/types"
+            ".svelte-kit/ambient.d.ts",
+            ".svelte-kit/types/**/$types.d.ts",
+            "vite.config.ts",
+            "src/**/*.js",
+            "src/**/*.ts",
+            "src/**/*.svelte",
+            "src/**/*.js",
+            "src/**/*.ts",
+            "src/**/*.svelte",
+            "tests/**/*.js",
+            "tests/**/*.ts",
+            "tests/**/*.svelte",
+        ],
+    }
+    ```
+
+1. **Ambient Types**.
+   Just add this `import "kitva/ambient";` on top of your app.d.ts.
+   This will type $schemas virtual imports
+
 [WIP]
 
 * [ ] Refactor some code generation code and how the code is organized.
