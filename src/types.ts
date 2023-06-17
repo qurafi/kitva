@@ -1,3 +1,4 @@
+import type { RequestEvent } from "@sveltejs/kit";
 import type { HTTP_METHODS, HTTP_PARTS } from "./utils/index.js";
 
 export type HttpMethod = (typeof HTTP_METHODS)[number];
@@ -10,6 +11,7 @@ export type AnyMap = { [key: string]: JSONType };
 
 /** default type for parsed request parts */
 export type DefaultData = Record<HttpPart, any>;
+export type AnyDefaultData = Partial<Record<HttpPart, any>>;
 
 export type AnyError = { message: string; [key: string]: any };
 export type ErrorMap = Record<string, AnyError>;
@@ -17,7 +19,7 @@ export type ErrorMap = Record<string, AnyError>;
 export type ValidationResult<
 	Data = AnyValue,
 	Error extends AnyError = AnyError,
-	Invalid extends boolean = boolean
+	Both extends boolean = boolean
 > =
 	| {
 			valid: true;
@@ -35,10 +37,10 @@ export type ValidationResult<
 			input: AnyValue;
 
 			errors: Error[];
-	  } & { valid: Invalid });
+	  } & { valid: Both });
 
 export type ValidationParts<
-	Data extends DefaultData,
+	Data extends AnyDefaultData,
 	Error extends AnyError = AnyError,
 	Invalid extends boolean = boolean
 > = {
@@ -46,7 +48,7 @@ export type ValidationParts<
 };
 
 export type ValidationResults<
-	Data extends DefaultData = DefaultData,
+	Data extends AnyDefaultData = AnyDefaultData,
 	Error extends AnyError = AnyError,
 	Valid extends boolean = boolean
 > = ValidationParts<Data, Error, Valid> &
@@ -84,3 +86,14 @@ export type ValidationResults<
 				valid: true;
 		  }
 	) & { valid: Valid };
+
+export type EventWithValidation<V = any> = RequestEvent<Partial<Record<string, string>>, any> & {
+	locals: { validation: V };
+};
+export type AnyHandler = (event: EventWithValidation) => any;
+export type RequestHandlerWithValidation<
+	T extends AnyHandler,
+	Data extends AnyDefaultData = any,
+	Error extends AnyError = AnyError,
+	Validated extends boolean = boolean
+> = (event: EventWithValidation<ValidationResults<Data, Error, Validated>>) => ReturnType<T>;
