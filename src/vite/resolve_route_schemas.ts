@@ -18,26 +18,32 @@ to:
 export const allowed_exports = new Set([...HTTP_METHODS, "actions"]);
 export const allowed_parts = new Set<string>(HTTP_PARTS);
 
-export function resolveRoutesSchemas(module: Record<string, any>, file: string) {
-	const schemas: Record<string, any> = {};
+type Module = Record<string, Record<string, unknown>>;
 
-	for (const exprt_name of Object.keys(module)) {
-		const exprt_value = module[exprt_name];
-		if (!allowed_exports.has(exprt_name)) {
-			warnAboutExports(exprt_name, file);
+export function resolveRoutesSchemas(module: Module, file: string) {
+	const schemas: Record<string, unknown> = {};
+
+	for (const export_name of Object.keys(module)) {
+		const export_value = module[export_name];
+		if (!export_value || typeof export_value !== "object") {
+			throw new Error(`Kitva: ${export_name}`);
+		}
+
+		if (!allowed_exports.has(export_name)) {
+			warnAboutExports(export_name, file);
 			continue;
 		}
 
-		for (const part of Object.keys(exprt_value)) {
-			if (exprt_name !== "actions" && !allowed_parts.has(part)) {
-				warnAboutUnknownPart(part, exprt_name, file);
+		for (const part of Object.keys(export_value)) {
+			if (export_name !== "actions" && !allowed_parts.has(part)) {
+				warnAboutUnknownPart(part, export_name, file);
 				continue;
 			}
-			if (exprt_name == "GET" && part == "body") {
+			if (export_name == "GET" && part == "body") {
 				warnAboutGetBody(file);
 				continue;
 			}
-			schemas[`${exprt_name}_${part}`] = exprt_value[part];
+			schemas[`${export_name}_${part}`] = export_value[part];
 		}
 	}
 
