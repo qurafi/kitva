@@ -25,7 +25,9 @@ export function withValidation<T extends Record<string, any>>(t: T) {
 	return out as WithValidation<T>;
 }
 
-type WithValidation<T extends Record<string, any>> = T & {
+type WithValidation<T extends Record<string, any>> = T & FormResult<T>;
+
+type FormResult<T> = {
 	/** @deprecated */
 	__hacky_ts_prop_to_inject_form_errors_on_action_data: () => {
 		[k in `__form_${keyof T & string}`]: {
