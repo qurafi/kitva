@@ -88,7 +88,7 @@ export function createValidationClient(
 
 	let timeout: any;
 
-	const unsubscribe_page = page.subscribe(({ form, url }) => {
+	const unsubscribe_page = page.subscribe(({ form }) => {
 		const form_result = form?.[`__form_${action}`];
 		if (form_result) {
 			const { input, errors: form_errors } = form_result;

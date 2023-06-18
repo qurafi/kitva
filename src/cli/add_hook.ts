@@ -1,5 +1,5 @@
 import { existsSync, readFileSync } from "fs";
-import { mkdir, readFile, writeFile } from "fs/promises";
+import { mkdir, writeFile } from "fs/promises";
 import { relative, resolve } from "path";
 import { warn } from "../utils/index.js";
 

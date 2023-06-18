@@ -1,4 +1,4 @@
-import type { AnyError, AnyMap, AnyValue } from "../types.js";
+import type { AnyError, AnyMap } from "../types.js";
 import type { Readable, Writable } from "svelte/store";
 import type { ValidationResult } from "../types.js";
 import type { ActionReturn } from "svelte/action";

@@ -2,7 +2,6 @@ import { afterAll, beforeAll, it } from "vitest";
 import { create } from "create-svelte";
 import { readFile, rm, writeFile } from "fs/promises";
 import path, { basename, relative, resolve } from "path";
-import { setup } from "../setup.js";
 import { ChildProcess, spawn } from "child_process";
 import { cwd } from "process";
 
