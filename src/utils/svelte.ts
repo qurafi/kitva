@@ -8,15 +8,10 @@ export async function getRequestContent({ request, params, url }: RequestEvent) 
 	return {
 		params,
 
-		get queries() {
-			return Object.fromEntries(url.searchParams);
-		},
-		get headers() {
-			return Object.fromEntries(request.headers);
-		},
-		get body() {
-			return getRequestBody(request);
-		}
+		queries: Object.fromEntries(url.searchParams),
+
+		headers: Object.fromEntries(request.headers),
+		body: await getRequestBody(request)
 	};
 }
 
@@ -24,10 +19,11 @@ export async function getRequestBody(request: Request, clone = true) {
 	const content_type = request.headers.get("content-type");
 
 	if (content_type == "application/json") {
-		return clone_if(request, clone)
-			.json()
-			.catch((_) => {}); // return nothing when json is invalid
-	} else if (is_form_content_type(request)) {
+		/* prettier-ignore */
+		return clone_if(request, clone).json().catch((_) => {/*  */});
+	}
+
+	if (is_form_content_type(request)) {
 		const formdata = await clone_if(request, clone).formData();
 		const data: Record<string, any> = {};
 		for (const [field, value] of formdata.entries()) {

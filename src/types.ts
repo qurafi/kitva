@@ -87,7 +87,8 @@ export type ValidationResults<
 		  }
 	) & { valid: Valid };
 
-export type EventWithValidation<V = any> = RequestEvent<Partial<Record<string, string>>, any> & {
+export type AnyRequestEvent = RequestEvent<Partial<Record<string, string>>, any>;
+export type EventWithValidation<V = any> = AnyRequestEvent & {
 	locals: { validation: V };
 };
 export type AnyHandler = (event: EventWithValidation) => any;
