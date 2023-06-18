@@ -4,7 +4,10 @@ test("should pass with correct data", async ({ request }) => {
 	const response = await request.post("/endpoints/standalone", {
 		data: {
 			a: "1",
-			b: true
+			b: true,
+			c: {
+				a: true
+			}
 		}
 	});
 
