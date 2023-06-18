@@ -1,6 +1,6 @@
 {
 	"name": "kitva",
-	"version": "1.0.0-next.4",
+	"version": "1.0.0-next.5",
 	"description": "A validation kit for sveltekit",
 	"type": "module",
 	"exports": {
@@ -54,7 +54,7 @@
 		"dist",
 		"!dist/**/*.test.*",
 		"!dist/**/*.spec.*",
-        "./*.d.ts"
+		"./*.d.ts"
 	],
 	"scripts": {
 		"test:e2e": "DEBUG_COLORS=1 pnpm -r test",
