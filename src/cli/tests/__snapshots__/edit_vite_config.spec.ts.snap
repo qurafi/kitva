@@ -1,58 +1,58 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`should edit vite config correctly: default_file 1`] = `
-"import { vitePluginSvelteValidation } from 'kitva/vite';
+"import { vitePluginSvelteKitva } from 'kitva/vite';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-	plugins: [sveltekit(),vitePluginSvelteValidation({})]
+	plugins: [sveltekit(),vitePluginSvelteKitva()]
 });"
 `;
 
 exports[`should edit vite config correctly: empty 1`] = `
-"import { vitePluginSvelteValidation } from 'kitva/vite';
+"import { vitePluginSvelteKitva } from 'kitva/vite';
 "
 `;
 
 exports[`should edit vite config correctly: file_with_plugins_0 1`] = `
-"import { vitePluginSvelteValidation } from 'kitva/vite';
+"import { vitePluginSvelteKitva } from 'kitva/vite';
 import somePlugin from \\"vite-plugin\\"
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-	plugins: [sveltekit(),vitePluginSvelteValidation({}), somePlugin()]
+	plugins: [sveltekit(),vitePluginSvelteKitva(), somePlugin()]
 });"
 `;
 
 exports[`should edit vite config correctly: file_with_plugins_0_lines 1`] = `
-"import { vitePluginSvelteValidation } from 'kitva/vite';
+"import { vitePluginSvelteKitva } from 'kitva/vite';
 import somePlugin from \\"vite-plugin\\"
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
 	plugins: [
-        sveltekit(),vitePluginSvelteValidation({}),
+        sveltekit(),vitePluginSvelteKitva(),
         somePlugin()
     ]
 });"
 `;
 
 exports[`should edit vite config correctly: file_with_plugins_1 1`] = `
-"import { vitePluginSvelteValidation } from 'kitva/vite';
+"import { vitePluginSvelteKitva } from 'kitva/vite';
 import somePlugin from \\"vite-plugin\\"
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-	plugins: [somePlugin(), sveltekit(),vitePluginSvelteValidation({})]
+	plugins: [somePlugin(), sveltekit(),vitePluginSvelteKitva()]
 });"
 `;
 
 exports[`should edit vite config correctly: file_with_plugins_1_lines 1`] = `
-"import { vitePluginSvelteValidation } from 'kitva/vite';
+"import { vitePluginSvelteKitva } from 'kitva/vite';
 import somePlugin from \\"vite-plugin\\"
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
@@ -60,7 +60,7 @@ import { defineConfig } from 'vite';
 export default defineConfig({
 	plugins: [
         somePlugin(),
-        sveltekit(),vitePluginSvelteValidation({})
+        sveltekit(),vitePluginSvelteKitva()
     ]
 });"
 `;
