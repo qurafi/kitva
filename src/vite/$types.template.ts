@@ -1,14 +1,8 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-nocheck
-import type {
-	AnyMap,
-	DefaultData,
-	ErrorMap,
-	HttpMethod,
-	ValidationResults,
-	RequestHandlerWithValidation
-} from "kitva/types";
+import type { AnyMap, HttpMethod, RequestHandlerWithValidation } from "kitva/types";
 
-import type { RequestEvent as RequestEvent_, RequestHandler as RequestHandler_ } from "./$types";
+import type { RequestHandler as RequestHandler_ } from "./$types";
 
 import type { Schemas } from "./schema_types";
 
