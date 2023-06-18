@@ -34,9 +34,8 @@ export function typeGenPlugin(): Plugin {
 
 		const { code, forms } = await generateTypes(builder, file, is_route_schema);
 
-		if (code) {
-			await writeFile(out, code);
-		}
+		// write empty file to not break typescript server
+		await writeFile(out, code || "");
 
 		if (is_route_schema) {
 			const src_$types2 = path.resolve(__dirname, "./$types.template.d.ts");
