@@ -18,8 +18,6 @@
 		}
 	];
 
-	export let data: PageData;
-
 	// form result typed
 	export let form;
 

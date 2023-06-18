@@ -49,10 +49,6 @@ const form_error = {
 	}
 };
 
-const form_error_json = JSON.stringify(form_error, null, 2);
-
-const min_length_msg = "must NOT have fewer than 1 characters";
-
 async function testFormSubmission({
 	javascript,
 	valid_data,
@@ -85,7 +81,7 @@ async function testFormSubmission({
 			}
 			// await expect(page.locator("pre")).toHaveText(form_error_json);
 			for (const [field, err] of Object.entries(form_error.__form_default.errors)) {
-				let message = await page.locator(`[name='${field}'] + .error`).textContent();
+				const message = await page.locator(`[name='${field}'] + .error`).textContent();
 
 				// on the client we don't update the coerced values on input
 

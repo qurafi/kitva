@@ -11,7 +11,9 @@ export const actions: Actions = withValidation({
 			success: true
 		};
 	},
-	another_action(event) {},
+	another_action(event) {
+		//
+	},
 	test(event) {
 		//
 	}
