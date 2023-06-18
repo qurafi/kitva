@@ -53,7 +53,8 @@
 	"files": [
 		"dist",
 		"!dist/**/*.test.*",
-		"!dist/**/*.spec.*"
+		"!dist/**/*.spec.*",
+        "./*.d.ts"
 	],
 	"scripts": {
 		"test:e2e": "DEBUG_COLORS=1 pnpm -r test",
