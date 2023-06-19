@@ -15,8 +15,8 @@
 		"allowJs": true,
 		"checkJs": true,
 		"outDir": "./dist",
-		"rootDir": "src"
+        "rootDir": "src"
 	},
-	"include": ["src", "ambient.d.ts"],
+	"include": ["src"],
 	"exclude": ["dist", "fixtures/", "src/**/tests/fixtures"]
 }

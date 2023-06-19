@@ -1,3 +1,4 @@
+import "../../../ambient.js";
 type Schemas = typeof import("$schemas?t=all").default;
 
 import { warn } from "../../utils/index.js";
