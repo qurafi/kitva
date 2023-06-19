@@ -1,4 +1,4 @@
-import jsonc from "jsonc-parser";
+import * as jsonc from "jsonc-parser";
 import { red } from "kleur/colors";
 import { error, warn } from "../utils/index.js";
 import path from "path";

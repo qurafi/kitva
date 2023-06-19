@@ -29,11 +29,9 @@ async function testSetup(types: string | null, template: string) {
 		playwright: false,
 		vitest: false
 	});
-
-	// await setup(out);
 }
 
-for (const fixture of fixtures /* .slice(1) */) {
+for (const fixture of fixtures /* .slice(0, 1) */) {
 	const project = resolve_fixture(fixture.types, fixture.template);
 	const name = basename(project);
 	it.concurrent(
@@ -43,7 +41,7 @@ for (const fixture of fixtures /* .slice(1) */) {
 
 			const pkg_path = resolve(project, "package.json");
 			const pkg = JSON.parse(await readFile(pkg_path, "utf-8"));
-			(pkg.dependencies ??= {}).kitva = "^1.0.0-next";
+			(pkg.dependencies ??= {}).kitva = "latest";
 
 			pkg.pnpm = {
 				overrides: {
