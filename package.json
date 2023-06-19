@@ -1,6 +1,6 @@
 {
 	"name": "kitva",
-	"version": "1.0.0-next.6",
+	"version": "1.0.0-next.7",
 	"description": "A validation kit for sveltekit",
 	"type": "module",
 	"exports": {
@@ -56,7 +56,7 @@
 		"!src/routes",
 		"!dist/**/*.test.*",
 		"!dist/**/*.spec.*",
-        "!src/**/*.test.*",
+		"!src/**/*.test.*",
 		"!src/**/*.spec.*",
 		"./*.d.ts"
 	],
