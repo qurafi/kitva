@@ -348,13 +348,3 @@ Usually the CLI will handle most of the setup steps automatically, but just in c
 4. **Ambient Types**.
    Just add this `import "kitva/ambient";` on top of your app.d.ts.
    This will type $schemas virtual imports
-
-[WIP]
-
-- [ ] Refactor some code generation code and how the code is organized.
-- [ ] Add ability for the user to customize the behavior of submission
-- [ ] attachValidation options to skip validation and assign the validation function to locals.validate
-- [ ] Input component to render form fields with errors and binding and everything.
-- [ ] Improve the docs and some real world examples.
-- [ ] (low priority) a debug tool to visualize the form, the schema code, and the data flow.
-- [ ] (low priority) Form renderer: automatically render all form fields from the schema.
