@@ -52,11 +52,11 @@
 	},
 	"files": [
 		"dist",
-		"src/!(cli|routes)",
+		"src",
 		"!src/routes",
 		"!dist/**/*.test.*",
 		"!dist/**/*.spec.*",
-		"!src/**/*.test.*",
+        "!src/**/*.test.*",
 		"!src/**/*.spec.*",
 		"./*.d.ts"
 	],
@@ -72,7 +72,7 @@
 		"build": "svelte-kit sync && pnpm run '/(build:ts|build:cmps)/' && publint",
 		"preview": "vite preview",
 		"package": "svelte-kit sync && pnpm build && publint",
-		"prepublishOnly_": "npm run package && publint",
+		"prepublishOnly": "npm run package && publint",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
