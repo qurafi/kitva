@@ -1,8 +1,22 @@
 {
 	"name": "kitva",
 	"version": "1.0.0-next.8",
-	"description": "A validation kit for sveltekit",
+	"description": "Validation kit for SvelteKit",
+    "keywords": [
+        "svelte",
+        "sveltekit",
+        "validation",
+        "forms",
+        "form-validation",
+        "vite-plugin",
+        "jsonschema"
+    ],
+    "repository": "https://github.com/qurafi/kitva",
+    "bugs": "https://github.com/qurafi/kitva/issues",
+    "author": "Mohammed Al-Qurafi <mohammedqurafi@gmail.com> (https://github.com/qurafi/)",
+    "license": "MIT",
 	"type": "module",
+    "bin": "./dist/cli/bin.js",
 	"exports": {
 		"./hook/*": {
 			"types": "./dist/hook/*.d.ts",
@@ -79,8 +93,6 @@
 		"format": "prettier --plugin-search-dir . --write .",
 		"tscheck": "tsc --noEmit"
 	},
-	"bin": "./dist/cli/bin.js",
-	"license": "MIT",
 	"peerDependencies": {
 		"svelte": "^3.54.0"
 	},
