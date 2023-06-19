@@ -1,4 +1,4 @@
-import "../../../ambient.js";
+/// <reference types="ajv-build-tools/types" />
 type Schemas = typeof import("$schemas?t=all").default;
 
 import { warn } from "../../utils/index.js";
