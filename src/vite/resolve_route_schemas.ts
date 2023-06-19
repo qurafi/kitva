@@ -25,13 +25,14 @@ export function resolveRoutesSchemas(module: Module, file: string) {
 
 	for (const export_name of Object.keys(module)) {
 		const export_value = module[export_name];
-		if (!export_value || typeof export_value !== "object") {
-			throw new Error(`Kitva: ${export_name}`);
-		}
 
 		if (!allowed_exports.has(export_name)) {
 			warnAboutExports(export_name, file);
 			continue;
+		}
+
+		if (!export_value || typeof export_value !== "object") {
+			throw new Error(`Kitva: ${file} - ${export_name} must be object `);
 		}
 
 		for (const part of Object.keys(export_value)) {
