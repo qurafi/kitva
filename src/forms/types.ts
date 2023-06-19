@@ -3,10 +3,11 @@ import type { Readable, Writable } from "svelte/store";
 import type { ValidationResult } from "../types.js";
 import type { ActionReturn } from "svelte/action";
 export interface FormValidationClient<Data = AnyMap, Error extends AnyError = AnyError> {
-	validate_result: Readable<ValidationResult<Data, Error>>;
-
-	/** alias of $validate_result.valid */
-	is_valid: Readable<boolean>;
+	/** Contains
+	 * ```typescript
+	 * {valid:boolean, data: Data, errors: Record<string, Error>, input: AnyMap}`
+	 * ``` */
+	result: Readable<ValidationResult<Data, Error>>;
 
 	loading: Readable<boolean>;
 
@@ -23,16 +24,7 @@ export interface FormValidationClient<Data = AnyMap, Error extends AnyError = An
 	 * */
 	errs: Readable<Partial<Record<keyof Data, string>>>;
 
-	/**
-	 * Raw errors
-	 */
-	errors: Readable<Record<keyof Data, Error>>;
-
-	/** Readable store returns the data when it's valid and it's type safe
-	 *
-	 * alias for ${@link validate_result}.data
-	 */
-	form_data: Readable<Data | undefined>;
+	errors: Readable<Partial<Record<keyof Data, Error>> | undefined>;
 
 	validateForm(field?: string): void;
 	action_url: string;
@@ -42,7 +34,9 @@ export interface FormValidationClient<Data = AnyMap, Error extends AnyError = An
 export type GeneratedValidationClient<
 	Data extends AnyMap = AnyMap,
 	Errors extends AnyError = AnyError
-> = (options: {
-	fields: Partial<Data> | Readable<Partial<Data>>;
-	use_enhance?: boolean | undefined;
+> = (options?: {
+	fields?: Partial<Data>;
+	use_enhance?: boolean;
+	use_storage?: boolean;
+	warn_user?: boolean;
 }) => FormValidationClient<Data, Errors>;

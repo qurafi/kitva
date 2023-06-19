@@ -1,63 +1,33 @@
-import { page } from "$app/stores";
-import { get, writable, derived, readonly, type Readable } from "svelte/store";
-import { objectMap } from "../utils/objectMap.js";
-import type { FormValidationClient } from "./types.js";
-import type { AnyMap, ValidationResult } from "../types.js";
-import type { GetFormErrors, ValidateFn } from "../hook/types.js";
-import { form_urlencoded } from "../utils/http.js";
-import { BROWSER, DEV } from "esm-env";
-import { filterEmptyFields, warn } from "../utils/index.js";
 import { enhance } from "$app/forms";
-import { onDestroy } from "svelte";
-import type { Unsubscriber } from "svelte/store";
 import { beforeNavigate } from "$app/navigation";
-
-function isReadableStore(x: any): x is Readable<any> {
-	return typeof x?.subscribe === "function";
-}
+import { page } from "$app/stores";
+import { DEV } from "esm-env";
+import { onDestroy } from "svelte";
+import { derived, get, readonly, writable } from "svelte/store";
+import type { GetFormErrors, ValidateFn } from "../hook/types.js";
+import type { AnyError, AnyMap, ValidationResult } from "../types.js";
+import { form_urlencoded } from "../utils/http.js";
+import { filterEmptyFields, warn } from "../utils/index.js";
+import { objectMap } from "../utils/objectMap.js";
+import { useStorage } from "./storage.js";
+import type { FormValidationClient } from "./types.js";
 
 export function createValidationClient(
 	validate: ValidateFn,
 	action: string,
-	initial_fields: AnyMap | Readable<AnyMap>,
+	initial_fields: AnyMap = {},
 	getFormErrors: GetFormErrors,
-
 	use_storage = true,
-
-	/** used internally for use_storage */
-	key = "1",
-
-	use_enhance = true
+	use_enhance = true,
+	warn_user = true
 ): FormValidationClient {
-	const fields = writable<AnyMap>({});
+	const fields = writable<AnyMap>(filterEmptyFields(initial_fields));
+
 	const set_fields = fields.set;
+	fields.set = (value) => set_fields(filterEmptyFields(value));
 
-	const storage_key = BROWSER ? `kitva_form_${action}:${key}` : "";
-	fields.set = function (value) {
-		const new_value = filterEmptyFields(value);
-		set_fields(new_value);
-		if (use_storage && BROWSER) {
-			if (Object.keys(new_value).length) {
-				sessionStorage.setItem(storage_key, JSON.stringify(new_value));
-				return;
-			}
-			sessionStorage.removeItem(storage_key);
-		}
-	};
-
-	let unsubscribe_initial_fields: Unsubscriber | undefined;
-
-	const stored_fields = BROWSER && sessionStorage.getItem(storage_key);
-	if (stored_fields) {
-		initial_fields = JSON.parse(stored_fields);
-	}
-
-	if (isReadableStore(initial_fields)) {
-		unsubscribe_initial_fields = initial_fields.subscribe((values) => {
-			fields.set(values);
-		});
-	} else {
-		fields.set(initial_fields);
+	if (use_storage) {
+		useStorage(action, fields);
 	}
 
 	const validate_result = derived(
@@ -65,28 +35,25 @@ export function createValidationClient(
 		(values) => validate(values) as ValidationResult<AnyMap>
 	);
 
-	const is_valid = derived(validate_result, (result) => result.valid);
-
-	const data = derived(validate_result, (result) => result.data);
-
 	const errors = derived(validate_result, (result) => {
-		return result.errors ? getFormErrors(result.errors) : {};
+		if (result.errors) {
+			return getFormErrors(result.errors);
+		}
 	});
 
 	const errs = writable<Record<string, string>>({});
 
-	function setErrors(new_errs: AnyMap | undefined | null) {
+	function setErrors(new_errs: Record<string, AnyError> | undefined | null) {
 		errs.set(new_errs ? objectMap(new_errs, (err) => err?.message || "") : {});
 	}
 
 	const loading = writable(false);
 
-	// we make sure to validate initial fields
+	let timeout: any;
+
 	if (Object.keys(initial_fields).length) {
 		validateForm();
 	}
-
-	let timeout: any;
 
 	const unsubscribe_page = page.subscribe(({ form }) => {
 		const form_result = form?.[`__form_${action}`];
@@ -101,20 +68,17 @@ export function createValidationClient(
 
 	onDestroy(() => {
 		unsubscribe_page();
-		unsubscribe_initial_fields?.();
 	});
 
 	function validateForm(field?: string) {
-		const status = get(validate_result);
-		const { valid, errors: raw_errors } = status;
-		if (!valid && field) {
-			const form_errors = getFormErrors(raw_errors);
+		const form_errors = get(errors);
+		if (form_errors && field) {
 			errs.update((errs) => {
 				errs[field] = form_errors[field]?.message;
 				return errs;
 			});
 		} else {
-			setErrors(valid ? {} : getFormErrors(raw_errors));
+			setErrors(form_errors);
 		}
 	}
 
@@ -127,74 +91,77 @@ export function createValidationClient(
 		timeout = setTimeout(() => validateForm(name), 250);
 	}
 
-	let vite_hmr_reload = true;
-	import.meta.hot?.on("vite:beforeFullReload", () => {
-		vite_hmr_reload = true;
-	});
-
 	let current_form: HTMLFormElement | null;
-	beforeNavigate((nav) => {
-		if (!current_form || vite_hmr_reload) {
-			return;
-		}
+	let vite_hmr_reload = false;
+	if (import.meta.hot) {
+		import.meta.hot.on("vite:beforeFullReload", () => {
+			vite_hmr_reload = true;
+		});
+	}
 
-		if (!confirm("are sure you want to leave?")) {
-			nav.cancel();
-		}
-	});
-
-	return {
-		validate_result,
-		fields,
-		errors: readonly(errors),
-		loading: readonly(loading),
-		errs: readonly(errs),
-		is_valid,
-		validateForm,
-		form_data: data,
-		action: (form) => {
-			current_form = form;
-
-			if (DEV && form.enctype !== form_urlencoded) {
-				warn(`it's better to use ${form_urlencoded} enctype for forms`);
+	if (warn_user) {
+		beforeNavigate((nav) => {
+			if (!current_form || vite_hmr_reload) {
+				return;
 			}
 
-			form.addEventListener("input", onInput);
+			if (!confirm("Are sure you want to leave?")) {
+				nav.cancel();
+			}
+		});
+	}
 
-			const enhancer =
-				use_enhance &&
-				enhance(form, ({ cancel }) => {
-					if (get(loading)) {
-						return;
-					}
+	function svelte_action(form: HTMLFormElement) {
+		if (DEV && form.enctype !== form_urlencoded) {
+			warn(`it's better to use ${form_urlencoded} enctype for forms`);
+		}
 
-					validateForm();
+		current_form = form;
+		form.addEventListener("input", onInput);
 
-					if (!get(is_valid)) {
-						cancel();
-						return;
-					}
-
-					loading.set(true);
-
-					return async ({ update, result }) => {
-						loading.set(false);
-						await update();
-						if (result.type == "success") {
-							fields.set({});
-						}
-					};
-				});
-
-			return {
-				destroy() {
-					current_form = null;
-					enhancer && enhancer.destroy();
-					form.removeEventListener("input", onInput);
-					unsubscribe_page();
+		const enhancer =
+			use_enhance &&
+			enhance(form, ({ cancel }) => {
+				if (get(loading)) {
+					return cancel();
 				}
-			};
-		},
+
+				validateForm();
+
+				if (!get(validate_result).valid) {
+					return cancel();
+				}
+
+				loading.set(true);
+
+				return async ({ update, result }) => {
+					loading.set(false);
+					await update();
+
+					if (result.type == "success") {
+						fields.set({});
+					}
+				};
+			});
+
+		return {
+			destroy() {
+				current_form = null;
+				enhancer && enhancer.destroy();
+				form.removeEventListener("input", onInput);
+				unsubscribe_page();
+			}
+		};
+	}
+
+	return {
+		result: validate_result,
+		fields,
+		loading: readonly(loading),
+		errs: readonly(errs),
+		errors,
+		validateForm,
+		action: svelte_action,
 		action_url: action == "default" ? "" : `?/${action}`
 	};
 }

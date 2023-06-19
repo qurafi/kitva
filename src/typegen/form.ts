@@ -27,8 +27,7 @@ export function generateClientCode(schema_import: string, forms: string[]) {
     
     ${forms
 		.map((form) => {
-			return `let i_${form} = 0;
-        export function ${getExportName(form)}(opts) {
+			return `export function ${getExportName(form)}(opts={}) {
             const validate = createValidateFn(actions_${form}, true);
         
             return createValidationClient(
@@ -36,9 +35,9 @@ export function generateClientCode(schema_import: string, forms: string[]) {
                 "${form}",
                 opts.fields,
                 getFormErrors,
-                true,
-                i_${form}++,
-                opts.use_enhance
+                opts.use_storage,
+                opts.use_enhance,
+                opts.warn_user
             );
         };`;
 		})

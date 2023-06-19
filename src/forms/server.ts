@@ -6,12 +6,8 @@ export function withValidation<T extends Record<string, any>>(t: T) {
 	for (const [name, action] of Object.entries(t)) {
 		out[name] = (event) => {
 			const { validation } = event.locals;
-			if (!validation) {
-				return action(event);
-			}
 
-			// currently we only handle body validation
-			if (!validation.valid && validation.body?.input) {
+			if (validation && !validation.valid && validation.body?.valid === false) {
 				return fail(400, {
 					[`__form_${name}`]: {
 						input: validation.body.input,
@@ -19,6 +15,7 @@ export function withValidation<T extends Record<string, any>>(t: T) {
 					}
 				});
 			}
+
 			return action(event);
 		};
 	}

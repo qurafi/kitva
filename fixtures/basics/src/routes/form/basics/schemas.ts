@@ -12,6 +12,10 @@ export const actions = {
 					format: "email is not valid"
 				}
 			}),
+			password: t.String({
+				minLength: 6,
+				maxLength: 128
+			}),
 			first_name: t.String({ minLength: 1 }),
 			last_name: t.Optional(t.String()),
 			accept_tos: t.Optional(t.Boolean({ default: false }))

@@ -76,14 +76,8 @@ async function testFormSubmission({
 		if (valid_data) {
 			await expect(page.locator("body")).toHaveText(/Successfully/);
 		} else {
-			if (!javascript) {
-				// when javascript enabled, the form submission will be prevented
-			}
-			// await expect(page.locator("pre")).toHaveText(form_error_json);
 			for (const [field, err] of Object.entries(form_error.__form_default.errors)) {
 				const message = await page.locator(`[name='${field}'] + .error`).textContent();
-
-				// on the client we don't update the coerced values on input
 
 				await expect(message).toBe(err.message);
 			}
@@ -98,9 +92,6 @@ testFormSubmission({ javascript: false, valid_data: true, enhance: false });
 
 testFormSubmission({ javascript: true, valid_data: false, enhance: false });
 testFormSubmission({ javascript: true, valid_data: true, enhance: false });
-
-testFormSubmission({ javascript: false, valid_data: false, enhance: true });
-testFormSubmission({ javascript: false, valid_data: true, enhance: true });
 
 testFormSubmission({ javascript: true, valid_data: false, enhance: true });
 testFormSubmission({ javascript: true, valid_data: true, enhance: true });
