@@ -1,8 +1,8 @@
 <script lang="ts">
-	import type { PageData } from "./$types.js";
 	import { page } from "$app/stores";
 
 	import { createDefaultActionForm as createValidate } from "./$form";
+	import { Input } from "kitva/components";
 
 	const enhance_param = $page.url.searchParams.get("enhance") || "true";
 	const use_enhance = enhance_param == "true";
@@ -36,7 +36,7 @@
 		use_enhance
 	});
 
-	const { fields, errs, loading, result } = my_form;
+	const { fields, loading } = my_form;
 </script>
 
 <div class="container">
@@ -56,51 +56,28 @@
 				use:my_form.action
 				autocomplete="off"
 			>
-				<label>
+				<!-- <label>
 					User
 					<input type="text" name="username" bind:value={$fields.username} />
 					<p class="error">{$errs.username || ""}</p>
-				</label>
+				</label> -->
 
-				<label>
-					Email
-					<input type="email" name="email" bind:value={$fields.email} />
-					<p class="error">{$errs.email || ""}</p>
-				</label>
+				<Input form={my_form} field="username" label="Username:" />
+				<Input form={my_form} field="email" label="Email:" />
+				<Input form={my_form} field="password" label="Password:" />
+				<Input form={my_form} field="first_name" label="First Name:" />
+				<Input form={my_form} field="last_name" label="Last Name(optional):" />
 
-				<label>
-					Password
-					<input type="password" name="password" bind:value={$fields.password} />
-					<p class="error">{$errs.password || ""}</p>
-				</label>
-
-				<label>
-					First Name:
-					<input type="text" name="first_name" bind:value={$fields.first_name} />
-					<p class="error">{$errs.first_name || ""}</p>
-				</label>
-
-				<label>
-					Last name (optional)
-					<input type="text" name="last_name" bind:value={$fields.last_name} />
-					<p class="error">{$errs.last_name || ""}</p>
-				</label>
+				<Input
+					form={my_form}
+					field="accept_tos"
+					type="checkbox"
+					label="Accept Term of services"
+				/>
 
 				<!-- check for unkown fields(depending on additionalProperties) -->
 				<!-- <input type="text" name="last_name" bind:value={$fields.unknown} /> -->
-
-				<!-- handle checkboxes(boolean) -->
-				<label>
-					Accept Term of services
-					<!-- value="true" -->
-					<input
-						type="checkbox"
-						name="accept_tos"
-						bind:checked={$fields.accept_tos}
-						value="true"
-					/>
-					<p class="error">{$errs.accept_tos || ""}</p>
-				</label>
+				<!-- <Input form={my_form} fields="unknown" /> -->
 
 				<button type="submit" disabled={$loading}>
 					Submit{$loading ? "ting" : ""}
@@ -130,17 +107,18 @@
 		margin-right: 3em;
 	}
 
-	input {
+	form :global(input) {
 		display: block;
 	}
 
-	.error {
+	form :global(.error) {
 		font-size: small;
 		margin-top: 0;
 		min-height: 0.5em;
+		color: red;
 	}
 
-	.error::after {
+	form :global(.error)::after {
 		content: "";
 		display: inline-block;
 	}
@@ -148,9 +126,5 @@
 	form button[type="submit"]:disabled {
 		opacity: 0.8;
 		cursor: not-allowed;
-	}
-
-	form .error {
-		color: red;
 	}
 </style>
