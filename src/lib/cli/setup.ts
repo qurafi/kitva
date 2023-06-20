@@ -77,7 +77,7 @@ export async function setup(cwd: string, { steps }: SetupOptions) {
 			}
 		}
 	} else {
-		warn("Could not add setup types because tsconfig/jsconfig is missing");
+		warn("Could setup types because tsconfig/jsconfig is missing");
 	}
 
 	console.log(green("Setup done"));
