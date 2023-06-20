@@ -18,26 +18,21 @@ function resolve_fixture(types: string | null, template: string) {
 	return resolve(__dirname, "fixtures", `${template}-types-${types}-tmp`);
 }
 
-async function testSetup(types: string | null, template: string) {
-	const out = resolve_fixture(types, template);
-	await create(out, {
-		name: "test",
-		template: template as any,
-		types: types as any,
-		prettier: false,
-		eslint: false,
-		playwright: false,
-		vitest: false
-	});
-}
-
 for (const fixture of fixtures /* .slice(0, 1) */) {
 	const project = resolve_fixture(fixture.types, fixture.template);
 	const name = basename(project);
 	it.concurrent(
 		`setup new kitva project: ${name}`,
 		async () => {
-			await testSetup(fixture.types, fixture.template);
+			await create(project, {
+				name: "test",
+				template: fixture.template as any,
+				types: fixture.types as any,
+				prettier: false,
+				eslint: false,
+				playwright: false,
+				vitest: false
+			});
 
 			const pkg_path = resolve(project, "package.json");
 			const pkg = JSON.parse(await readFile(pkg_path, "utf-8"));
