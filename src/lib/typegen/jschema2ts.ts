@@ -10,7 +10,7 @@ export async function compileJsonSchemaTypes(
 	schema: any,
 	ref?: string
 ) {
-	const generated_name = uid();
+	const generated_name = `_${randomInt(2 ** 48 - 1)}`;
 
 	if (!schema.$id && !ref) {
 		throw new Error("ref is required when schema.$id is undefined");
@@ -18,8 +18,8 @@ export async function compileJsonSchemaTypes(
 
 	const base_id = dirname(schema.$id ?? ref);
 
-	// json-schema-to-typescript use $id for generated interface so we override with the name we want
-	// it still try to format the name so we give it a uid and then replace it with our desired name
+	// json-schema-to-typescript use $id as interface name so we override with the name we want
+	// it still try to format the name so we give it a numberic uid and then replace it with our desired name
 	const code = await compile({ ...schema, $id: generated_name, title: undefined }, name, {
 		declareExternallyReferenced: true,
 		additionalProperties: true,
@@ -67,8 +67,4 @@ function ajvResolver(ajv: Ajv.default, base_id: string) {
 			return schema_env.schema;
 		}
 	};
-}
-
-function uid() {
-	return `_${randomInt(2 ** 48 - 1)}`;
 }

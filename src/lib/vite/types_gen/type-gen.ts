@@ -1,8 +1,7 @@
 import type { Plugin, SchemaBuilder } from "ajv-build-tools";
 import path from "path";
-import { compileFileJsonSchemaToTs } from "../typegen/index.js";
-import { generate$formDts } from "../typegen/form.js";
-import { HTTP_METHODS } from "../utils/index.js";
+import { generateTypes } from "../../typegen/index.js";
+import { generate$formDts } from "../client_gen/form.js";
 import { copyFile, mkdir, rm, writeFile } from "fs/promises";
 import { fileURLToPath } from "url";
 
@@ -11,20 +10,13 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export function typeGenPlugin(): Plugin {
 	async function handleFile(builder: SchemaBuilder, file: string) {
 		const { root, baseDir } = builder.config;
-
 		const is_route_schema = file.startsWith("routes/");
-
 		const abs_file = path.resolve(root, baseDir, file);
-
-		// using typescript's rootDirs
 		const root_dir = path.resolve(root, ".schemas/types");
-
 		const base_dir = path.resolve(root_dir, path.dirname(path.relative(root, abs_file)));
-
 		const $form_path = path.resolve(base_dir, "./$form.d.ts");
 
 		await rm(base_dir, { recursive: true, force: true });
-
 		await mkdir(base_dir, { recursive: true });
 
 		const out = path.resolve(
@@ -34,7 +26,7 @@ export function typeGenPlugin(): Plugin {
 
 		const { code, forms } = await generateTypes(builder, file, is_route_schema);
 
-		// write empty file to not break typescript server
+		// empty file to not break typescript server
 		await writeFile(out, code || "");
 
 		if (is_route_schema) {
@@ -66,56 +58,4 @@ export function typeGenPlugin(): Plugin {
 			);
 		}
 	};
-}
-
-async function generateTypes(builder: SchemaBuilder, file: string, is_route_schema: boolean) {
-	// store file
-	const forms: string[] = [];
-	const exported_schemas: ExportedRouteSchemas = {};
-
-	let code = await compileFileJsonSchemaToTs({
-		builder,
-		file: file,
-		async onSchema(name) {
-			if (!is_route_schema) {
-				return;
-			}
-
-			// inline routes schemas
-			const is_action_schema = name.startsWith("actions_");
-			const is_method_schema = HTTP_METHODS.some((method) => name.startsWith(method + "_"));
-			if (is_method_schema || is_action_schema) {
-				const [method] = name.split("_", 1);
-
-				(exported_schemas[method] ??= []).push(`${name.slice(method.length + 1)}: ${name}`);
-			}
-
-			// write ./$form/action types
-			if (is_action_schema) {
-				const action = name.slice("actions_".length);
-				forms.push(action);
-			}
-		}
-	});
-
-	if (code && is_route_schema) {
-		code += constructRouteSchemaInterface(exported_schemas);
-	}
-
-	return {
-		code: code,
-		forms
-	};
-}
-
-type ExportedRouteSchemas = Record<string, string[]>;
-
-function constructRouteSchemaInterface(schemas: ExportedRouteSchemas) {
-	const props = Object.entries(schemas)
-		.map(([method, props]) => {
-			return `\t${method}: {\n\t\t${props.join("\n\t\t")}\n\t}`;
-		})
-		.join("\n");
-
-	return `export interface Schemas {\n${props}\n}`;
 }

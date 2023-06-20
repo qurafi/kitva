@@ -2,7 +2,7 @@ import { dirname } from "path";
 import path from "path/posix";
 import type { Plugin as VitePlugin } from "vite";
 import type { Plugin as ajvToolsPlugin } from "ajv-build-tools";
-import { generateClientCode } from "../typegen/form.js";
+import { generateClientCode } from "./form.js";
 
 export async function viteSvelteFormClientGenPlugin(): Promise<VitePlugin> {
 	let root: string;
@@ -58,7 +58,7 @@ export async function viteSvelteFormClientGenPlugin(): Promise<VitePlugin> {
 }
 export const routes_form: Record<string, string[]> = {};
 
-export function getRouteFormSchemaPlugin(): ajvToolsPlugin {
+export function getRouteFormSchemasPlugin(): ajvToolsPlugin {
 	return {
 		onFile({ builder, relativePath }) {
 			if (relativePath.startsWith("routes/")) {

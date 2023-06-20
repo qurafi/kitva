@@ -1,6 +1,6 @@
 import { bold } from "kleur/colors";
-import { HTTP_METHODS, HTTP_PARTS, warn } from "../utils/index.js";
-
+import { HTTP_METHODS, HTTP_PARTS, warn } from "../../utils/index.js";
+import type { Plugin as AjvToolsPlugin } from "ajv-build-tools";
 /*
 Resolve from:
  export GET = {queries: {}}
@@ -49,6 +49,18 @@ export function resolveRoutesSchemas(module: Module, file: string) {
 	}
 
 	return schemas;
+}
+
+export function routeSchemasResolver(): AjvToolsPlugin {
+	return {
+		async resolveModule(module, file) {
+			if (file.startsWith("routes/")) {
+				return resolveRoutesSchemas(module, file);
+			}
+
+			return module;
+		}
+	};
 }
 
 function warnAboutGetBody(file: string) {

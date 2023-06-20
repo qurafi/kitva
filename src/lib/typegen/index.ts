@@ -1,5 +1,50 @@
 import { type SchemaBuilder, resolveSchemaRef } from "ajv-build-tools";
 import { compileJsonSchemaTypes } from "./jschema2ts.js";
+import { HTTP_METHODS, type MaybePromise } from "$lib/utils/index.js";
+
+export async function generateTypes(
+	builder: SchemaBuilder,
+	file: string,
+	is_route_schema: boolean
+) {
+	// store file
+	const forms: string[] = [];
+	const exported_schemas: ExportedRouteSchemas = {};
+
+	let code = await compileFileJsonSchemaToTs({
+		builder,
+		file: file,
+		async onSchema(name) {
+			if (!is_route_schema) {
+				return;
+			}
+
+			// inline routes schemas
+			const is_action_schema = name.startsWith("actions_");
+			const is_method_schema = HTTP_METHODS.some((method) => name.startsWith(method + "_"));
+			if (is_method_schema || is_action_schema) {
+				const [method] = name.split("_", 1);
+
+				(exported_schemas[method] ??= []).push(`${name.slice(method.length + 1)}: ${name}`);
+			}
+
+			// write ./$form/action types
+			if (is_action_schema) {
+				const action = name.slice("actions_".length);
+				forms.push(action);
+			}
+		}
+	});
+
+	if (code && is_route_schema) {
+		code += constructRouteSchemaInterface(exported_schemas);
+	}
+
+	return {
+		code: code,
+		forms
+	};
+}
 
 interface CompileContext {
 	builder: SchemaBuilder;
@@ -7,7 +52,7 @@ interface CompileContext {
 }
 
 type CompileOptions = CompileContext & {
-	onSchema?(name: string, file: string): void;
+	onSchema?(name: string, file: string): MaybePromise<void>;
 };
 
 export async function compileFileJsonSchemaToTs({ builder, file, onSchema }: CompileOptions) {
@@ -27,4 +72,16 @@ export async function compileFileJsonSchemaToTs({ builder, file, onSchema }: Com
 	}
 
 	return source;
+}
+
+type ExportedRouteSchemas = Record<string, string[]>;
+
+function constructRouteSchemaInterface(schemas: ExportedRouteSchemas) {
+	const props = Object.entries(schemas)
+		.map(([method, props]) => {
+			return `\t${method}: {\n\t\t${props.join("\n\t\t")}\n\t}`;
+		})
+		.join("\n");
+
+	return `export interface Schemas {\n${props}\n}`;
 }
