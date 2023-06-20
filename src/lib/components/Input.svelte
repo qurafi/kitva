@@ -1,4 +1,5 @@
 <script lang="ts">
+	/* global $$Generic */
 	import type { Writable } from "svelte/store";
 	import type { HTMLInputAttributes, HTMLLabelAttributes } from "svelte/elements";
 
@@ -40,6 +41,7 @@
 	}
 </script>
 
+/* global $$Generic */
 <label {...labelProps}>
 	{label}
 	{#if $$restProps.type == "checkbox"}
