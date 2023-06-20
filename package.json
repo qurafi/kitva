@@ -17,70 +17,6 @@
     "license": "MIT",
 	"type": "module",
     "bin": "./dist/cli/bin.js",
-	"exports": {
-		"./hook/*": {
-			"types": "./dist/hook/*.d.ts",
-			"import": "./dist/hook/*.js"
-		},
-		"./vite": {
-			"types": "./dist/vite/index.d.ts",
-			"import": "./dist/vite/index.js"
-		},
-		"./presets/ajv/*": {
-			"types": "./dist/presets/ajv/*.d.ts",
-			"import": "./dist/presets/ajv/*.js"
-		},
-		"./utils/*": {
-			"types": "./dist/utils/*.d.ts",
-			"import": "./dist/utils/*.js"
-		},
-		"./forms/*": {
-			"types": "./dist/forms/*.d.ts",
-			"import": "./dist/forms/*.js"
-		},
-		"./types": {
-			"types": "./dist/types.d.ts"
-		},
-        "./components": {
-			"types": "./dist/components/index.d.ts",
-            "svelte": "./dist/components/index.js"
-		}
-	},
-	"typesVersions": {
-		"*": {
-			"hook/*": [
-				"dist/hook/*.d.ts"
-			],
-			"vite": [
-				"dist/vite/index.d.ts"
-			],
-			"presets/ajv/*": [
-				"dist/presets/ajv/*.d.ts"
-			],
-			"utils/*": [
-				"dist/utils/*.d.ts"
-			],
-			"forms/*": [
-				"dist/forms/*.d.ts"
-			],
-			"types": [
-				"dist/types.d.ts"
-			],
-            "components": [
-				"dist/components/index.d.ts"
-			]
-		}
-	},
-	"files": [
-		"dist",
-		"src",
-		"!src/routes",
-		"!dist/**/*.test.*",
-		"!dist/**/*.spec.*",
-		"!src/**/*.test.*",
-		"!src/**/*.spec.*",
-		"./*.d.ts"
-	],
 	"scripts": {
 		"test:e2e": "DEBUG_COLORS=1 pnpm -r test",
 		"test:spec": "DEBUG_COLORS=1 pnpm vitest",
@@ -96,9 +32,66 @@
 		"format": "prettier --plugin-search-dir . --write .",
 		"tscheck": "tsc --noEmit"
 	},
+	"exports": {
+		"./hook/*": {
+			"types": "./dist/hook/*.d.ts",
+			"import": "./dist/hook/*.js"
+		},
+		"./vite": {
+			"types": "./dist/vite/index.d.ts",
+			"import": "./dist/vite/index.js"
+		},
+		"./presets/ajv/*": {
+			"types": "./dist/presets/ajv/*.d.ts",
+			"import": "./dist/presets/ajv/*.js"
+		},
+		"./forms/*": {
+			"types": "./dist/forms/*.d.ts",
+			"import": "./dist/forms/*.js"
+		},
+		"./types": {
+			"types": "./dist/types.d.ts"
+		},
+        "./components": {
+			"types": "./dist/components/index.d.ts",
+            "svelte": "./dist/components/index.js"
+		}
+	},
+    "typesVersions": {
+        "*" : {
+            "hook/*": [
+              "dist/hook/*.d.ts"
+            ],
+            "vite": [
+              "dist/vite/index.d.ts"
+            ],
+            "presets/ajv/*": [
+              "dist/presets/ajv/*.d.ts"
+            ],
+            "forms/*": [
+              "dist/forms/*.d.ts"
+            ],
+            "types": [
+              "dist/types.d.ts"
+            ],
+            "components": [
+              "dist/components/index.d.ts"
+            ]
+          }   
+    },
+	"files": [
+		"dist",
+		"src",
+		"!src/routes",
+		"!dist/**/*.test.*",
+		"!dist/**/*.spec.*",
+		"!src/**/*.test.*",
+		"!src/**/*.spec.*",
+		"./*.d.ts"
+	],
 	"peerDependencies": {
 		"svelte": "^3.54.0",
-        "@sveltejs/kit": "^1.20.4"
+        "@sveltejs/kit": "^1.5.0"
 	},
 	"devDependencies": {
 		"@sinclair/typebox": "^0.28.14",
