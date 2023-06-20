@@ -1,6 +1,6 @@
 import { withValidation } from "kitva/forms/server";
 import type { Actions } from "./$types2";
-import { handleValidate } from "kitva/hook/validation_hook";
+import { handleValidate } from "kitva/hook";
 
 export const actions: Actions = withValidation({
 	default(event) {

@@ -1,5 +1,5 @@
 import type { POSTHandler } from "./$types2";
-import { handleValidate } from "kitva/hook/validation_hook";
+import { handleValidate } from "kitva/hook";
 import { json } from "@sveltejs/kit";
 
 export const POST: POSTHandler = async (event) => {
