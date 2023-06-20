@@ -1,8 +1,8 @@
-import { randomInt } from "crypto";
+import { randomInt } from "node:crypto";
 import { compile } from "json-schema-to-typescript";
 import type Ajv from "ajv";
 import { resolveUrl } from "ajv/dist/compile/resolve.js";
-import { dirname } from "path";
+import { dirname } from "node:path";
 
 export async function compileJsonSchemaTypes(
 	ajv: Ajv.default,

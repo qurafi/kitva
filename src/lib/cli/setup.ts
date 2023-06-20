@@ -1,12 +1,12 @@
-import { existsSync, readFileSync, writeFileSync } from "fs";
-import { resolve } from "path";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { addVitePlugin } from "./edit_vite_config.js";
 import { editTsConfig } from "./edit_tsconfig.js";
 import { addValidationHook } from "./add_hook.js";
 import { warn } from "../utils/index.js";
 import { bold, green } from "kleur/colors";
 import { addTypes } from "./add_types.js";
-import { execSync } from "child_process";
+import { execSync } from "node:child_process";
 
 function getViteConfig(cwd: string) {
 	const vite_js = resolve(cwd, "vite.config.js");

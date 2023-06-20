@@ -1,9 +1,9 @@
 import type { Plugin, SchemaBuilder } from "ajv-build-tools";
-import path from "path";
+import path from "node:path";
 import { generateTypes } from "../../typegen/index.js";
 import { generate$formDts } from "../client_gen/form.js";
 import { copyFile, mkdir, rm, writeFile } from "fs/promises";
-import { fileURLToPath } from "url";
+import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 

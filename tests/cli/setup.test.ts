@@ -1,9 +1,8 @@
 import { afterAll, beforeAll, it } from "vitest";
 import { create } from "create-svelte";
-import { readFile, rm, writeFile } from "fs/promises";
-import path, { basename, relative, resolve } from "path";
-import { ChildProcess, spawn } from "child_process";
-import { cwd } from "process";
+import { readFile, rm, writeFile } from "node:fs/promises";
+import path, { basename, relative, resolve } from "node:path";
+import { ChildProcess, spawn } from "node:child_process";
 
 const fixtures = [
 	{ types: null, template: "default" },
@@ -40,7 +39,7 @@ for (const fixture of fixtures /* .slice(0, 1) */) {
 
 			pkg.pnpm = {
 				overrides: {
-					kitva: "link:" + relative(project, cwd())
+					kitva: "link:" + relative(project, process.cwd())
 				}
 			};
 

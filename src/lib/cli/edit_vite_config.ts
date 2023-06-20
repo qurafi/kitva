@@ -1,4 +1,4 @@
-import { readFile, writeFile } from "fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
 import { warn } from "../utils/index.js";
 
 const import_statement = "import { vitePluginSvelteKitva } from 'kitva/vite';";

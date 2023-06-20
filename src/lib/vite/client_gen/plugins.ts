@@ -1,4 +1,4 @@
-import { dirname } from "path";
+import { dirname } from "node:path";
 import path from "path/posix";
 import type { Plugin as VitePlugin } from "vite";
 import type { Plugin as ajvToolsPlugin } from "ajv-build-tools";

@@ -1,7 +1,7 @@
 import * as jsonc from "jsonc-parser";
 import { red } from "kleur/colors";
 import { error, warn } from "../utils/index.js";
-import path from "path";
+import path from "node:path";
 
 const root_dir = ".schemas/types";
 

@@ -1,6 +1,6 @@
-import { existsSync, readFileSync } from "fs";
-import { mkdir, writeFile } from "fs/promises";
-import { relative, resolve } from "path";
+import { existsSync, readFileSync } from "node:fs";
+import { mkdir, writeFile } from "node:fs/promises";
+import { relative, resolve } from "node:path";
 import { warn } from "../utils/index.js";
 
 // TODO just export the whole hook with the preset from kiva/presets/ajv
