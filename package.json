@@ -22,7 +22,7 @@
 		"test:spec": "DEBUG_COLORS=1 pnpm vitest",
 		"test": "export CI=true && pnpm run '/^test:/'",
 		"dev": "svelte-package -w",
-		"build": "svelte-kit sync && svelte-package && publint",
+		"build": "svelte-package",
 		"preview": "vite preview",
 		"package": "svelte-kit sync && pnpm build && publint",
 		"prepublishOnly": "npm run package && publint",
