@@ -3,8 +3,7 @@
 Validate your endpoints and forms with no boilerplate, Just define your **schemas.ts** alongside your routes and this tool will take care of validation, type generation and form client generation.
 
 ## Showcase
-
-<https://github.com/qurafi/kitva/assets/15172611/e45b5441-7961-43ab-8515-a6a362a85fe1>
+TODO
 
 ## Features
 
