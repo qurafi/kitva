@@ -26,5 +26,5 @@ export function vitePluginSvelteKitva(opts?: PluginOptions) {
 		]
 	});
 
-	return [ajvTools, viteSvelteFormClientGenPlugin()] as PluginOption;
+	return [ajvTools as PluginOption, viteSvelteFormClientGenPlugin()];
 }
