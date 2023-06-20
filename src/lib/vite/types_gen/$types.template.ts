@@ -1,6 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-nocheck
-import type { AnyMap, HttpMethod, RequestHandlerWithValidation } from "../../../dist/lib/types.js";
+import type { AnyMap, HttpMethod, RequestHandlerWithValidation } from "kitva/types";
 
 import type { RequestHandler as RequestHandler_ } from "./$types";
 
