@@ -5,12 +5,11 @@ import { existsSync } from "node:fs";
 import { resolve } from "node:path";
 import { createServer } from "vite";
 
-const cwd = process.cwd()
+const cwd = process.cwd();
 
 function log(...messages) {
 	return console.log("\nsubprocess:", ...messages, "\n\n");
 }
-
 
 log("validating vite project setup", cwd);
 
