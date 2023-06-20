@@ -2,21 +2,21 @@
 	"name": "kitva",
 	"version": "1.0.0-next.8",
 	"description": "Validation kit for SvelteKit",
-    "keywords": [
-        "svelte",
-        "sveltekit",
-        "validation",
-        "forms",
-        "form-validation",
-        "vite-plugin",
-        "jsonschema"
-    ],
-    "repository": "https://github.com/qurafi/kitva",
-    "bugs": "https://github.com/qurafi/kitva/issues",
-    "author": "Mohammed Al-Qurafi <mohammedqurafi@gmail.com> (https://github.com/qurafi/)",
-    "license": "MIT",
+	"keywords": [
+		"svelte",
+		"sveltekit",
+		"validation",
+		"forms",
+		"form-validation",
+		"vite-plugin",
+		"jsonschema"
+	],
+	"repository": "https://github.com/qurafi/kitva",
+	"bugs": "https://github.com/qurafi/kitva/issues",
+	"author": "Mohammed Al-Qurafi <mohammedqurafi@gmail.com> (https://github.com/qurafi/)",
+	"license": "MIT",
 	"type": "module",
-    "bin": "./dist/cli/bin.js",
+	"bin": "./dist/cli/bin.js",
 	"scripts": {
 		"test:e2e": "DEBUG_COLORS=1 pnpm -r test",
 		"test:spec": "DEBUG_COLORS=1 pnpm vitest",
@@ -52,33 +52,33 @@
 		"./types": {
 			"types": "./dist/types.d.ts"
 		},
-        "./components": {
+		"./components": {
 			"types": "./dist/components/index.d.ts",
-            "svelte": "./dist/components/index.js"
+			"svelte": "./dist/components/index.js"
 		}
 	},
-    "typesVersions": {
-        "*" : {
-            "hook": [
-              "dist/hook/index.d.ts"
-            ],
-            "vite": [
-              "dist/vite/index.d.ts"
-            ],
-            "presets/ajv/*": [
-              "dist/presets/ajv/*.d.ts"
-            ],
-            "forms/*": [
-              "dist/forms/*.d.ts"
-            ],
-            "types": [
-              "dist/types.d.ts"
-            ],
-            "components": [
-              "dist/components/index.d.ts"
-            ]
-          }   
-    },
+	"typesVersions": {
+		"*": {
+			"hook": [
+				"dist/hook/index.d.ts"
+			],
+			"vite": [
+				"dist/vite/index.d.ts"
+			],
+			"presets/ajv/*": [
+				"dist/presets/ajv/*.d.ts"
+			],
+			"forms/*": [
+				"dist/forms/*.d.ts"
+			],
+			"types": [
+				"dist/types.d.ts"
+			],
+			"components": [
+				"dist/components/index.d.ts"
+			]
+		}
+	},
 	"files": [
 		"dist",
 		"src",
@@ -90,8 +90,8 @@
 		"./*.d.ts"
 	],
 	"peerDependencies": {
-		"svelte": "^3.54.0",
-        "@sveltejs/kit": "^1.5.0"
+		"@sveltejs/kit": "^1.5.0",
+		"svelte": "^3.54.0"
 	},
 	"devDependencies": {
 		"@sinclair/typebox": "^0.28.14",
@@ -123,7 +123,7 @@
 	},
 	"dependencies": {
 		"ajv": "^8.12.0",
-		"ajv-build-tools": "^1.0.0-next",
+		"ajv-build-tools": "1.0.0-next.5",
 		"debug": "^4.3.4",
 		"json-schema-to-typescript": "^13.0.1",
 		"jsonc-parser": "^3.2.0",
