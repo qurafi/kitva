@@ -6,6 +6,6 @@ export default defineConfig({
 	test: {
 		// singleThread: true,
 		threads: true,
-		include: ["src/**/*.{test,spec}.{js,ts}"]
+		include: ["{src,tests}/**/*.{test,spec}.{js,ts}"]
 	}
 });

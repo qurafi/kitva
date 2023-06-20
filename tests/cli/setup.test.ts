@@ -22,8 +22,8 @@ async function testSetup(types: string | null, template: string) {
 	const out = resolve_fixture(types, template);
 	await create(out, {
 		name: "test",
-		template: template,
-		types: types,
+		template: template as any,
+		types: types as any,
 		prettier: false,
 		eslint: false,
 		playwright: false,

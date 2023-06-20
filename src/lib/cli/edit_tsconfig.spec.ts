@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { editTsConfig } from "../edit_tsconfig.js";
+import { editTsConfig } from "./edit_tsconfig.js";
 
 const sk_config = `{
 	"compilerOptions": {

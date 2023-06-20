@@ -14,7 +14,7 @@ export const preset = createPreset(schemas);
 export const handle = getValidationHook(preset);
 `;
 
-const hook_server_code_js = `import { handle as validationHook } from "$lib/validation/hook";
+const hook_server_code_js = `import { handle as validationHook } from "./lib/validation/hook";
 import { sequence } from "@sveltejs/kit/hooks";
 
 /** @type {import("@sveltejs/kit").Handle} */
@@ -26,7 +26,7 @@ const mainHandle = async ({event, resolve}) => {
 export const handle = sequence(validationHook, mainHandle)`;
 
 const hook_server_code_ts = `import type { Handle } from "@sveltejs/kit";\n
-import { handle as validationHook } from "$lib/validation/hook";
+import { handle as validationHook } from "./lib/validation/hook";
 import { sequence } from "@sveltejs/kit/hooks";
 
 const mainHandle: Handle = async ({event, resolve}) => {

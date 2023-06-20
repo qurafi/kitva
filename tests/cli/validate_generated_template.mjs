@@ -1,8 +1,9 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-nocheck
 import { execSync } from "child_process";
 import { existsSync } from "fs";
 import { resolve } from "path";
-import { cwd, stdout } from "process";
+import { cwd } from "process";
 import { createServer } from "vite";
 
 function log(...messages) {

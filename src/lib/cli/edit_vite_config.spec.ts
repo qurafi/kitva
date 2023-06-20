@@ -1,5 +1,5 @@
 import { expect, it } from "vitest";
-import { editViteConfig } from "../edit_vite_config.js";
+import { editViteConfig } from "./edit_vite_config.js";
 
 const fixtures = {
 	empty: "",

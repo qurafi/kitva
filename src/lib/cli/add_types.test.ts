@@ -1,5 +1,5 @@
 import { expect, it } from "vitest";
-import { editAppDts } from "../add_types.js";
+import { editAppDts } from "./add_types.js";
 
 const fixtures = {
 	default: `// See https://kit.svelte.dev/docs/types#app

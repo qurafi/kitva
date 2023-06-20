@@ -18,5 +18,5 @@
         "rootDir": "src"
 	},
 	"include": ["src"],
-	"exclude": ["dist", "fixtures/", "src/**/tests/fixtures"]
+	"exclude": ["dist", "fixtures", "src/**/tests/fixtures"]
 }
