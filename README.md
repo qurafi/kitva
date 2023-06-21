@@ -20,20 +20,22 @@ TODO
 
 ## Get Started
 
-`npm i kitva`
-`pnpm i kitva`
+`npm i kitva ajv ajv-formats@beta`
+`pnpm i kitva ajv ajv-formats@beta`
 
-And then:
+And then run this command to setup everything:
 `npm run kitva`
 `pnpm kitva`
 
 **NOTE:** This command will edit your vite config, tsconfig and create $lib/validation/hook file, so it's recommended to commit your work.
 
+For more information: See [Manual setup](#manual-setup), [CLI Options](#cli-options)
+
 ### Schema format
 
-Json schemas are used as schema format by default. All schema validation is handled by Ajv. Althought we kinda made it possible to use other formats, but we currently only focus on json schemas.
+Json schemas are used as schema format by default and it's managed by Ajv. Althought we kinda made it possible to use other formats, but we currently only focus on json schemas.
 
-For more information about json schemas. Consult one of the following links:
+For more information about using Json Schemas. Consult one of the following links:
 
 - [Ajv docs](https://ajv.js.org/json-schema.html)
 - [Understanding JSON Schema](https://json-schema.org/understanding-json-schema/)
@@ -45,8 +47,8 @@ For more information about json schemas. Consult one of the following links:
 
 There's two kind of schema files:
 
-- A shared one that's defined in `$lib/schemas`
-- A route schema which included with some enhancement including type generation for forms and endpoints.
+- A shared one defined in `$lib/schemas`
+- A route schema which included with some enhancement for endpoints and forms.
 
 **Example of an endpoint schema file**
 
@@ -160,11 +162,18 @@ export const POST = {
 */
 export const actions = {
     signup: {
-        body: {
-            ...
-        }
+        // must be type object and additionalProperties turned off
+        type:"object",
+        additionalProperties: false,
+        properties: {
+            a: {type:"string"},
+            b: {type:"boolean", default:false},
+        },
+        // must set required
+        required: ["a", "b"]
+        ...
+    }
 
-    },
 }
 ```
 
@@ -177,13 +186,14 @@ import type { Actions } from "./$types2";
 
 export const actions: Actions = withValidation({
     signup(event) {
-        // do something
+        // type safe!
+        event.locals.validation.body.a
 
         return {
             success: true,
         };
     },
-    another: ..., // TS error
+    another: ..., // TS error, unknown prop
 });
 ```
 
@@ -197,9 +207,9 @@ All clients are exported by the format, `action_name = createActionNameForm`, e.
 <script>
  import { createDefaultForm } from "./$form";
 
- const my_form = createDefaultForm(initial_fields);
+ const my_form = createDefaultForm({fields: initial_fields});
 
- const { fields, errs, is_valid, action, action_url } = my_form;
+ const { fields, errs, action, action_url } = my_form;
 </script>
 
 <form method="post" action={action_url}>
@@ -210,63 +220,22 @@ All clients are exported by the format, `action_name = createActionNameForm`, e.
    <p class="error">{$errs.username}</p>
   {/if}
  </label>
+
+ <!-- or use Input from kitva/components -->
+ <Input form={my_form} name="username"/>
  ...
 </form>
 ```
 
-The client returns the following:
+For more information about the client see [forms/types.ts](./src/lib/forms/types.ts)
 
-```typescript
-my_form = {
-    /**
-     * Usage with binding values
-     * Not type safe because fields could be invalid or missing
-     * */
-    fields: Writable<Partial<Record<keyof Data, any>>>;
 
-    /**
-     * Readable store returns the data when it's valid and it's type safe
-     *
-     * alias for $validate_result.data
-    */
-    form_data: Readable<Data | undefined>;
-
-    /** alias of $validate_result.valid */
-    is_valid: Readable<boolean>;
-
-    /**
-     * Optmized error messages for UI
-     * - errors are set to the specific field user start typing into
-     * - errors are delayed 250ms after the start of typing
-     *
-    */
-    errs: Readable<Partial<Record<keyof Data, string>>>;
-
-    /**
-     * Raw errors, alias for $validation_result.errors
-    */
-    errors: Readable<Record<keyof Data, Error>>;
-
-    /**
-     * Returns {valid: boolean, data: Data, errors: Error[], input: JSONType}
-     * */
-    validate_result: Readable<ValidationResult<Data, Error>>;
-
-    // all self explanatory
-    loading: Readable<boolean>;
-    action_url: string;
-    action(form:HTMLFormElement)
-
-    // advanced, used for custom validation logic
-    validateForm(field?: string): void;
-}
-```
 
 ### Standalone Validation
 
 To directly import and use the compiled validation function for schemas. refer to [ajv-build-tools](https://github.com/qurafi/ajv-tools#importing-the-compiled-schemas)
 
-### **CLI** options
+### CLI options
 
 Running the command without arguments will setup every thing listed in [Manual Setup](#manual-setup), but in case you want to setup a specific setup add --only=steps, where steps are comma seperated:
 `pnpm kitva --only=hook,vite,types`
@@ -293,7 +262,7 @@ Usually the CLI will handle most of the setup steps automatically, but just in c
     // virtual import used to import all the compiled schemas
     import schemas from "$schemas?t=all";
 
-    import { validationHook } from "kitva/hook/index";
+    import { validationHook } from "kitva/hooks";
     import { createPreset } from "kitva/presets/ajv/server";
 
     export const preset = createPreset(schemas);
