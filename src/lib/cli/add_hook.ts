@@ -6,7 +6,7 @@ import { warn } from "../utils/index.js";
 // TODO just export the whole hook with the preset from kiva/presets/ajv
 const validation_hook = `import schemas from "$schemas?t=all";
 
-import { validationHook as getValidationHook } from "kitva/hook";
+import { validationHook as getValidationHook } from "kitva/hooks";
 import { createPreset } from "kitva/presets/ajv/server";
 
 export const preset = createPreset(schemas);

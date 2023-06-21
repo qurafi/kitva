@@ -33,9 +33,9 @@
 		"tscheck": "tsc --noEmit"
 	},
 	"exports": {
-		"./hook": {
-			"types": "./dist/hook/index.d.ts",
-			"import": "./dist/hook/index.js"
+		"./hooks": {
+			"types": "./dist/hooks/index.d.ts",
+			"import": "./dist/hooks/index.js"
 		},
 		"./vite": {
 			"types": "./dist/vite/index.d.ts",
@@ -59,9 +59,6 @@
 	},
 	"typesVersions": {
 		"*": {
-			"hook": [
-				"dist/hook/index.d.ts"
-			],
 			"vite": [
 				"dist/vite/index.d.ts"
 			],
