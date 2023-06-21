@@ -1,5 +1,5 @@
-<!-- global $$Generic -->
 <script lang="ts">
+	/* global $$Generic */
 	import type { Writable } from "svelte/store";
 	import type { HTMLInputAttributes, HTMLLabelAttributes } from "svelte/elements";
 
