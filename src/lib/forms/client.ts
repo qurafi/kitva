@@ -4,7 +4,7 @@ import { page } from "$app/stores";
 import { DEV } from "esm-env";
 import { onDestroy } from "svelte";
 import { derived, get, readonly, writable } from "svelte/store";
-import type { GetFormErrors, ValidateFn } from "../hook/types.js";
+import type { GetFormErrors, ValidateFn } from "../hooks/types.js";
 import type { AnyError, AnyMap, ValidationResult } from "../types.js";
 import { form_urlencoded } from "../utils/http.js";
 import { filterEmptyFields, warn } from "../utils/index.js";
@@ -25,10 +25,6 @@ export function createValidationClient(
 
 	const set_fields = fields.set;
 	fields.set = (value) => set_fields(filterEmptyFields(value));
-
-	if (use_storage) {
-		useStorage(action, fields);
-	}
 
 	const validate_result = derived(
 		fields,
@@ -112,6 +108,8 @@ export function createValidationClient(
 	}
 
 	function svelte_action(form: HTMLFormElement) {
+		const storage = use_storage && useStorage(action, fields);
+
 		if (DEV && form.enctype !== form_urlencoded) {
 			warn(`it's better to use ${form_urlencoded} enctype for forms`);
 		}
@@ -148,6 +146,7 @@ export function createValidationClient(
 			destroy() {
 				current_form = null;
 				enhancer && enhancer.destroy();
+				storage && storage.unsubscribe();
 				form.removeEventListener("input", onInput);
 				unsubscribe_page();
 			}

@@ -25,12 +25,16 @@ export function useStorage(
 		//
 	}
 
-	fields.subscribe(() => {
+	const unsubscribe_fields = fields.subscribe(() => {
 		if (changed) {
 			sessionStorage.setItem(key, JSON.stringify(get(fields), only));
 		}
 		changed = true;
 	});
+
+	return {
+		unsubscribe: unsubscribe_fields
+	};
 }
 
 // if a page hot reloaded, we have to reset the global ids
