@@ -33,7 +33,7 @@ export async function getRequestBody(request: Request, clone = true) {
 			}
 
 			if (DEV && not_string) {
-				throw new Error("kitva: files are not supported");
+				throw new Error("Kitva: files are not supported");
 			}
 		}
 

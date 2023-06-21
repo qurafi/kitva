@@ -24,13 +24,15 @@ export async function viteSvelteFormClientGenPlugin(): Promise<VitePlugin> {
 				}
 
 				if (!importer) {
-					throw new Error("using form with relative path should have an importer");
+					throw new Error("Kitva: Using form with relative path should have an importer");
 				}
 
 				const rel_importer = path.relative(root, importer);
 				const dirname = path.dirname(rel_importer);
 				if (!dirname.startsWith(routes_dir)) {
-					throw new Error("$form client could only be generated for routes schemas");
+					throw new Error(
+						"Kitva: $form client could only be generated for routes schemas"
+					);
 				}
 
 				const route = dirname.slice(routes_dir.length);
@@ -43,9 +45,11 @@ export async function viteSvelteFormClientGenPlugin(): Promise<VitePlugin> {
 			if (id.startsWith(resolved_abs_form_prefix)) {
 				const route = id.slice(resolved_abs_form_prefix.length);
 				const schema = `$schemas/routes/${route ? route + "/" : ""}schemas`;
-				const route_action_names = routes_form["routes/" + route];
+				const route_action_names = routes_form[`routes${route ? "/" + route : ""}`];
 				if (!route_action_names) {
-					throw new Error("Could not find actions for this route");
+					throw new Error(
+						`Kitva: Could not find actions for route "${route}", resolve id '${id}'`
+					);
 				}
 				// console.log(route, routes_form, route_action_names);
 
