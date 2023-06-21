@@ -14,15 +14,16 @@ export function vitePluginSvelteKitva(opts?: PluginOptions) {
 		...opts?.ajvTools,
 		include: [
 			"./src/routes/**/schemas.{ts,js,\\.d.ts}",
-			"./src/lib/schemas/**/*.{ts,js,\\.d.ts}"
+			"./src/lib/schemas/**/*.{ts,js,\\.d.ts}",
+			...(opts?.ajvTools?.include || [])
 		],
-		// TODO support ts to json schema
-		exclude: ["**/*.d.ts"],
+		exclude: ["**/*.d.ts", ...(opts?.ajvTools?.exclude || [])],
 		plugins: [
 			routeSchemasResolver(),
 			typeGenPlugin(),
 			validateFormObjectType(),
-			getRouteFormSchemasPlugin()
+			getRouteFormSchemasPlugin(),
+			...(opts?.ajvTools?.plugins || [])
 		]
 	});
 
