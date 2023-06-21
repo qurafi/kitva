@@ -20,11 +20,14 @@ TODO
 
 ## Get Started
 **NOTE**: This is still in alpha. If you have any issue or feedback, please raise a new issue.
+
 `npm i kitva ajv ajv-formats@beta`
+
 `pnpm i kitva ajv ajv-formats@beta`
 
 And then run this command to setup everything:
 `npm run kitva`
+
 `pnpm kitva`
 
 Afer that, you may need to restart your typescript server.
