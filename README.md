@@ -3,7 +3,11 @@
 Validate your endpoints and forms with no boilerplate, Just define your **schemas.ts** alongside your routes and this tool will take care of validation, type generation and form client generation.
 
 ## Showcase
-TODO
+https://github.com/qurafi/kitva/assets/15172611/839dea17-95f2-476d-8b5f-f90dd12ce77d
+
+
+
+
 
 ## Features
 
@@ -26,6 +30,7 @@ TODO
 `pnpm i kitva ajv ajv-formats@beta`
 
 And then run this command to setup everything:
+
 `npm run kitva`
 
 `pnpm kitva`
