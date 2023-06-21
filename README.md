@@ -16,7 +16,7 @@ https://github.com/qurafi/kitva/assets/15172611/839dea17-95f2-476d-8b5f-f90dd12c
 - **Less boilerplate**: Endpoints and forms are automatically validated by a global Sveltekit hook.
 - **Small bundle sizes**: Just your validation function and the form client and nothing else!
 - **Typesafety**: Types are automatically generated and handled for you.
-- **Full featured form client**: Just import `./$form` inside your page and your form client is ready to use. With features including:
+- **Fully featured form client**: Just import `./$form` inside your page and your form client is ready to use. With features including:
   - Fully typed, No need to bring types with you.
   - Save your form in session storage.
   - Warning before navigating away.
@@ -35,7 +35,7 @@ And then run this command to setup everything:
 
 `pnpm kitva`
 
-Afer that, you may need to restart your typescript server.
+After that, you may need to restart your typescript server.
 
 **NOTE:** This command will edit your vite config, tsconfig and create $lib/validation/hook file, so it's recommended to commit your work.
 
