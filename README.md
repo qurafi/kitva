@@ -19,13 +19,15 @@ TODO
   - and more.
 
 ## Get Started
-
+**NOTE**: This is still in alpha. If you have any issue or feedback, please raise a new issue.
 `npm i kitva ajv ajv-formats@beta`
 `pnpm i kitva ajv ajv-formats@beta`
 
 And then run this command to setup everything:
 `npm run kitva`
 `pnpm kitva`
+
+Afer that, you may need to restart your typescript server.
 
 **NOTE:** This command will edit your vite config, tsconfig and create $lib/validation/hook file, so it's recommended to commit your work.
 
