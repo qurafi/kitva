@@ -84,11 +84,11 @@
 		"!dist/**/*.spec.*",
 		"!src/**/*.test.*",
 		"!src/**/*.spec.*",
-		"./*.d.ts"
+		"*/*.d.ts"
 	],
 	"peerDependencies": {
 		"ajv": "^8.12.0",
-		"ajv-formats": "3.0.0-rc.0",
+		"ajv-formats": "^3.0.0-rc.0",
 		"@sveltejs/kit": "^1.5.0",
 		"svelte": "^3.54.0"
 	},
