@@ -62,15 +62,15 @@
 					<p class="error">{$errs.username || ""}</p>
 				</label> -->
 
-				<Input form={my_form} field="username" label="Username:" />
-				<Input form={my_form} field="email" label="Email:" />
-				<Input form={my_form} field="password" label="Password:" />
-				<Input form={my_form} field="first_name" label="First Name:" />
-				<Input form={my_form} field="last_name" label="Last Name(optional):" />
+				<Input form={my_form} name="username" label="Username:" />
+				<Input form={my_form} name="email" label="Email:" />
+				<Input form={my_form} name="password" label="Password:" />
+				<Input form={my_form} name="first_name" label="First Name:" />
+				<Input form={my_form} name="last_name" label="Last Name(optional):" />
 
 				<Input
 					form={my_form}
-					field="accept_tos"
+					name="accept_tos"
 					type="checkbox"
 					label="Accept Term of services"
 				/>

@@ -1,5 +1,5 @@
+<!-- global $$Generic -->
 <script lang="ts">
-	/* global $$Generic */
 	import type { Writable } from "svelte/store";
 	import type { HTMLInputAttributes, HTMLLabelAttributes } from "svelte/elements";
 
@@ -10,11 +10,11 @@
 
 	export let form: $$Props["form"];
 
-	export let field: $$Props["field"];
+	export let name: $$Props["name"];
 
 	const { fields, errs } = form;
 
-	export let label = field as string;
+	export let label = name as string;
 
 	export let labelProps: $$Props["labelProps"] = undefined;
 
@@ -22,7 +22,7 @@
 
 	interface $$Props extends Omit<HTMLInputAttributes, "form" | "name"> {
 		form: FormValidationClient<T>;
-		field: keyof ExtractWritable<(typeof form)["fields"]> & string;
+		name: keyof ExtractWritable<(typeof form)["fields"]> & string;
 		label?: string;
 		labelProps?: HTMLLabelAttributes;
 		errorClass?: string;
@@ -31,7 +31,7 @@
 	let err_id: string | undefined;
 	let error: string | undefined;
 
-	$: error = $errs[field];
+	$: error = $errs[name];
 
 	$: if (error) {
 		const hash = (Math.random() * Number.MAX_SAFE_INTEGER) | 0;
@@ -41,26 +41,25 @@
 	}
 </script>
 
-/* global $$Generic */
 <label {...labelProps}>
-	{label}
+	<span>{label}</span>
 	{#if $$restProps.type == "checkbox"}
 		<input
 			type="checkbox"
 			{...$$restProps}
-			bind:checked={$fields[field]}
+			bind:checked={$fields[name]}
 			value="true"
 			{...$$restProps}
-			name={field}
+			{name}
 			aria-invalid={error !== undefined}
 			aria-errormessage={err_id}
 		/>
 	{:else}
 		<input
 			type="text"
-			bind:value={$fields[field]}
+			bind:value={$fields[name]}
 			{...$$restProps}
-			name={field}
+			{name}
 			aria-invalid={error !== undefined}
 			aria-errormessage={err_id}
 		/>
