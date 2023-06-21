@@ -13,7 +13,7 @@ function log(...messages) {
 
 log("validating vite project setup", cwd);
 
-execSync("pnpm i", {
+execSync("pnpm i --ignore-workspace", {
 	cwd,
 	stdio: ["ignore", "ignore", "inherit"]
 });
