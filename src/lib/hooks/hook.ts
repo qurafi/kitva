@@ -145,7 +145,7 @@ async function validateRequest(
 
 	if (!called && handle_result !== false) {
 		if (DEV && handle_validate) {
-			throw new Error("handleValidate didn't call validate()");
+			throw new Error("Kitva: handleValidate didn't call validate()");
 		}
 		await validate();
 	}
