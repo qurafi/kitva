@@ -17,6 +17,7 @@ https://github.com/qurafi/kitva/assets/15172611/839dea17-95f2-476d-8b5f-f90dd12c
     - [Defining Schemas](#defining-schemas)
       - [Example of an endpoint schema file](#example-of-an-endpoint-schema-file)
       - [Type builders](#type-builders)
+      - [Form actions](#form-actions)
     - [Validation Hooks](#validation-hooks)
     - [Standalone Validation](#standalone-validation)
     - [CLI options](#cli-options)
@@ -154,7 +155,7 @@ You could use some type builders such as [Zod](https://github.com/colinhacks/zod
 import { Type as t } from "@sinclair/typebox";
 import { z } from "zod";
 
-// typebox
+// TypeBox
 const UserLoginSchemaTypeBox = t.Object(
  {
   username: t.String({
@@ -175,7 +176,7 @@ const UserLoginSchemaTypeBox = t.Object(
  { additionalProperties: false }
 );
 
-// zod
+// or with Zod
 const UserLoginSchemaZod = z.object({
  username: z.string().min(3).max(36),
  password: z.string().min(6).max(128),
@@ -192,13 +193,13 @@ export const POST = {
 
 **2:** TypeBox supports type inference but currently all schemas are converted to types by [json-schema-to-typescript](https://github.com/bcherny/json-schema-to-typescript).
 
-**Form actions:**
+#### Form actions
 
 ```typescript
 /* routes/api/login
     +page.svelte
     +page.server.ts
-    schema.ts
+    schemas.ts
 */
 export const actions = {
     signup: {
@@ -211,8 +212,12 @@ export const actions = {
         },
         // must set required
         required: ["a", "b"]
-        ...
-    }
+    },
+    // or simply with zod, TypBox, etc.
+    signup: z.object({
+        a: z.string(),
+        b: z.boolean().default(false).
+    })
 
 }
 ```
@@ -226,7 +231,7 @@ import type { Actions } from "./$types2";
 
 export const actions: Actions = withValidation({
     signup(event) {
-        // type safe!
+        // access form data from event.locals and it's type safe!
         event.locals.validation.body.a
 
         return {
@@ -261,7 +266,7 @@ All clients are exported by the format, `action_name = createActionNameForm`, e.
   {/if}
  </label>
 
- <!-- or use Input from kitva/components -->
+ <!-- or simply use Input from kitva/components -->
  <Input form={my_form} name="username"/>
  ...
 </form>
