@@ -22,6 +22,11 @@ export function vitePluginSvelteKitva(opts?: PluginOptions) {
 			routeSchemasResolver(),
 			getRouteFormSchemasPlugin(),
 			...(opts?.ajvTools?.plugins || []),
+			{
+				resolveSchema(schema) {
+					return { additionalProperties: false, ...schema };
+				}
+			},
 			resolveFormObjectType(),
 			typeGenPlugin()
 		]
