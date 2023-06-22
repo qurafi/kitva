@@ -10,14 +10,16 @@ export const HTTP_PARTS = ["body", "headers", "queries", "params"] as const;
 
 export const createDebug = (ns: string) => createDebugger(`kitva:${ns}`);
 
+const log_ms = 200;
+
 export const warn = (msg: string, ...args: any) => {
-	console.warn(`${bold(yellow("warn:"))} ${msg}`, ...args);
+	setTimeout(() => console.warn(`${bold(yellow("warn:"))} ${msg}`, ...args), log_ms);
 };
 export const error = (msg: string, ...args: any) => {
-	console.error(`${bold(red("ERROR:"))} ${msg}`, ...args);
+	setTimeout(() => console.error(`${bold(red("ERROR:"))} ${msg}`, ...args), log_ms);
 };
 export const info = (msg: string, ...args: any) => {
-	console.log(`${bold(red("info:"))} ${msg}`, ...args);
+	setTimeout(() => console.log(`${bold(red("info:"))} ${msg}`, ...args), log_ms);
 };
 
 // we will treat any empty string as undefined as all formData entry is either a file or a string
