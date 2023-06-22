@@ -6,12 +6,25 @@ Validate your endpoints and forms with no boilerplate, Just define your **schema
 https://github.com/qurafi/kitva/assets/15172611/839dea17-95f2-476d-8b5f-f90dd12ce77d
 
 
+## Table of Content
 
-
+- [Kitva - Validation Kit for Sveltekit](#kitva---validation-kit-for-sveltekit)
+  - [Showcase](#showcase)
+  - [Table of Content](#table-of-content)
+  - [Features](#features)
+  - [Get Started](#get-started)
+    - [Schema format](#schema-format)
+    - [Defining Schemas](#defining-schemas)
+      - [Example of an endpoint schema file](#example-of-an-endpoint-schema-file)
+      - [Type builders](#type-builders)
+    - [Validation Hooks](#validation-hooks)
+    - [Standalone Validation](#standalone-validation)
+    - [CLI options](#cli-options)
+    - [Manual Setup](#manual-setup)
 
 ## Features
 
-- **Standard**: Uses Json Schema standard as the default schema format
+- **Standard**: Uses Json Schema standard as the default schema format.
 - **Performance**: Compiles your schemas into highly optmized validation code, thanks to Ajv.
 - **Less boilerplate**: Endpoints and forms are automatically validated by a global Sveltekit hook.
 - **Small bundle sizes**: Just your validation function and the form client and nothing else!
@@ -20,9 +33,12 @@ https://github.com/qurafi/kitva/assets/15172611/839dea17-95f2-476d-8b5f-f90dd12c
   - Fully typed, No need to bring types with you.
   - Save your form in session storage.
   - Warning before navigating away.
+  - Form input components ready to use with binding and errors all set
   - and more.
+- **Zod compatibility**: Zod schemas are converted to Json Schemas out of the box.
 
 ## Get Started
+
 **NOTE**: This is still in alpha. If you have any issue or feedback, please raise a new issue.
 
 `npm i kitva ajv ajv-formats@beta`
@@ -43,7 +59,7 @@ For more information: See [Manual setup](#manual-setup), [CLI Options](#cli-opti
 
 ### Schema format
 
-Json schemas are used as schema format by default and it's managed by Ajv. Althought we kinda made it possible to use other formats, but we currently only focus on json schemas.
+Json schemas are used as the default schema format and it's managed by Ajv. Althought we kinda made it possible to use other formats, but we currently only focus on json schemas.
 
 For more information about using Json Schemas. Consult one of the following links:
 
@@ -57,10 +73,10 @@ For more information about using Json Schemas. Consult one of the following link
 
 There's two kind of schema files:
 
-- A shared one defined in `$lib/schemas`
+- A shared one defined in `$lib/schemas`.
 - A route schema which included with some enhancement for endpoints and forms.
 
-**Example of an endpoint schema file**
+#### Example of an endpoint schema file
 
 ```typescript
 /* 
@@ -102,7 +118,7 @@ export const POST = {
 };
 ```
 
-And that's it. Your endpoint will automatically validated. To get the parsed data use the `event.locals.validation.*` and
+And that's it. Your endpoint will automatically validated. To get the parsed data use the `event.locals.validation.*`
 
 ```typescript
 // all related types available in the new $types2 file
@@ -130,37 +146,51 @@ event.locals.validation = {
 }
 ```
 
-**Type builders**
+#### Type builders
 
-You could use some type builders such as [fluent-json-schema](https://github.com/fastify/fluent-json-schema) and [TypeBox](https://github.com/sinclairzx81/typebox) to make life easier:
+You could use some type builders such as [Zod](https://github.com/colinhacks/zod)<sup>1</sup>, [Fluent-Json-Schema](https://github.com/fastify/fluent-json-schema) and [TypeBox](https://github.com/sinclairzx81/typebox)<sup>2</sup> to make life easier:
 
 ```typescript
 import { Type as t } from "@sinclair/typebox";
+import { z } from "zod";
+
+// typebox
+const UserLoginSchemaTypeBox = t.Object(
+ {
+  username: t.String({
+   minLength: 3,
+   maxLength: 36
+  }),
+  password: t.String({
+   format: "password", // just a hint for the UI
+   minLength: 6,
+   maxLength: 128
+  }),
+  email: t.String({
+   format: "email",
+   minLength: 6,
+   maxLength: 100
+  })
+ },
+ { additionalProperties: false }
+);
+
+// zod
+const UserLoginSchemaZod = z.object({
+ username: z.string().min(3).max(36),
+ password: z.string().min(6).max(128),
+ email: z.string().min(6).max(100).email()
+});
 
 export const POST = {
- body: t.Object(
-  {
-   username: t.String({
-    minLength: 3,
-    maxLength: 36
-   }),
-   password: t.String({
-    format: "password", // just a hint for the UI
-    minLength: 6,
-    maxLength: 128
-   }),
-   email: t.String({
-    format: "email",
-    minLength: 6,
-    maxLength: 100
-   })
-  },
-  { additionalProperties: false }
- )
+ body: UserLoginSchemaTypeBox,
+//  body: UserLoginSchemaZod,
 };
 ```
 
-**NOTE:** TypeBox support type interference but currently all schemas are converted to types by [json-schema-to-typescript](https://github.com/bcherny/json-schema-to-typescript)
+**1:** Zod schemas are converted to json schema using [zod-to-json-schema](https://github.com/StefanTerdell/zod-to-json-schema). Not all features are supported and the validation and compilation still backed by Ajv. Although it should work fine for most of schemas.
+
+**2:** TypeBox supports type inference but currently all schemas are converted to types by [json-schema-to-typescript](https://github.com/bcherny/json-schema-to-typescript).
 
 **Form actions:**
 
@@ -190,7 +220,7 @@ export const actions = {
 This will require aditional step by calling withValidation as there's no current possible way to intercept and change form result in Sveltekit:
 
 ```typescript
-import { withValidation } from "kitva/forms/server";
+import { withValidation } from "kitva/hooks";
 // NOTE: use $types2
 import type { Actions } from "./$types2";
 
@@ -240,10 +270,33 @@ All clients are exported by the format, `action_name = createActionNameForm`, e.
 For more information about the client see [forms/types.ts](./src/lib/forms/types.ts)
 
 
+### Validation Hooks
+
+To change the behavior of validation, use handleValidate from `kitva/hooks`.
+```typescript
+handleValidate(actions.default, async ({ event, input, validate }) => {
+
+ if (input.body) {
+  input.body.filled_by_server = "filled by server";
+ }
+
+ await validate();
+
+ delete input.body.password;
+
+//  return false to cancel the validation
+//  return false
+});
+
+```
+
+Note that if you don't call validate. In production, it will be called for you, but in dev mode, an error will be thrown. This to prevent security issues when forgetting to call validate.
+
+
 
 ### Standalone Validation
 
-To directly import and use the compiled validation function for schemas. refer to [ajv-build-tools](https://github.com/qurafi/ajv-tools#importing-the-compiled-schemas)
+To directly import and use the compiled validation functions. refer to [ajv-build-tools](https://github.com/qurafi/ajv-tools#importing-the-compiled-schemas)
 
 ### CLI options
 
