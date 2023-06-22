@@ -117,7 +117,7 @@
 		"zod": "^3.21.4"
 	},
 	"dependencies": {
-		"ajv-build-tools": "1.0.0-next.5",
+		"ajv-build-tools": "1.0.0-next.6",
 		"debug": "^4.3.4",
 		"json-schema-to-typescript": "^13.0.1",
 		"jsonc-parser": "^3.2.0",
