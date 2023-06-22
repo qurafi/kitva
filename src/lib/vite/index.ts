@@ -3,7 +3,7 @@ import type { PluginOption } from "vite";
 import { getRouteFormSchemasPlugin, viteSvelteFormClientGenPlugin } from "./client_gen/plugins.js";
 import { typeGenPlugin } from "./types_gen/type-gen.js";
 import { routeSchemasResolver } from "./helpers/resolve_route_schemas.js";
-import { validateFormObjectType } from "./helpers/validate_form_schema_type.js";
+import { resolveFormObjectType } from "./helpers/resolve_form_schema_type.js";
 
 interface PluginOptions {
 	ajvTools?: AjvToolsOptions;
@@ -20,10 +20,10 @@ export function vitePluginSvelteKitva(opts?: PluginOptions) {
 		exclude: ["**/*.d.ts", ...(opts?.ajvTools?.exclude || [])],
 		plugins: [
 			routeSchemasResolver(),
-			typeGenPlugin(),
-			validateFormObjectType(),
 			getRouteFormSchemasPlugin(),
-			...(opts?.ajvTools?.plugins || [])
+			...(opts?.ajvTools?.plugins || []),
+			resolveFormObjectType(),
+			typeGenPlugin()
 		]
 	});
 
