@@ -87,9 +87,9 @@
 		"*/*.d.ts"
 	],
 	"peerDependencies": {
+		"@sveltejs/kit": "^1.5.0",
 		"ajv": "^8.12.0",
 		"ajv-formats": "^3.0.0-rc.0",
-		"@sveltejs/kit": "^1.5.0",
 		"svelte": "^3.54.0"
 	},
 	"devDependencies": {
@@ -113,7 +113,8 @@
 		"typescript": "^5.0.0",
 		"undici": "^5.22.1",
 		"vite": "^4.3.0",
-		"vitest": "^0.31.4"
+		"vitest": "^0.31.4",
+		"zod": "^3.21.4"
 	},
 	"dependencies": {
 		"ajv-build-tools": "1.0.0-next.5",
@@ -121,7 +122,8 @@
 		"json-schema-to-typescript": "^13.0.1",
 		"jsonc-parser": "^3.2.0",
 		"kleur": "^4.1.5",
-		"rfdc": "^1.3.0"
+		"rfdc": "^1.3.0",
+		"zod-to-json-schema": "^3.21.2"
 	},
 	"pnpm": {
 		"overrides": {

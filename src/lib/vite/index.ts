@@ -4,6 +4,7 @@ import { getRouteFormSchemasPlugin, viteSvelteFormClientGenPlugin } from "./clie
 import { typeGenPlugin } from "./types_gen/type-gen.js";
 import { routeSchemasResolver } from "./helpers/resolve_route_schemas.js";
 import { resolveFormObjectType } from "./helpers/resolve_form_schema_type.js";
+import { resolveZodSchemas } from "./helpers/resolve_zod_schemas.js";
 
 interface PluginOptions {
 	ajvTools?: AjvToolsOptions;
@@ -22,6 +23,7 @@ export function vitePluginSvelteKitva(opts?: PluginOptions) {
 			routeSchemasResolver(),
 			getRouteFormSchemasPlugin(),
 			...(opts?.ajvTools?.plugins || []),
+			resolveZodSchemas(),
 			{
 				resolveSchema(schema) {
 					return { additionalProperties: false, ...schema };
