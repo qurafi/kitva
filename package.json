@@ -128,7 +128,7 @@
 	},
 	"pnpm": {
 		"overrides": {
-			"ajv-build-tools": "link:../ajv-build-tools"
+			"ajv-build-tools": "../ajv-build-tools"
 		}
 	}
 }
