@@ -4,23 +4,24 @@ import { page } from "$app/stores";
 import { DEV } from "esm-env";
 import { onDestroy } from "svelte";
 import { derived, get, readonly, writable } from "svelte/store";
-import type { GetFormErrors, ValidateFn } from "../hooks/types.js";
 import type { AnyError, AnyMap, ValidationResult } from "../types.js";
 import { form_urlencoded } from "../utils/http.js";
 import { filterEmptyFields, warn } from "../utils/index.js";
 import { objectMap } from "../utils/objectMap.js";
 import { useStorage } from "./storage.js";
-import type { FormValidationClient } from "./types.js";
+import type { CreateClientOption, FormValidationClient } from "./types.js";
 
-export function createValidationClient(
-	validate: ValidateFn,
-	action: string,
-	initial_fields: AnyMap = {},
-	getFormErrors: GetFormErrors,
-	use_storage = true,
-	use_enhance = true,
-	warn_user = true
-): FormValidationClient {
+export function createValidationClient(opts: CreateClientOption): FormValidationClient {
+	const {
+		validate,
+		getFormErrors,
+		action,
+		fields: initial_fields = {},
+		use_storage = true,
+		use_enhance = true,
+		warn_user = true
+	} = opts;
+
 	const fields = writable<AnyMap>(filterEmptyFields(initial_fields));
 
 	const set_fields = fields.set;

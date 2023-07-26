@@ -30,15 +30,12 @@ export function generateClientCode(schema_import: string, forms: string[]) {
 			return `export function ${getExportName(form)}(opts={}) {
             const validate = createValidateFn(actions_${form}, true);
         
-            return createValidationClient(
+            return createValidationClient({
                 validate,
-                "${form}",
-                opts.fields,
                 getFormErrors,
-                opts.use_storage,
-                opts.use_enhance,
-                opts.warn_user
-            );
+                action: "${form}",
+                ...opts
+            });
         };`;
 		})
 		.join("\n\n")}`;

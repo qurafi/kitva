@@ -2,6 +2,7 @@ import type { AnyError, AnyMap } from "../types.js";
 import type { Readable, Writable } from "svelte/store";
 import type { ValidationResult } from "../types.js";
 import type { ActionReturn } from "svelte/action";
+import type { GetFormErrors, ValidateFn } from "$lib/hooks/types.js";
 export interface FormValidationClient<Data = AnyMap, Error extends AnyError = AnyError> {
 	/** Contains
 	 * ```typescript
@@ -31,12 +32,20 @@ export interface FormValidationClient<Data = AnyMap, Error extends AnyError = An
 	action(form: HTMLFormElement): ActionReturn<void>;
 }
 
-export type GeneratedValidationClient<
-	Data extends AnyMap = AnyMap,
-	Errors extends AnyError = AnyError
-> = (options?: {
+export interface ClientOptions<Data extends AnyMap = AnyMap> {
 	fields?: Partial<Data>;
 	use_enhance?: boolean;
 	use_storage?: boolean;
 	warn_user?: boolean;
-}) => FormValidationClient<Data, Errors>;
+}
+
+export interface CreateClientOption extends ClientOptions {
+	validate: ValidateFn;
+	action: string;
+	getFormErrors: GetFormErrors;
+}
+
+export type GeneratedValidationClient<
+	Data extends AnyMap = AnyMap,
+	Errors extends AnyError = AnyError
+> = (options?: ClientOptions<Data>) => FormValidationClient<Data, Errors>;
