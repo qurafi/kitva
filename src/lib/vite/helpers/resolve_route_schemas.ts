@@ -1,6 +1,7 @@
 import { bold } from "kleur/colors";
-import { HTTP_METHODS, HTTP_PARTS, warn } from "../../utils/index.js";
+import { HTTP_METHODS, HTTP_PARTS, defer_warn } from "$lib/utils/index.js";
 import type { Plugin as AjvToolsPlugin } from "ajv-build-tools";
+
 /*
 Resolve from:
  export GET = {queries: {}}
@@ -64,15 +65,15 @@ export function routeSchemasResolver(): AjvToolsPlugin {
 }
 
 function warnAboutGetBody(file: string) {
-	warn(`${bold(file)}: body in GET is not allowed`);
+	defer_warn(`${bold(file)}: body in GET is not allowed`);
 }
 
 function warnAboutUnknownPart(part: string, method: string, file: string) {
-	warn(`${bold(file)}: ${method} exported unkown http part ${part}. it will be ignored`);
+	defer_warn(`${bold(file)}: ${method} exported unkown http part ${part}. it will be ignored`);
 }
 
 function warnAboutExports(not_allowed_export: string, file: string) {
-	warn(
+	defer_warn(
 		`${bold(file)} has non allowed export '${bold(not_allowed_export)}' and it will be ignored`
 	);
 }
