@@ -1,12 +1,10 @@
 import { enhance } from "$app/forms";
 import { beforeNavigate } from "$app/navigation";
 import { page } from "$app/stores";
-import { DEV } from "esm-env";
 import { onDestroy } from "svelte";
 import { derived, get, readonly, writable } from "svelte/store";
 import type { AnyError, AnyMap, ValidationResult } from "../types.js";
-import { form_urlencoded } from "../utils/http.js";
-import { filterEmptyFields, objectMap, warn } from "../utils/index.js";
+import { filterEmptyFields, objectMap } from "../utils/index.js";
 import { useStorage } from "./storage.js";
 import type { CreateClientOption, FormValidationClient } from "./types.js";
 
@@ -109,10 +107,6 @@ export function createValidationClient(opts: CreateClientOption): FormValidation
 
 	function svelte_action(form: HTMLFormElement) {
 		const storage = use_storage && useStorage(action, fields);
-
-		if (DEV && form.enctype !== form_urlencoded) {
-			warn(`it's better to use ${form_urlencoded} enctype for forms`);
-		}
 
 		current_form = form;
 		form.addEventListener("input", onInput);
