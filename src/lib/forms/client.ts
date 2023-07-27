@@ -6,8 +6,7 @@ import { onDestroy } from "svelte";
 import { derived, get, readonly, writable } from "svelte/store";
 import type { AnyError, AnyMap, ValidationResult } from "../types.js";
 import { form_urlencoded } from "../utils/http.js";
-import { filterEmptyFields, warn } from "../utils/index.js";
-import { objectMap } from "../utils/objectMap.js";
+import { filterEmptyFields, objectMap, warn } from "../utils/index.js";
 import { useStorage } from "./storage.js";
 import type { CreateClientOption, FormValidationClient } from "./types.js";
 
