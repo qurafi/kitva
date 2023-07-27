@@ -1,6 +1,6 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { relative, resolve } from "node:path";
-import { warn } from "../utils/index.js";
+import { warn } from "../utils/server.js";
 
 // TODO just export the whole hook with the preset from kiva/presets/ajv
 const validation_hook = `import schemas from "$schemas?t=all";

@@ -1,32 +1,17 @@
-import { bold, red, yellow } from "kleur/colors";
-
-import createDebugger from "debug";
-
 export type AnyMap = Record<string, any>;
 export type MaybePromise<T> = Promise<T> | T;
 
 export const HTTP_METHODS = ["GET", "POST", "DELETE", "PUT", "PATCH"] as const;
 export const HTTP_PARTS = ["body", "headers", "queries", "params"] as const;
 
-export const createDebug = (ns: string) => createDebugger(`kitva:${ns}`);
+export type HttpMethod = (typeof HTTP_METHODS)[number];
+export type HttpPart = (typeof HTTP_PARTS)[number];
 
-function delayed<T extends (...args: any[]) => any>(ms: number, fn: T) {
+export function delayed<T extends (...args: any[]) => any>(ms: number, fn: T) {
 	return (...args: Parameters<T>) => {
 		setTimeout(() => fn(...args), ms);
 	};
 }
-
-export function warn(msg: string, ...args: any[]) {
-	console.warn(`${bold(yellow("warn:"))} ${msg}`, ...args);
-}
-
-export function error(msg: string, ...args: any[]) {
-	console.error(`${bold(red("ERROR:"))} ${msg}`, ...args);
-}
-
-const LOG_MS = 200;
-export const defer_warn = delayed(LOG_MS, warn);
-export const defer_error = delayed(LOG_MS, error);
 
 // we will treat any empty string as undefined as all formData entry is either a file or a string
 export function filterEmptyFields(input: AnyMap) {

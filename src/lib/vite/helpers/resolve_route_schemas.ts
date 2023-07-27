@@ -1,6 +1,7 @@
 import { bold } from "kleur/colors";
-import { HTTP_METHODS, HTTP_PARTS, defer_warn } from "$lib/utils/index.js";
+import { HTTP_METHODS, HTTP_PARTS } from "$lib/utils/index.js";
 import type { Plugin as AjvToolsPlugin } from "ajv-build-tools";
+import { defer_warn } from "$lib/utils/server.js";
 
 /*
 Resolve from:

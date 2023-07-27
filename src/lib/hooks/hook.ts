@@ -1,11 +1,12 @@
 import type { Handle, RequestEvent } from "@sveltejs/kit";
 import { DEV } from "esm-env";
-import type { EventWithValidation, HttpMethod, HttpPart, ValidationResults } from "../types.js";
+import type { EventWithValidation, ValidationResults } from "../types.js";
 import { is_endpoint_request } from "../utils/http.js";
-import { HTTP_PARTS, createDebug } from "../utils/index.js";
+import { HTTP_PARTS, type HttpMethod, type HttpPart } from "../utils/index.js";
 import { getActionName, getRequestContent, getRouteSrc, type Modules } from "../utils/svelte.js";
 import type { ValidationOptions } from "./types.js";
 import { validation_hooks } from "./handleValidate.js";
+import { createDebug } from "$lib/utils/server.js";
 
 const debug = createDebug("hook:core");
 

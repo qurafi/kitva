@@ -1,7 +1,7 @@
 /// <reference types="ajv-build-tools/types" />
 type Schemas = typeof import("$schemas?t=all").default;
 
-import { warn } from "$lib/utils/index.js";
+import { warn } from "$lib/utils/server.js";
 import { json } from "@sveltejs/kit";
 import { type AjvError, createValidateFn, generateErrorMap } from "./index.js";
 import type { ValidationOptions } from "$lib/hooks/types.js";

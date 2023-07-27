@@ -1,12 +1,5 @@
-import type {
-	AnyError,
-	AnyValue,
-	HttpMethod,
-	HttpPart,
-	JSONType,
-	ValidationResult
-} from "../types.js";
-import type { MaybePromise } from "../utils/index.js";
+import type { AnyError, AnyValue, JSONType, ValidationResult } from "../types.js";
+import type { HttpMethod, HttpPart, MaybePromise } from "../utils/index.js";
 import type { Modules } from "../utils/svelte.js";
 
 export type ValidateFn<Data = AnyValue, Error extends AnyError = AnyError> = (

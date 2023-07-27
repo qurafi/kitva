@@ -1,5 +1,5 @@
 import { setup } from "./setup.js";
-import { error } from "../utils/index.js";
+import { error } from "../utils/server.js";
 import { parseArgs } from "node:util";
 
 try {

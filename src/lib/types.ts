@@ -1,8 +1,5 @@
 import type { RequestEvent } from "@sveltejs/kit";
-import type { HTTP_METHODS, HTTP_PARTS } from "./utils/index.js";
-
-export type HttpMethod = (typeof HTTP_METHODS)[number];
-export type HttpPart = (typeof HTTP_PARTS)[number];
+import type { HttpPart } from "./utils/index.js";
 
 export type JSONType = number | boolean | string | null | JSONType[] | AnyMap;
 
@@ -88,10 +85,12 @@ export type ValidationResults<
 	) & { valid: Valid };
 
 export type AnyRequestEvent = RequestEvent<Partial<Record<string, string>>, any>;
+
 export type EventWithValidation<V = any> = AnyRequestEvent & {
 	locals: { validation: V };
 };
 export type AnyHandler = (event: EventWithValidation) => any;
+
 export type RequestHandlerWithValidation<
 	T extends AnyHandler,
 	Data extends AnyDefaultData = any,

@@ -1,4 +1,4 @@
-import { error } from "$lib/utils/index.js";
+import { error } from "$lib/utils/server.js";
 import { appendFileSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 
