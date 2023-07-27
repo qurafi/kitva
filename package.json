@@ -114,7 +114,7 @@
 		"typescript": "^5.0.0",
 		"undici": "^5.22.1",
 		"vite": "^4.3.0",
-		"vitest": "^0.31.4",
+		"vitest": "^0.33.0",
 		"zod": "^3.21.4"
 	},
 	"dependencies": {
