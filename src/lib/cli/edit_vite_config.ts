@@ -1,4 +1,4 @@
-import { readFile, writeFile } from "node:fs/promises";
+import { readFileSync, writeFileSync } from "fs";
 import { warn } from "../utils/index.js";
 
 const import_statement = "import { vitePluginSvelteKitva } from 'kitva/vite';";
@@ -12,8 +12,8 @@ export function editViteConfig(content: string) {
 	return `${import_statement}\n${new_content}`;
 }
 
-export async function addVitePlugin(config: string) {
-	const vite_config = await readFile(config, "utf-8");
+export function addVitePlugin(config: string) {
+	const vite_config = readFileSync(config, "utf-8");
 	if (vite_config.includes("kitva/vite")) {
 		warn("Skipping editing vite.config");
 		return;
@@ -23,5 +23,5 @@ export async function addVitePlugin(config: string) {
 	if (!new_vite_config.includes(plugin_call)) {
 		warn("Could not edit vite config");
 	}
-	await writeFile(config, new_vite_config);
+	writeFileSync(config, new_vite_config);
 }

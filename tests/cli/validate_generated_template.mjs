@@ -7,21 +7,16 @@ import { createServer } from "vite";
 
 const cwd = process.cwd();
 
-function log(...messages) {
-	return console.log("\nsubprocess:", ...messages, "\n\n");
-}
-
 log("validating vite project setup", cwd);
 
-execSync("pnpm i --ignore-workspace", {
-	cwd,
-	stdio: ["ignore", "ignore", "inherit"]
-});
+install();
 
 execSync("pnpm kitva", {
 	cwd: cwd,
-	stdio: ["ignore", "inherit", "inherit"]
+	stdio: ["inherit", "inherit", "inherit"]
 });
+
+install();
 
 const server = await createServer({
 	root: cwd
@@ -35,3 +30,14 @@ const ext = existsSync(resolve(cwd, "src/hooks.server.ts")) ? "ts" : "js";
 await server.ssrLoadModule("src/hooks.server." + ext);
 
 process.exit(0);
+
+function log(...messages) {
+	return console.log("\nsubprocess:", ...messages, "\n\n");
+}
+
+function install() {
+	execSync("pnpm i --ignore-workspace", {
+		cwd,
+		stdio: ["ignore", "ignore", "inherit"]
+	});
+}
