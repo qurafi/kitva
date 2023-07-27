@@ -1,6 +1,8 @@
 import type { RequestEvent } from "@sveltejs/kit";
 import type { HttpPart } from "./utils/index.js";
 
+export type { HttpPart, HttpMethod } from "./utils/index.js";
+
 export type JSONType = number | boolean | string | null | JSONType[] | AnyMap;
 
 export type AnyValue = JSONType;

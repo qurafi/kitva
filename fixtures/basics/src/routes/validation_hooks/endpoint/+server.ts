@@ -1,7 +1,6 @@
 import type { POSTHandler } from "./$types2";
-import { handleValidate } from "kitva/hooks";
 import { json } from "@sveltejs/kit";
-
+import { handleValidate } from "kitva";
 export const POST: POSTHandler = async (event) => {
 	const result = {
 		your_input: event.locals.validation.body.input

@@ -1,6 +1,5 @@
 export function generate$formDts(forms: string[]) {
-	return `import { GeneratedValidationClient } from "kitva/forms/types";
-import { AjvError } from "kitva/presets/ajv/index";
+	return `import { GeneratedValidationClient, AjvError } from "kitva";
 import { Schemas } from "./schema_types";
 
 ${forms
@@ -20,15 +19,14 @@ function getExportName(action: string) {
 export function generateClientCode(schema_import: string, forms: string[]) {
 	return `import { ${forms.map((form) => `actions_${form}`).join(", ")} } from "${schema_import}";
     
-    import { createValidationClient } from "kitva/forms/client";
+    import { createValidationClient, createAjvValidateFn, getAjvFormErrors as getFormErrors } from "kitva";
     
-    import { createValidateFn, getFormErrors } from "kitva/presets/ajv/index";
     
     
     ${forms
 		.map((form) => {
 			return `export function ${getExportName(form)}(opts={}) {
-            const validate = createValidateFn(actions_${form}, true);
+            const validate = createAjvValidateFn(actions_${form}, true);
         
             return createValidationClient({
                 validate,

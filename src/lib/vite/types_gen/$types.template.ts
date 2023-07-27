@@ -1,12 +1,12 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-nocheck
-import type { AnyMap, HttpMethod, RequestHandlerWithValidation } from "kitva/types";
+import type { AnyMap, RequestHandlerWithValidation, HttpMethod } from "kitva/types";
 
 import type { RequestHandler as RequestHandler_ } from "./$types";
 
 import type { Schemas } from "./schema_types";
 
-import { AjvError } from "kitva/presets/ajv/index";
+import { AjvError } from "kitva";
 
 export type RequestHandlers = {
 	[k in HttpMethod]: k extends keyof Schemas

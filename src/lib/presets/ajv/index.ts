@@ -6,6 +6,7 @@ import rfdc from "rfdc";
 // the message is always defined when ajv option "messages" is true(default),
 export type AjvError = ErrorObject & { message: string };
 
+//TODO remove this
 export type AppLocal = ValidationResult<AnyValue, AjvError>;
 
 // for errors that aren't related to a field

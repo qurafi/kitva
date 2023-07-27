@@ -2,7 +2,7 @@
 	import { page } from "$app/stores";
 
 	import { createDefaultActionForm as createValidate } from "./$form";
-	import { Input } from "kitva/components";
+	import { Input } from "kitva";
 
 	const enhance_param = $page.url.searchParams.get("enhance") || "true";
 	const use_enhance = enhance_param == "true";

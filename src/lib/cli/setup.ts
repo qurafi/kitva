@@ -1,4 +1,4 @@
-import { bold, green } from "kleur/colors";
+import { blue, bold, green, yellow } from "kleur/colors";
 import { existsSync } from "node:fs";
 import { resolve } from "node:path";
 import { addValidationHook } from "./add_hook.js";
@@ -15,7 +15,9 @@ export async function setup(cwd: string, { steps }: SetupOptions) {
 
 	const vite_config = getViteConfig(cwd);
 
-	if (!existsSync(resolve("svelte.config.js"))) {
+	const has_tsconfig = existsSync(resolve(cwd, "tsconfig.json"));
+
+	if (!existsSync(resolve(cwd, "svelte.config.js"))) {
 		throw new Error(
 			"svelte.config.js is not found. please make sure to run this command inside a sveltekit project"
 		);
@@ -32,7 +34,7 @@ export async function setup(cwd: string, { steps }: SetupOptions) {
 
 	if (steps.includes("hook")) {
 		console.log("Adding SvelteKit hook...");
-		addValidationHook(cwd, ".js");
+		addValidationHook(cwd, has_tsconfig ? ".ts" : ".js");
 	}
 
 	if (steps.includes("types")) {
@@ -47,8 +49,14 @@ export async function setup(cwd: string, { steps }: SetupOptions) {
 
 	console.log(green("Setup done"));
 
+	console.log(yellow("\nDon't forget to install dependencies:"));
+
+	console.log("pnpm i\nnpm i");
+
 	console.log(
-		"\nIf you have any issue in setup. Please see https://github.com/qurafi/kitva/tree/master#manual-setup"
+		blue(
+			"\nIf you have any issue in setup. Please see https://github.com/qurafi/kitva/tree/master#manual-setup"
+		)
 	);
 }
 
