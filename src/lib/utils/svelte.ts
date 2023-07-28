@@ -1,6 +1,5 @@
 import type { RequestEvent } from "@sveltejs/kit";
 import { is_form_content_type } from "./http.js";
-import { DEV } from "esm-env";
 
 export type Modules = Record<string, () => Promise<Record<string, unknown>>>;
 
@@ -25,21 +24,29 @@ export async function getRequestBody(request: Request, clone = true) {
 
 	if (is_form_content_type(request)) {
 		const formdata = await clone_if(request, clone).formData();
-		const data: Record<string, any> = {};
-		for (const [field, value] of formdata.entries()) {
-			const not_string = typeof value != "string";
-			if (value != "" || not_string) {
-				data[field] = value;
-			}
 
-			if (DEV && not_string) {
-				throw new Error("Kitva: files are not supported");
-			}
-		}
-
-		return data;
+		return parseFormData(formdata);
 	}
 }
+
+export function parseFormData(formdata: FormData) {
+	const data: Record<string, any> = {};
+	for (const [field, value] of formdata.entries()) {
+		const is_string = typeof value == "string";
+		if (is_string && value !== "") {
+			if (data[field]) {
+				if (!Array.isArray(data[field])) {
+					data[field] = [data[field]];
+				}
+				data[field].push(value);
+			} else {
+				data[field] = value;
+			}
+		}
+	}
+	return data;
+}
+
 // sometimes if you don't have another hook accessing the data, it is better to just use the orignal request
 // to avoid unnecessary request cloning, the parsed data will be always available in locals
 // in validation[part].data assuming it's valid

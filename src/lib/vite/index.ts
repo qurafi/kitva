@@ -13,6 +13,12 @@ interface PluginOptions {
 export function vitePluginSvelteKitva(opts?: PluginOptions) {
 	const ajvTools = unpluginAjvTools.vite({
 		...opts?.ajvTools,
+		ajvOptions: {
+			all: {
+				coerceTypes: "array"
+			},
+			...opts?.ajvTools?.ajvOptions
+		},
 		include: [
 			"./src/routes/**/schemas.{ts,js,\\.d.ts}",
 			"./src/lib/schemas/**/*.{ts,js,\\.d.ts}",
