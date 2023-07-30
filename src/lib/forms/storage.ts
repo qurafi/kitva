@@ -2,22 +2,18 @@ import { BROWSER } from "esm-env";
 import type { FormValidationClient } from "./types.js";
 import { get } from "svelte/store";
 
-let idx: Record<string, any> = {};
-
 export function useStorage(
-	action: string,
+	form_id: string,
 	fields: FormValidationClient["fields"],
 	only?: string[]
 ) {
-	const id = (idx[action] = (idx[action] || 0) + 1);
-	const key = `kitva_form_${action}:${id}`;
 	let changed = false;
 	if (!BROWSER) {
 		return;
 	}
 
 	try {
-		const storedFields = JSON.parse(sessionStorage.getItem(key) || "{}");
+		const storedFields = JSON.parse(sessionStorage.getItem(form_id) || "{}");
 		if (Object.keys(storedFields).length) {
 			fields.set(storedFields);
 		}
@@ -27,7 +23,7 @@ export function useStorage(
 
 	const unsubscribe_fields = fields.subscribe(() => {
 		if (changed) {
-			sessionStorage.setItem(key, JSON.stringify(get(fields), only));
+			sessionStorage.setItem(form_id, JSON.stringify(get(fields), only));
 		}
 		changed = true;
 	});
@@ -35,11 +31,4 @@ export function useStorage(
 	return {
 		unsubscribe: unsubscribe_fields
 	};
-}
-
-// if a page hot reloaded, we have to reset the global ids
-if (import.meta.hot) {
-	import.meta.hot.on("vite:beforeUpdate", () => {
-		idx = {};
-	});
 }

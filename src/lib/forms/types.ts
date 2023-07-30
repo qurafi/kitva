@@ -30,6 +30,8 @@ export interface FormValidationClient<Data = AnyMap, Error extends AnyError = An
 	validateForm(field?: string): void;
 	action_url: string;
 	action(form: HTMLFormElement): ActionReturn<void>;
+
+	id: string;
 }
 
 export interface ClientOptions<Data extends AnyMap = AnyMap> {
@@ -37,6 +39,7 @@ export interface ClientOptions<Data extends AnyMap = AnyMap> {
 	use_enhance?: boolean;
 	use_storage?: boolean;
 	warn_user?: boolean;
+	form_id: string;
 }
 
 export interface CreateClientOption extends ClientOptions {
@@ -48,4 +51,4 @@ export interface CreateClientOption extends ClientOptions {
 export type GeneratedValidationClient<
 	Data extends AnyMap = AnyMap,
 	Errors extends AnyError = AnyError
-> = (options?: ClientOptions<Data>) => FormValidationClient<Data, Errors>;
+> = (options?: Omit<ClientOptions<Data>, "form_id">) => FormValidationClient<Data, Errors>;

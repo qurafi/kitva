@@ -1,3 +1,5 @@
+import { randomBytes } from "crypto";
+
 export function generate$formDts(forms: string[]) {
 	return `import { GeneratedValidationClient, AjvError } from "kitva";
 import { Schemas } from "./schema_types";
@@ -32,6 +34,7 @@ export function generateClientCode(schema_import: string, forms: string[]) {
                 validate,
                 getFormErrors,
                 action: "${form}",
+                form_id: "kitva-${randomBytes(2).toString("base64url")}",
                 ...opts
             });
         };`;

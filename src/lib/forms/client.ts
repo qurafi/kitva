@@ -16,7 +16,8 @@ export function createValidationClient(opts: CreateClientOption): FormValidation
 		fields: initial_fields = {},
 		use_storage = true,
 		use_enhance = true,
-		warn_user = true
+		warn_user = true,
+		form_id
 	} = opts;
 
 	const fields = writable<AnyMap>(filterEmptyFields(initial_fields));
@@ -155,6 +156,7 @@ export function createValidationClient(opts: CreateClientOption): FormValidation
 		errors,
 		validateForm,
 		action: svelte_action,
-		action_url: action == "default" ? "" : `?/${action}`
+		action_url: action == "default" ? "" : `?/${action}`,
+		id: form_id
 	};
 }

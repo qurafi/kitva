@@ -12,13 +12,13 @@
 
 	export let name: $$Props["name"];
 
-	const { fields, errs } = form;
-
 	export let label = name as string;
 
 	export let labelProps: $$Props["labelProps"] = undefined;
 
 	export let errorClass = "error";
+
+	export let err_id: string = `${form.id}-err-${name}`;
 
 	interface $$Props extends Omit<HTMLInputAttributes, "form" | "name"> {
 		form: FormValidationClient<T>;
@@ -28,17 +28,13 @@
 		errorClass?: string;
 	}
 
-	let err_id: string | undefined;
+	const { fields, errs } = form;
+
 	let error: string | undefined;
+	let err_id_state: string | undefined;
 
 	$: error = $errs[name];
-
-	$: if (error) {
-		const hash = (Math.random() * Number.MAX_SAFE_INTEGER) | 0;
-		err_id = `${form.action_url.slice(2) || "default"}${hash.toString(16)}`;
-	} else {
-		err_id = undefined;
-	}
+	$: err_id_state = error === undefined ? undefined : err_id;
 </script>
 
 <label {...labelProps}>
