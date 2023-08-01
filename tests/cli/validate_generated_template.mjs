@@ -13,7 +13,7 @@ install();
 
 execSync("pnpm kitva", {
 	cwd: cwd,
-	stdio: ["inherit", "inherit", "inherit"]
+	stdio: ["ignore", "inherit", "inherit"]
 });
 
 install();
@@ -36,8 +36,8 @@ function log(...messages) {
 }
 
 function install() {
-	execSync("pnpm i --ignore-workspace", {
+	execSync("pnpm i --ignore-workspace --no-frozen-lockfile", {
 		cwd,
-		stdio: ["ignore", "ignore", "inherit"]
+		stdio: ["ignore", "inherit", "inherit"]
 	});
 }
