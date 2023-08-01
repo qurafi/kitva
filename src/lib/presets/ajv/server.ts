@@ -5,7 +5,7 @@ import { json } from "@sveltejs/kit";
 import { type AjvError, createValidateFn, generateErrorMap } from "./index.js";
 import type { ValidationOptions } from "$lib/hooks/types.js";
 import { DEV } from "esm-env";
-import { validationHook } from "$lib/index.js";
+import { validationHook } from "$lib/hooks/hook.js";
 
 type Schemas = typeof import("$schemas?t=all").default;
 

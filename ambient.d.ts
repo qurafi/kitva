@@ -1,1 +1,1 @@
-/// <reference types="ajv-build-tools/types" />
+import "ajv-build-tools/types";

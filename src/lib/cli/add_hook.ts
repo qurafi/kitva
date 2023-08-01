@@ -5,7 +5,7 @@ import { warn } from "../utils/server.js";
 export function hook_template(is_ts: boolean) {
 	const code = [
 		'import schemas from "$schemas?t=all"',
-		'import { getValidationHook } from "kitva"',
+		'import { getValidationHook } from "kitva/server"',
 		'import { sequence } from "@sveltejs/kit/hooks"'
 	];
 
