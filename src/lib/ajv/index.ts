@@ -1,5 +1,5 @@
 import type { ErrorObject, ValidateFunction } from "ajv";
-import type { JSONType, ValidationResult } from "../../types.js";
+import type { JSONType, ValidationResult } from "../types.js";
 import { BROWSER } from "esm-env";
 import rfdc from "rfdc";
 

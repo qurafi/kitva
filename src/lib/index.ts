@@ -4,7 +4,7 @@ export {
 	createValidateFn as createAjvValidateFn,
 	getFormErrors as getAjvFormErrors,
 	type AjvError
-} from "./presets/ajv/index.js";
+} from "./ajv/index.js";
 
 export { createValidationClient } from "./forms/client.js";
 
