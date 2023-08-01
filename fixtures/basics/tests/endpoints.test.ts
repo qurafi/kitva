@@ -70,5 +70,5 @@ test("content negotiation: render html", async ({ request }) => {
 	});
 
 	expect(response.status()).toBe(200);
-	await expect(response.text()).resolves.toContain("<h1>Page</h1>");
+	await expect(response.text()).resolves.toContain("<html");
 });

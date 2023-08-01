@@ -1,6 +1,6 @@
 import type { Actions } from "./$types2";
 import { setTimeout } from "timers/promises";
-import { withValidation } from "kitva";
+import { withValidation } from "kitva/server";
 
 export const actions: Actions = withValidation({
 	async default_action(event) {

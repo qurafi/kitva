@@ -1,5 +1,5 @@
 import type { Actions } from "./$types2";
-import { handleValidate, withValidation } from "kitva";
+import { handleValidate, withValidation } from "kitva/server";
 export const actions: Actions = withValidation({
 	default(event) {
 		return { success: true, input: event.locals.validation.body.input };
