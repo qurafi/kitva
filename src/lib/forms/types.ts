@@ -23,9 +23,9 @@ export interface FormValidationClient<Data = AnyMap, Error extends AnyError = An
 	 * NOTE: if you want to access directly the raw errors, use ${@link errors}
 	 *
 	 * */
-	errs: Readable<Partial<Record<keyof Data, string>>>;
+	errs: Readable<Partial<Record<keyof Data | "$$error", string>>>;
 
-	errors: Readable<Partial<Record<keyof Data, Error>> | undefined>;
+	errors: Readable<Partial<Record<keyof Data | "$$error", Error>> | undefined>;
 
 	validateForm(field?: string): void;
 	action_url: string;
