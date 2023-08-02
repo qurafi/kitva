@@ -1,10 +1,11 @@
+import type { MaybePromise } from "$lib/utils/index.js";
 import type { AnyHandler, RequestHandlerWithValidation, ValidationResults } from "../types.js";
 import type { getRequestContent } from "../utils/svelte.js";
 
 export const validation_hooks = new WeakMap<AnyHandler, HandleValidate>();
 
 /**
- * Add hook to a handler to change the behavior of validation.
+ * Change the behavior of validation for specific handler.
  *
  * Returning false will skip validation.
  *
@@ -30,4 +31,4 @@ export type HandleValidate<T extends AnyHandler = AnyHandler> = (params: {
 	event: Parameters<T>["0"] & { locals: { validation: never } };
 	input: Input;
 	validate: GetValidateOf<T>;
-}) => Promise<boolean | void | undefined>;
+}) => MaybePromise<boolean | void | undefined>;
