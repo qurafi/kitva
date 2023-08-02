@@ -54,8 +54,10 @@ function clone_if(req: Request, b: boolean) {
 	return b ? req.clone() : req;
 }
 
-export function getActionName(s: string) {
-	return s.startsWith("?/") ? s.slice(2) : "default";
+export function getActionName(search: string) {
+	const params = new URLSearchParams(search);
+	const name = [...params.keys()].find((name) => name.startsWith("/"));
+	return name ? name.slice(1) : "default";
 }
 
 export function getRouteSrc(routes: Modules, routeId: string | null, file: string) {
