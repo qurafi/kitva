@@ -54,7 +54,10 @@ export function createValidationClient(opts: CreateClientOption): FormValidation
 		const form_result = form?.[`__form_${action}`];
 		if (form_result) {
 			const { input, errors: form_errors } = form_result;
-			fields.set(input);
+			if (input) {
+				fields.set(input);
+			}
+
 			if (form_errors) {
 				setErrors(form_errors);
 			}
