@@ -17,11 +17,7 @@ export function validationHook(opts: ValidationOptions): Handle {
 	return async ({ event, resolve }) => {
 		const response = await validateRequest(event, routes, opts);
 
-		if (response instanceof Response) {
-			return response;
-		}
-
-		return resolve(event);
+		return response ?? resolve(event);
 	};
 }
 
@@ -151,7 +147,5 @@ async function validateRequest(
 		await validate();
 	}
 
-	if (response) {
-		return response;
-	}
+	return response;
 }
