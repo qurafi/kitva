@@ -21,7 +21,8 @@ export function filterEmptyFields(input: AnyMap) {
 	return Object.fromEntries(filtered);
 }
 
-export function objectMap(obj: AnyMap, map: (value: AnyMap, prop: string) => any) {
+//TODO Imrpove types
+export function objectMap(obj: AnyMap, map: (value: any, prop: string) => any) {
 	const new_obj: AnyMap = {};
 
 	for (const prop in obj) {
