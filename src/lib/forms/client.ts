@@ -94,13 +94,15 @@ export function createValidationClient(opts: CreateClientOption): FormValidation
 		});
 	}
 
+	let submitting: boolean;
+
 	if (warn_user) {
 		beforeNavigate((nav) => {
 			if (!current_form || vite_hmr_reload) {
 				return;
 			}
 
-			if (!confirm("Are sure you want to leave?")) {
+			if (!confirm("Are sure you want to leave?") && !submitting) {
 				nav.cancel();
 			}
 		});
@@ -111,6 +113,9 @@ export function createValidationClient(opts: CreateClientOption): FormValidation
 
 		current_form = form;
 		form.addEventListener("input", onInput);
+		form.addEventListener("submit", () => {
+			submitting = true;
+		});
 
 		const enhancer =
 			use_enhance &&
@@ -129,6 +134,7 @@ export function createValidationClient(opts: CreateClientOption): FormValidation
 
 				return async ({ update, result }) => {
 					loading.set(false);
+					submitting = false;
 					await update();
 
 					if (result.type == "success") {
