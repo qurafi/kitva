@@ -56,22 +56,13 @@ export type ValidationResults<
 				valid: false;
 
 				/**
-				 *
-				 * params, headers, queries validated first
-				 * and if there's errors, the first error will be assigned
-				 * with globalError symbol
-				 *
-				 * for body(form inputs). errors assigned by fields.
-				 *
 				 * @example
 				 * {
 				 *  valid: false,
 				 *  formErrors: {
-				 *      // for params, headers, querystring, or global errors
-				 *      // first error only
+				 *      // global error message
 				 *      $$error: Error,
-				 *
-				 *      // for body(form inputs) it's assigned by field
+				 *      // field erros
 				 *      user: Error,
 				 *      password: Error,
 				 *
