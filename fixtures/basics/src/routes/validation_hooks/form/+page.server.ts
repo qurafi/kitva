@@ -1,7 +1,20 @@
 import type { Actions } from "./$types2";
-import { handleValidate, withValidation } from "kitva/server";
+import { formFailure, handleValidate, withValidation } from "kitva/server";
 export const actions: Actions = withValidation({
 	default(event) {
+		const { data } = event.locals.validation.body;
+		if (data) {
+			if (data.password == "123456") {
+				return formFailure(event, 400, {
+					password: "password should not be 123456"
+				});
+			}
+
+			if (data.username === "admin" && data.password !== "secret") {
+				return formFailure(event, 403, "username or password is invalid");
+			}
+		}
+
 		return { success: true, input: event.locals.validation.body.input };
 	}
 });
