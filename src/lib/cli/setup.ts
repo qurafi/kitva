@@ -5,6 +5,7 @@ import { addValidationHook } from "./add_hook.js";
 import { addVitePlugin } from "./edit_vite_config.js";
 import { setupTypes } from "./setup_types.js";
 import { addDeps } from "./add_deps.js";
+import { add_localization } from "./add_localization.js";
 
 interface SetupOptions {
 	steps: string[];
@@ -45,6 +46,11 @@ export async function setup(cwd: string, { steps }: SetupOptions) {
 	if (steps.includes("deps")) {
 		console.log("Adding runtime dependencies");
 		addDeps(cwd);
+	}
+
+	if (steps.includes("localize")) {
+		console.log("Adding localization file");
+		await add_localization(cwd);
 	}
 
 	console.log(green("Setup done"));

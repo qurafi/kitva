@@ -4,7 +4,8 @@ import { withValidation } from "kitva/server";
 
 export const actions: Actions = withValidation({
 	async default_action(event) {
-		console.log("submitted", event.locals.validation.body.data);
+		const data = event.locals.validation.body.data;
+		console.log("submitted");
 		await setTimeout(process.env.PLAYWRIGHT_TEST_BASE_URL ? 0 : 1150);
 		return {
 			success: true

@@ -22,8 +22,7 @@ export function generateClientCode(schema_import: string, forms: string[]) {
 	return `import { ${forms.map((form) => `actions_${form}`).join(", ")} } from "${schema_import}";
     
     import { createValidationClient, createAjvValidateFn, getAjvFormErrors as getFormErrors } from "kitva";
-    
-    
+    import {localize} from "/src/lib/validation/localization";
     
     ${forms
 		.map((form) => {
@@ -35,6 +34,7 @@ export function generateClientCode(schema_import: string, forms: string[]) {
                 getFormErrors,
                 action: "${form}",
                 form_id: "kitva-${randomBytes(2).toString("base64url")}",
+                localize,
                 ...opts
             });
         };`;

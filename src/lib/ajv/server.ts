@@ -9,7 +9,7 @@ import { validationHook } from "$lib/hooks/hook.js";
 
 type Schemas = typeof import("$schemas?t=all").default;
 
-export function getValidationHook(schemas: Schemas, options?: ValidationOptions) {
+export function getValidationHook(schemas: Schemas, options?: Partial<ValidationOptions>) {
 	return validationHook({
 		...options,
 		...createPreset(schemas)

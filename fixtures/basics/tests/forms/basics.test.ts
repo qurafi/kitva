@@ -1,51 +1,15 @@
 import { expect, test } from "@playwright/test";
 import { setTimeout } from "timers/promises";
 
-const form_error = {
-	__form_default: {
-		input: {
-			email: "test@"
-		},
-		errors: {
-			username: {
-				instancePath: "",
-				schemaPath: "#/required",
-				keyword: "required",
-				params: {
-					missingProperty: "username"
-				},
-				message: "must have required property 'username'"
-			},
-			first_name: {
-				instancePath: "",
-				schemaPath: "#/required",
-				keyword: "required",
-				params: {
-					missingProperty: "first_name"
-				},
-				message: "must have required property 'first_name'"
-			},
-			email: {
-				instancePath: "/email",
-				schemaPath: "#/properties/email/errorMessage",
-				keyword: "errorMessage",
-				params: {
-					errors: [
-						{
-							instancePath: "/email",
-							schemaPath: "#/properties/email/format",
-							keyword: "format",
-							params: {
-								format: "email"
-							},
-							message: 'must match format "email"',
-							emUsed: true
-						}
-					]
-				},
-				message: "email is not valid"
-			}
-		}
+const form_errors = {
+	username: {
+		message: "username.invalid"
+	},
+	first_name: {
+		message: "must have required property 'first_name'"
+	},
+	email: {
+		message: "email is not valid"
 	}
 };
 
@@ -76,10 +40,10 @@ async function testFormSubmission({
 		if (valid_data) {
 			await expect(page.locator("body")).toHaveText(/Successfully/);
 		} else {
-			for (const [field, err] of Object.entries(form_error.__form_default.errors)) {
+			for (const [field, err] of Object.entries(form_errors)) {
 				const message = await page.locator(`[name='${field}'] + .error`).textContent();
 
-				await expect(message).toBe(err.message);
+				expect(message).toBe(err.message);
 			}
 		}
 

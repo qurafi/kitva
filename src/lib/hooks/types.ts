@@ -1,3 +1,4 @@
+import type { Localize } from "$lib/index.js";
 import type { AnyError, AnyValue, JSONType, ValidationResult } from "../types.js";
 import type { HttpMethod, HttpPart, MaybePromise } from "../utils/index.js";
 import type { Modules } from "../utils/svelte.js";
@@ -41,9 +42,9 @@ export interface ValidationOptions {
 
 	/** get a singular error used on standalone endpoints and global form errors */
 	getError(errors: any[], part: string): AnyError;
-}
 
-export type PresetValidationOptions = Omit<ValidationOptions, "getValidation">;
+	localize?: Localize;
+}
 
 export type GetValidationFunction = (
 	ctx: ValidationContext

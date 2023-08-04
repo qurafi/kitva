@@ -5,6 +5,8 @@
 	import { Input } from "kitva";
 
 	const enhance_param = $page.url.searchParams.get("enhance") || "true";
+	const locale_param = $page.url.searchParams.get("test_use_locale");
+	const use_locale = locale_param == "true" || locale_param || false;
 	const use_enhance = enhance_param == "true";
 
 	const [valid, invalid] = [
@@ -15,7 +17,7 @@
 			first_name: "Username"
 		},
 		{
-			username: "",
+			username: "long_username",
 			email: "test@"
 		}
 	];
@@ -33,6 +35,7 @@
 	const fill_param = $page.url.searchParams.get("fill");
 	const my_form = createValidate({
 		fields: fill_param ? (fill_param == "valid" ? valid : invalid) : {},
+		locale: use_locale,
 		use_enhance
 	});
 

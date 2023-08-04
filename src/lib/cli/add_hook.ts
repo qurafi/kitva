@@ -6,7 +6,8 @@ export function hook_template(is_ts: boolean) {
 	const code = [
 		'import schemas from "$schemas?t=all"',
 		'import { getValidationHook } from "kitva/server"',
-		'import { sequence } from "@sveltejs/kit/hooks"'
+		'import { sequence } from "@sveltejs/kit/hooks"',
+		'import { localize } from "./lib/validation/localization";'
 	];
 
 	if (is_ts) {
@@ -26,7 +27,7 @@ export function hook_template(is_ts: boolean) {
 	);
 
 	code.push(
-		`\nconst validationHook = getValidationHook(schemas)`,
+		`\nconst validationHook = getValidationHook(schemas, {localize})`,
 		`export const handle = sequence(validationHook, mainHandle)`
 	);
 

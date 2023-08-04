@@ -7,7 +7,7 @@ try {
 		options: {
 			only: {
 				type: "string",
-				default: "types,hook,vite,deps"
+				default: "types,hook,vite,deps,localize"
 			}
 		}
 	});

@@ -1,10 +1,15 @@
-import type { ErrorObject, ValidateFunction } from "ajv";
+import type { DefinedError as AjvDefinedError, ErrorObject, ValidateFunction } from "ajv";
 import type { JSONType, ValidationResult } from "../types.js";
 import { BROWSER } from "esm-env";
 import rfdc from "rfdc";
 
 // the message is always defined when ajv option "messages" is true(default),
 export type AjvError = ErrorObject & { message: string };
+
+export type DefinedError = { message: string } & (
+	| AjvDefinedError
+	| ErrorObject<"errorMessage", { errors: AjvError; [key: string]: any }>
+);
 
 // for errors that aren't related to a field
 export const GLOBAL_ERROR = "$$error";

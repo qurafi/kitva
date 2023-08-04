@@ -1,24 +1,28 @@
-import { type Actions, fail, ActionFailure } from "@sveltejs/kit";
+import { localize } from "$lib/ajv/localization.js";
+import { objectMap } from "$lib/utils/index.js";
+import { getActionName } from "$lib/utils/svelte.js";
+import { type ActionFailure, fail, type Actions } from "@sveltejs/kit";
 import type {
-	AnyMap,
 	AnyError,
+	AnyMap,
 	AnyRequestEvent,
 	EventWithValidation,
 	ValidationParts
 } from "../types.js";
-import { getActionName } from "$lib/utils/svelte.js";
-import { objectMap } from "$lib/utils/index.js";
-import type { AjvError } from "$lib/index.js";
+import { GLOBAL_ERROR } from "$lib/ajv/index.js";
+
+type TGLOBAL_ERROR = typeof GLOBAL_ERROR;
 
 type WithValidation<T extends Record<string, any>> = T & FormResults<T>;
 
 export function withValidation<T extends Record<string, any>>(t: T) {
 	const out: Actions = {};
 	for (const [name, action] of Object.entries(t)) {
-		out[name] = (event) => {
+		out[name] = async (event) => {
 			const { validation } = event.locals;
 
 			if (validation && !validation.valid && validation.body?.valid === false) {
+				await localize(event, validation.body.errors);
 				return fail(400, {
 					[`__form_${name}`]: {
 						input: validation.body.input,
@@ -37,39 +41,47 @@ type ExtractFields<T> = T extends EventWithValidation<ValidationParts<{ body: in
 	? R
 	: never;
 
-type ErrorOfFields<T> = Partial<Record<keyof ExtractFields<T> | "$$error", string>>;
+type ErrorOfFields<T> = Partial<Record<keyof ExtractFields<T> | TGLOBAL_ERROR, string>>;
 
-export function formFailure<T extends AnyRequestEvent = AnyRequestEvent>(
+export async function formFailure<T extends AnyRequestEvent = AnyRequestEvent>(
 	event: T,
 	status: number,
 	errors: ErrorOfFields<T> | string
-): ActionFailure<any> {
+): Promise<ActionFailure<any>> {
 	const action = getActionName(event.url.search);
 
 	if (typeof errors == "string") {
 		errors = {
-			$$error: errors
+			[GLOBAL_ERROR]: errors
 		} as ErrorOfFields<T>;
 	}
+
+	const error_map = objectMap(errors, (value, prop) => {
+		return errorObject(prop, value);
+	});
+
+	await localize(event, Object.values(error_map));
 
 	return fail(status, {
 		[`__form_${action}`]: {
 			input: event.locals.validation?.body?.input,
-			errors: objectMap(errors, (value, prop) => {
-				return {
-					instancePath: prop == "$$error" ? "" : `/${prop}`,
-					schemaPath:
-						prop == "$$error" ? "#/errorMessage" : `#/properties/${prop}/errorMessage`,
-					keyword: "errorMessage",
-					params: {
-						errors: [],
-						form_failure: true
-					},
-					message: value
-				} satisfies AjvError;
-			})
+			errors: error_map
 		}
 	});
+}
+
+/** Generate Ajv compatible custome error */
+export function errorObject(prop: string, message: string) {
+	return {
+		instancePath: prop == GLOBAL_ERROR ? "" : `/${prop}`,
+		schemaPath: prop == GLOBAL_ERROR ? "#/errorMessage" : `#/properties/${prop}/errorMessage`,
+		keyword: "errorMessage",
+		params: {
+			errors: [],
+			form_failure: true
+		},
+		message
+	};
 }
 
 type FormResults<T> = {

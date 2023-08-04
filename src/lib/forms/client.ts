@@ -7,6 +7,7 @@ import type { AnyError, AnyMap, ValidationResult } from "../types.js";
 import { filterEmptyFields, objectMap } from "../utils/index.js";
 import { useStorage } from "./storage.js";
 import type { CreateClientOption, FormValidationClient } from "./types.js";
+import { BROWSER } from "esm-env";
 
 export function createValidationClient(opts: CreateClientOption): FormValidationClient {
 	const {
@@ -17,11 +18,15 @@ export function createValidationClient(opts: CreateClientOption): FormValidation
 		use_storage = true,
 		use_enhance = true,
 		warn_user = true,
-		form_id
+		form_id,
+		localize,
+		locale = "en"
 	} = opts;
 
-	const fields = writable<AnyMap>(filterEmptyFields(initial_fields));
+	const lang =
+		typeof locale === "string" ? locale : BROWSER && locale && navigator.language.toLowerCase();
 
+	const fields = writable<AnyMap>(filterEmptyFields(initial_fields));
 	const set_fields = fields.set;
 	fields.set = (value) => set_fields(filterEmptyFields(value));
 
@@ -38,17 +43,20 @@ export function createValidationClient(opts: CreateClientOption): FormValidation
 
 	const errs = writable<Record<string, string>>({});
 
-	function setErrors(new_errs: Record<string, AnyError> | undefined | null) {
-		errs.set(new_errs ? objectMap(new_errs, (err) => err?.message || "") : {});
+	function setErrors(new_errs: Record<string, AnyError> | undefined | null, use_localize = true) {
+		const update = () => {
+			errs.set(new_errs ? objectMap(new_errs, (err) => err?.message || "") : {});
+		};
+
+		if (BROWSER && lang && new_errs && use_localize) {
+			const result = localize(lang, Object.values(new_errs));
+			result?.finally(update);
+			return;
+		}
+		update();
 	}
 
 	const loading = writable(false);
-
-	let timeout: any;
-
-	if (Object.keys(initial_fields).length) {
-		validateForm();
-	}
 
 	const unsubscribe_page = page.subscribe(({ form }) => {
 		const form_result = form?.[`__form_${action}`];
@@ -59,7 +67,7 @@ export function createValidationClient(opts: CreateClientOption): FormValidation
 			}
 
 			if (form_errors) {
-				setErrors(form_errors);
+				setErrors(form_errors, false);
 			}
 		}
 	});
@@ -71,15 +79,26 @@ export function createValidationClient(opts: CreateClientOption): FormValidation
 	function validateForm(field?: string) {
 		const form_errors = get(errors);
 		if (form_errors && field) {
-			errs.update((errs) => {
-				errs[field] = form_errors[field]?.message;
-				return errs;
-			});
+			const update = () => {
+				errs.update((errs) => {
+					errs[field] = form_errors[field]?.message;
+
+					return errs;
+				});
+			};
+
+			if (BROWSER && lang && form_errors) {
+				const result = localize(lang, Object.values(form_errors));
+				result?.finally(update);
+				return;
+			}
+			update();
 		} else {
 			setErrors(form_errors);
 		}
 	}
 
+	let timeout: any;
 	function onInput(e: Event) {
 		const target = e.target as HTMLElement;
 		const name = target?.getAttribute("name");
@@ -165,7 +184,10 @@ export function createValidationClient(opts: CreateClientOption): FormValidation
 		errors,
 		validateForm,
 		action: svelte_action,
-		action_url: action == "default" ? "" : `?/${action}`,
+		action_url: `${action == "default" ? "?" : `?/${action}`}${
+			locale ? `&locale=${locale}` : ""
+		}`,
+
 		id: form_id
 	};
 }
