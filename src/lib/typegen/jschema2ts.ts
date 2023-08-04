@@ -3,6 +3,7 @@ import { compile } from "json-schema-to-typescript";
 import type Ajv from "ajv";
 import { resolveUrl } from "ajv/dist/compile/resolve.js";
 import { dirname } from "node:path";
+import { KitvaError } from "$lib/utils/index.js";
 
 export async function compileJsonSchemaTypes(
 	ajv: Ajv.default,
@@ -13,7 +14,7 @@ export async function compileJsonSchemaTypes(
 	const generated_name = `_${randomInt(2 ** 48 - 1)}`;
 
 	if (!schema.$id && !ref) {
-		throw new Error("ref is required when schema.$id is undefined");
+		throw KitvaError("ref is required when schema.$id is undefined");
 	}
 
 	const base_id = dirname(schema.$id ?? ref);
@@ -62,7 +63,7 @@ function ajvResolver(ajv: Ajv.default, base_id: string) {
 
 			const schema_env = ajv.getSchema(id);
 			if (!schema_env) {
-				throw new Error(`Could not resolve schema ${file.url} for type gen`);
+				throw KitvaError(`Could not resolve schema ${file.url} for type gen`);
 			}
 			return schema_env.schema;
 		}

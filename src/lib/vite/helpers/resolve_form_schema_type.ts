@@ -1,3 +1,4 @@
+import { KitvaError } from "$lib/utils/index.js";
 import type { Plugin as AjvToolsPlugin } from "ajv-build-tools";
 
 export function resolveFormObjectType(): AjvToolsPlugin {
@@ -8,8 +9,8 @@ export function resolveFormObjectType(): AjvToolsPlugin {
 			}
 
 			if (schema.type && schema.type !== "object") {
-				throw new Error(
-					`Kitva: Form actions must be object, got ${schema.type}. at ${file}:${name}`
+				throw KitvaError(
+					`Form actions must be object, got ${schema.type}. at ${file}:${name}`
 				);
 			}
 

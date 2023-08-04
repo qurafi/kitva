@@ -2,7 +2,7 @@ import type { Handle, RequestEvent } from "@sveltejs/kit";
 import { DEV } from "esm-env";
 import type { EventWithValidation, ValidationResults } from "../types.js";
 import { is_endpoint_request } from "../utils/http.js";
-import { HTTP_PARTS, type HttpMethod, type HttpPart } from "../utils/index.js";
+import { HTTP_PARTS, KitvaError, type HttpMethod, type HttpPart } from "../utils/index.js";
 import { getActionName, getRequestContent, getRouteSrc, type Modules } from "../utils/svelte.js";
 import type { ValidationOptions } from "./types.js";
 import { validation_hooks } from "./handleValidate.js";
@@ -143,7 +143,7 @@ async function validateRequest(
 
 	if (!called && handle_result !== false) {
 		if (DEV && handle_validate) {
-			throw new Error("Kitva: handleValidate didn't call validate()");
+			throw KitvaError("handleValidate didn't call validate()");
 		}
 		await validate();
 	}

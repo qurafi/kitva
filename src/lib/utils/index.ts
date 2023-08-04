@@ -34,3 +34,9 @@ export function objectMap(obj: AnyMap, map: (value: any, prop: string) => any) {
 
 	return new_obj;
 }
+
+export function KitvaError(message: string) {
+	const err = new Error(message);
+	err.name = "KitvaError";
+	return err;
+}

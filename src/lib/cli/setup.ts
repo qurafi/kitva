@@ -6,6 +6,7 @@ import { addVitePlugin } from "./edit_vite_config.js";
 import { setupTypes } from "./setup_types.js";
 import { addDeps } from "./add_deps.js";
 import { add_localization } from "./add_localization.js";
+import { KitvaError } from "$lib/utils/index.js";
 
 interface SetupOptions {
 	steps: string[];
@@ -19,13 +20,13 @@ export async function setup(cwd: string, { steps }: SetupOptions) {
 	const has_tsconfig = existsSync(resolve(cwd, "tsconfig.json"));
 
 	if (!existsSync(resolve(cwd, "svelte.config.js"))) {
-		throw new Error(
+		throw KitvaError(
 			"svelte.config.js is not found. please make sure to run this command inside a sveltekit project"
 		);
 	}
 
 	if (!vite_config) {
-		throw new Error("vite config is not found");
+		throw KitvaError("vite config is not found");
 	}
 
 	if (steps.includes("vite")) {

@@ -1,5 +1,5 @@
 import { bold } from "kleur/colors";
-import { HTTP_METHODS, HTTP_PARTS } from "$lib/utils/index.js";
+import { HTTP_METHODS, HTTP_PARTS, KitvaError } from "$lib/utils/index.js";
 import type { Plugin as AjvToolsPlugin } from "ajv-build-tools";
 import { defer_warn } from "$lib/utils/server.js";
 
@@ -34,7 +34,7 @@ export function resolveRoutesSchemas(module: Module, file: string) {
 		}
 
 		if (!export_value || typeof export_value !== "object") {
-			throw new Error(`Kitva: ${file} - ${export_name} must be object `);
+			throw KitvaError(`${file} - ${export_name} must be object `);
 		}
 
 		for (const part of Object.keys(export_value)) {

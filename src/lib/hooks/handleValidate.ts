@@ -1,4 +1,4 @@
-import type { MaybePromise } from "$lib/utils/index.js";
+import { KitvaError, type MaybePromise } from "$lib/utils/index.js";
 import type { AnyHandler, RequestHandlerWithValidation, ValidationResults } from "../types.js";
 import type { getRequestContent } from "../utils/svelte.js";
 
@@ -16,7 +16,7 @@ export const validation_hooks = new WeakMap<AnyHandler, HandleValidate>();
 export function handleValidate<T extends AnyHandler>(handler: T, callback: HandleValidate<T>) {
 	const old_hook = validation_hooks.get(handler);
 	if (old_hook && old_hook !== callback) {
-		throw new Error("Kitva: handleValidate - already registered validate hook");
+		throw KitvaError("handleValidate - already registered validate hook");
 	}
 	validation_hooks.set(handler, callback);
 }
