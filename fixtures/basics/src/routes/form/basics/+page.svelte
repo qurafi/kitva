@@ -2,7 +2,7 @@
 	import { page } from "$app/stores";
 
 	import { createDefaultActionForm as createValidate } from "./$form";
-	import { Input } from "kitva";
+	import { Form } from "kitva";
 
 	const enhance_param = $page.url.searchParams.get("enhance") || "true";
 	const locale_param = $page.url.searchParams.get("test_use_locale");
@@ -22,16 +22,8 @@
 		}
 	];
 
-	// form result typed
 	export let form;
 
-	// form result in __form_action format
-	// will contains the "input" data and the "errors"
-	form?.__form_default_action;
-
-	// create form validation with initial values
-	// this will take form.__form_action and the validation function
-	// you could fill form fields from page data as well (as long its type safe)
 	const fill_param = $page.url.searchParams.get("fill");
 	const my_form = createValidate({
 		fields: fill_param ? (fill_param == "valid" ? valid : invalid) : {},
@@ -52,41 +44,21 @@
 		<div>
 			<pre>{JSON.stringify($fields, null, 2)}</pre>
 
-			<form
-				method="post"
-				action={my_form.action_url}
-				novalidate
-				use:my_form.action
-				autocomplete="off"
-			>
-				<!-- <label>
-					User
-					<input type="text" name="username" bind:value={$fields.username} />
-					<p class="error">{$errs.username || ""}</p>
-				</label> -->
+			<Form form={my_form} let:Input>
+				<Input type="text" name="username" label="Username:" />
+				<Input name="email" label="Email:" />
+				<Input name="password" label="Password:" />
+				<Input name="first_name" label="First Name:" />
+				<Input name="last_name" label="Last Name(optional):" />
 
-				<Input form={my_form} name="username" label="Username:" />
-				<Input form={my_form} name="email" label="Email:" />
-				<Input form={my_form} name="password" label="Password:" />
-				<Input form={my_form} name="first_name" label="First Name:" />
-				<Input form={my_form} name="last_name" label="Last Name(optional):" />
-
-				<Input
-					form={my_form}
-					name="accept_tos"
-					type="checkbox"
-					label="Accept Term of services"
-				/>
-
-				<!-- check for unkown fields(depending on additionalProperties) -->
-				<!-- <input type="text" name="last_name" bind:value={$fields.unknown} /> -->
-				<!-- <Input form={my_form} fields="unknown" /> -->
+				<Input name="accept_tos" type="checkbox" label="Accept Term of services" />
 
 				<button type="submit" disabled={$loading}>
 					Submit{$loading ? "ting" : ""}
 				</button>
+				<!-- to test warn user -->
 				<a href="./no-schema" data-sveltekit-reload>Another page</a>
-			</form>
+			</Form>
 			<button on:click={() => ($fields = valid)}>Valid</button>
 			<button on:click={() => ($fields = invalid)}>Invalid</button>
 		</div>
@@ -110,23 +82,23 @@
 		margin-right: 3em;
 	}
 
-	form :global(input) {
+	.container :global(input) {
 		display: block;
 	}
 
-	form :global(.error) {
+	.container :global(.error) {
 		font-size: small;
 		margin-top: 0;
 		min-height: 0.5em;
 		color: red;
 	}
 
-	form :global(.error)::after {
+	.container :global(.error)::after {
 		content: "";
 		display: inline-block;
 	}
 
-	form button[type="submit"]:disabled {
+	.container button[type="submit"]:disabled {
 		opacity: 0.8;
 		cursor: not-allowed;
 	}
