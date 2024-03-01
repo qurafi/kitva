@@ -67,14 +67,12 @@
 	},
 	"files": [
 		"dist",
-		"src",
-		"!src/routes",
+		"src/lib",
+		"ambient.d.ts",
 		"!dist/**/*.test.*",
 		"!dist/**/*.spec.*",
 		"!src/**/*.test.*",
-		"!src/**/*.spec.*",
-		"*/*.d.ts",
-		"*.d.ts"
+		"!src/**/*.spec.*"
 	],
 	"peerDependencies": {
 		"@sveltejs/kit": "^1.5.0",
