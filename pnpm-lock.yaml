@@ -15,7 +15,7 @@ importers:
         specifier: ^2.0.0
         version: 2.5.2(@sveltejs/vite-plugin-svelte@3.0.2)(svelte@4.2.12)(vite@5.1.4)
       ajv-build-tools:
-        specifier: link:../ajv-build-tools
+        specifier: ../ajv-build-tools
         version: link:../ajv-build-tools
       ajv-i18n:
         specifier: ^4.2.0
