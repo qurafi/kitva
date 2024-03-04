@@ -11,8 +11,6 @@ test("should pass with correct data", async ({ request }) => {
 		}
 	});
 
-	console.log(response);
-
 	expect(response.ok()).toBeTruthy();
 });
 
