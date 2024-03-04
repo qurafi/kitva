@@ -1,4 +1,7 @@
 module.exports = {
+	rules: {
+		"@typescript-eslint/no-unused-vars": "warn"
+	},
 	root: true,
 	extends: [
 		"eslint:recommended",
