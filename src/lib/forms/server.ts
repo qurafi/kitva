@@ -1,7 +1,7 @@
 import { localize } from "$lib/ajv/localization.js";
 import { objectMap } from "$lib/utils/index.js";
 import { getActionName } from "$lib/utils/svelte.js";
-import { type ActionFailure, fail, type Actions } from "@sveltejs/kit";
+import type { Actions } from "@sveltejs/kit";
 import type {
 	AnyError,
 	AnyMap,
@@ -23,12 +23,12 @@ export function withValidation<T extends Record<string, any>>(t: T) {
 
 			if (validation && !validation.valid && validation.body?.valid === false) {
 				await localize(event, validation.body.errors);
-				return fail(400, {
+				return {
 					[`__form_${name}`]: {
 						input: validation.body.input,
 						errors: validation.formErrors
 					}
-				});
+				};
 			}
 
 			return action(event);
@@ -45,9 +45,8 @@ type ErrorOfFields<T> = Partial<Record<keyof ExtractFields<T> | TGLOBAL_ERROR, s
 
 export async function formFailure<T extends AnyRequestEvent = AnyRequestEvent>(
 	event: T,
-	status: number,
 	errors: ErrorOfFields<T> | string
-): Promise<ActionFailure<any>> {
+) {
 	const action = getActionName(event.url.search);
 
 	if (typeof errors == "string") {
@@ -62,12 +61,12 @@ export async function formFailure<T extends AnyRequestEvent = AnyRequestEvent>(
 
 	await localize(event, Object.values(error_map));
 
-	return fail(status, {
+	return {
 		[`__form_${action}`]: {
 			input: event.locals.validation?.body?.input,
 			errors: error_map
 		}
-	});
+	};
 }
 
 /** Generate Ajv compatible custome error */
