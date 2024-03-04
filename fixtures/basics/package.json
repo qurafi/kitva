@@ -11,21 +11,22 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
 	},
 	"devDependencies": {
-		"@playwright/test": "^1.28.1",
-		"@sveltejs/adapter-auto": "^2.0.0",
-		"@sveltejs/kit": "^1.20.4",
-		"svelte": "^4.0.5",
-		"svelte-check": "^3.4.3",
-		"tslib": "^2.4.1",
-		"typescript": "^5.0.0",
-		"vite": "^4.4.2"
+		"@playwright/test": "^1.42.0",
+		"@sveltejs/adapter-auto": "^3.1.1",
+		"@sveltejs/kit": "^2.5.2",
+		"@sveltejs/vite-plugin-svelte": "^3.0.2",
+		"svelte": "^4.2.12",
+		"svelte-check": "^3.6.6",
+		"tslib": "^2.6.2",
+		"typescript": "^5.3.3",
+		"vite": "^5.1.4"
 	},
 	"dependencies": {
-		"@sinclair/typebox": "^0.28.14",
-		"ajv": "^8",
-		"ajv-formats": "^3.0.0-rc.0",
+		"@sinclair/typebox": "^0.28.20",
+		"ajv": "^8.12.0",
+		"ajv-formats": "3.0.0-rc.0",
 		"kitva": "workspace:*",
-		"zod": "^3.21.4"
+		"zod": "^3.22.4"
 	},
 	"type": "module"
 }
