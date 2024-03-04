@@ -1,10 +1,4 @@
-import type {
-	HTMLAttributes,
-	HTMLBaseAttributes,
-	HTMLInputAttributes,
-	HTMLLabelAttributes,
-	HTMLParamAttributes
-} from "svelte/elements";
+import type { HTMLAttributes, HTMLInputAttributes, HTMLLabelAttributes } from "svelte/elements";
 
 interface ComponentConfig {
 	inputProps?: Record<string, any> & HTMLInputAttributes;
