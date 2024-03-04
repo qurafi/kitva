@@ -59,5 +59,5 @@ export function createValidateFn(validate: ValidateFunction, clone_data = false)
 
 	validate_fn.schema = validate.schema;
 
-	return validate;
+	return validate_fn;
 }
