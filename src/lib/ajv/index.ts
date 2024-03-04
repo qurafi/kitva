@@ -41,7 +41,7 @@ export const getFormErrors = generateErrorMap;
 const clone = BROWSER ? (data: unknown) => JSON.parse(JSON.stringify(data)) : rfdc();
 
 export function createValidateFn(validate: ValidateFunction, clone_data = false) {
-	return (input: unknown) => {
+	function validate_fn(input: unknown) {
 		const data = clone_data ? clone(input) : input;
 
 		const valid = validate(data);
@@ -55,5 +55,9 @@ export function createValidateFn(validate: ValidateFunction, clone_data = false)
 			input,
 			data: valid ? data : undefined
 		} as ValidationResult<JSONType, AjvError>;
-	};
+	}
+
+	validate_fn.schema = validate.schema;
+
+	return validate;
 }

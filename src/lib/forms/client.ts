@@ -187,7 +187,7 @@ export function createValidationClient(opts: CreateClientOption): FormValidation
 		action_url: `${action == "default" ? "?" : `?/${action}`}${
 			locale ? `&locale=${locale}` : ""
 		}`,
-
+		schema: validate.schema,
 		id: form_id
 	};
 }

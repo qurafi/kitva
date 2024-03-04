@@ -39,6 +39,8 @@ export interface FormValidationClient<Data = AnyMap, Error extends AnyError = An
 	action(form: HTMLFormElement): ActionReturn<void>;
 
 	id: string;
+
+	schema: Record<string, any>;
 }
 
 export interface ClientOptions<Data extends AnyMap = AnyMap> {
