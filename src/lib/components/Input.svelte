@@ -1,4 +1,6 @@
 <script lang="ts" generics="FormDefs">
+	import { config } from "./globals.js";
+
 	/* global FormDefs */
 	import type { AjvError } from "$lib/index.js";
 	import { getContext } from "svelte";
@@ -42,25 +44,31 @@
 	{#if $$restProps.type == "checkbox"}
 		<input
 			type="checkbox"
-			{...$$restProps}
 			bind:checked={$fields[name]}
 			value="true"
-			{...$$restProps}
 			{name}
 			aria-invalid={error !== undefined}
 			aria-errormessage={err_id_state}
+			{...config.inputProps}
+			{...$$restProps}
 		/>
 	{:else}
 		<input
 			type="text"
 			bind:value={$fields[name]}
-			{...$$restProps}
 			{name}
 			aria-invalid={error !== undefined}
 			aria-errormessage={err_id_state}
+			{...config.inputProps}
+			{...$$restProps}
 		/>
 	{/if}
-	<p id={err_id_state} class={errorClass} style:visibility={error ? "visible" : "hidden"}>
+	<p
+		id={err_id_state}
+		class={errorClass}
+		style:visibility={error ? "visible" : "hidden"}
+		{...config.errorProps}
+	>
 		{error}
 	</p>
 </label>
