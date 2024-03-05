@@ -7,6 +7,7 @@ declare global {
 			validation?: import("./lib/types.js").ValidationResults & {
 				localize?: Localize;
 			};
+			action?: string;
 		}
 		// interface PageData {}
 		// interface Platform {}

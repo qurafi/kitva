@@ -30,7 +30,8 @@ export type Actions = {
 		Actions_[k],
 		{ body: Schemas["actions"][k] },
 		AjvError,
-		true
+		true,
+		k
 	>;
 };
 

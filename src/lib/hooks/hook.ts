@@ -68,6 +68,7 @@ async function validateRequest(
 	};
 
 	event.locals.validation = validation;
+	event.locals.action = action_name;
 	event.locals.validation.localize = opts.localize;
 
 	async function validatePart(part: HttpPart) {
