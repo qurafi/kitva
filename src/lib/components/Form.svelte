@@ -6,6 +6,7 @@
 	import { SvelteComponent, setContext } from "svelte";
 	import type { HTMLFormAttributes } from "svelte/elements";
 	import Input from "./Input.svelte";
+	import { config } from "./globals.js";
 
 	type InferProp<Cmp> = Cmp extends typeof SvelteComponent<infer Prop extends Record<string, any>>
 		? Prop
@@ -26,6 +27,6 @@
 	const InputComponent: typeof SvelteComponent<Omit<InputProps, "form">> = Input;
 </script>
 
-<form method="post" use:form.action action={form.action_url} {...$$restProps}>
+<form method="post" use:form.action action={form.action_url} {...config.formProps} {...$$restProps}>
 	<slot Input={InputComponent} />
 </form>
