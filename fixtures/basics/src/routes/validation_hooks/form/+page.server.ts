@@ -5,13 +5,13 @@ export const actions: Actions = withValidation({
 		const { data } = event.locals.validation.body;
 		if (data) {
 			if (data.password == "123456") {
-				return formFailure(event, 400, {
+				return formFailure(event, {
 					password: "password should not be 123456"
 				});
 			}
 
 			if (data.username === "admin" && data.password !== "secret") {
-				return formFailure(event, 403, "username or password is invalid");
+				return formFailure(event, "username or password is invalid");
 			}
 		}
 
