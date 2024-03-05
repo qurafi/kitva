@@ -4,7 +4,7 @@ const use_build = process.env.CI || process.env.TEST_MODE == "build";
 const config: PlaywrightTestConfig = {
 	webServer: {
 		command: use_build ? "npm run build && npm run preview" : "pnpm dev",
-		port: use_build ? 4173 : 5173,
+		port: use_build ? 4173 : 8180,
 		stdout: "pipe"
 	},
 	testDir: "tests",
