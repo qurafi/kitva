@@ -4,7 +4,7 @@
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true,
 		"moduleResolution": "nodenext",
-		"module": "ESNext",
+		"module": "NodeNext",
 		"target": "ES2022",
 		"skipLibCheck": true,
 		"sourceMap": true,
