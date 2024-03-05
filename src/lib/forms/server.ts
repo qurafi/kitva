@@ -62,6 +62,7 @@ export async function formFailure<T extends AnyRequestEvent = AnyRequestEvent>(
 	await localize(event, Object.values(error_map));
 
 	return {
+		action,
 		[`__form_${action}`]: {
 			input: event.locals.validation?.body?.input,
 			errors: error_map
@@ -85,10 +86,10 @@ export function errorObject(prop: string, message: string) {
 
 type FormResults<T> = {
 	/** @deprecated */
-	__hacky_ts_prop_to_inject_form_errors_on_action_data: () => {
+	__hacky_ts_prop_to_inject_form_errors_in_action_data: () => {
 		[k in `__form_${keyof T & string}`]: {
 			input: AnyMap;
 			errors: Record<string, AnyError>;
 		};
-	};
+	} & { action: keyof T };
 };
