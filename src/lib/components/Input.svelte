@@ -52,7 +52,7 @@
 	};
 </script>
 
-<label {...labelProps} for={input_id}>{label}</label>
+<label {...labelProps} {...config.labelProps} for={input_id}>{label}</label>
 {#if $$restProps.type == "checkbox"}
 	<input type="checkbox" bind:checked={$fields[name]} value="true" {...input_props} />
 {:else}
