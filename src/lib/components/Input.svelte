@@ -28,47 +28,41 @@
 	export let labelProps: $$Props["labelProps"] = undefined;
 
 	export let errorClass = "error";
-	export let err_id = `${form.id}-err-${name}`;
 
 	const { fields, errs } = form;
 
+	let input_id: string;
+	let input_props: HTMLInputAttributes;
+
 	let error: string | undefined;
-	let err_id_state: string | undefined;
+	let err_id: string | undefined;
+
+	$: input_id = `${form.id}-${name}`;
 
 	$: error = $errs[name];
-	$: err_id_state = error === undefined ? undefined : err_id;
+	$: err_id = error && `${form.id}-err-${name}`;
+
+	$: input_props = {
+		name,
+		"aria-invalid": error !== undefined,
+		"aria-errormessage": err_id,
+		id: input_id,
+		...config.inputProps,
+		...$$restProps
+	};
 </script>
 
-<label {...labelProps}>
-	<span>{label}</span>
-	{#if $$restProps.type == "checkbox"}
-		<input
-			type="checkbox"
-			bind:checked={$fields[name]}
-			value="true"
-			{name}
-			aria-invalid={error !== undefined}
-			aria-errormessage={err_id_state}
-			{...config.inputProps}
-			{...$$restProps}
-		/>
-	{:else}
-		<input
-			type="text"
-			bind:value={$fields[name]}
-			{name}
-			aria-invalid={error !== undefined}
-			aria-errormessage={err_id_state}
-			{...config.inputProps}
-			{...$$restProps}
-		/>
-	{/if}
-	<p
-		id={err_id_state}
-		class={errorClass}
-		style:visibility={error ? "visible" : "hidden"}
-		{...config.errorProps}
-	>
-		{error}
-	</p>
-</label>
+<label {...labelProps} for={input_id}>{label}</label>
+{#if $$restProps.type == "checkbox"}
+	<input type="checkbox" bind:checked={$fields[name]} value="true" {...input_props} />
+{:else}
+	<input type="text" bind:value={$fields[name]} {...input_props} />
+{/if}
+<p
+	id={err_id}
+	class={errorClass}
+	style:visibility={error ? "visible" : "hidden"}
+	{...config.errorProps}
+>
+	{error}
+</p>
