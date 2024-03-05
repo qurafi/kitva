@@ -1,12 +1,14 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-nocheck
-import type { AnyMap, RequestHandlerWithValidation, HttpMethod } from "kitva/types";
-
-import type { RequestHandler as RequestHandler_ } from "./$types";
+import type { RequestHandlerWithValidation, HttpMethod } from "kitva/types";
 
 import type { Schemas } from "./schema_types";
 
 import { AjvError } from "kitva";
+
+import type { RequestEvent } from "@sveltejs/kit";
+import type { RequestHandler as RequestHandler_, RouteParams, RouteId } from "./$types";
+import { FormResult } from "kitva/server";
 
 export type RequestHandlers = {
 	[k in HttpMethod]: k extends keyof Schemas
@@ -20,14 +22,13 @@ export type DELETEHandler = RequestHandlers["DELETE"];
 export type PATCHHandler = RequestHandlers["PATCH"];
 export type PUTHandler = RequestHandlers["PUT"];
 
-type Actions_ = import("./$types").Actions;
-type ActionData_ = import("./$types").ActionData;
 type ActionSchemas = Schemas["actions"];
-type inferAction<T> = T extends `__form_${infer R}` ? R : never;
+
+type CurrentRequestEvent = RequestEvent<RouteParams, RouteId>;
 
 export type Actions = {
 	[k in keyof ActionSchemas]: RequestHandlerWithValidation<
-		Actions_[k],
+		(event: CurrentRequestEvent) => any,
 		{ body: Schemas["actions"][k] },
 		AjvError,
 		true,
@@ -35,9 +36,10 @@ export type Actions = {
 	>;
 };
 
-export type ActionData = ActionData_ & {
-	[k in `__form_${keyof ActionSchemas}`]: {
-		input: AnyMap;
-		errors: Record<keyof ActionSchemas[inferAction<k>], AjvError>;
-	};
+export const withValidation: <T extends Actions>(
+	actions: T
+) => {
+	[K in keyof T]: (
+		event: CurrentRequestEvent
+	) => { action: K } & (Awaited<ReturnType<T[K]>> | FormResult<K>);
 };

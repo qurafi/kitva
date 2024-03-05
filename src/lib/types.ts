@@ -79,7 +79,11 @@ export type ValidationResults<
 
 export type AnyRequestEvent = RequestEvent<Partial<Record<string, string>>, any>;
 
-export type EventWithValidation<V = any, ActionName extends string = string> = AnyRequestEvent & {
+export type EventWithValidation<
+	V = any,
+	ActionName extends string | undefined = undefined,
+	Event extends AnyRequestEvent = AnyRequestEvent
+> = Event & {
 	locals: { validation: V; action: ActionName };
 };
 
@@ -90,7 +94,11 @@ export type RequestHandlerWithValidation<
 	Data extends AnyDefaultData = any,
 	Error extends AnyError = AnyError,
 	Validated extends boolean = boolean,
-	ActionName extends string = string
+	ActionName extends string | undefined = undefined
 > = (
-	event: EventWithValidation<ValidationResults<Data, Error, Validated>, ActionName>
+	event: EventWithValidation<
+		ValidationResults<Data, Error, Validated>,
+		ActionName,
+		Parameters<T>["0"]
+	>
 ) => ReturnType<T>;

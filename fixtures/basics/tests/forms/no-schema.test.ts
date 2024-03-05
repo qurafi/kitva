@@ -5,7 +5,7 @@ test("form/no-schema", async ({ page }) => {
 
 	await page.click("button");
 
-	await expect(page.locator("pre")).toHaveText(`{\n\n"success": true\n}`);
+	await expect(page.locator("pre")).toContainText(`"success": true`);
 });
 
 test("form/no-specific-schema", async ({ page }) => {
@@ -13,5 +13,5 @@ test("form/no-specific-schema", async ({ page }) => {
 
 	await page.click("button");
 
-	await expect(page.locator("pre")).toHaveText(`{\n\n"success": true\n}`);
+	await expect(page.locator("pre")).toContainText(`"success": true`);
 });

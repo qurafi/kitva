@@ -3,6 +3,7 @@ import { randomBytes } from "crypto";
 export function generate$formDts(forms: string[]) {
 	return `import { GeneratedValidationClient, AjvError } from "kitva";
 import { Schemas } from "./schema_types";
+export {withValidation} from "./$types2"
 
 ${forms
 	.map((form) => {
@@ -23,6 +24,8 @@ export function generateClientCode(schema_import: string, forms: string[]) {
     
     import { createValidationClient, createAjvValidateFn, getAjvFormErrors as getFormErrors } from "kitva";
     import {localize} from "/src/lib/validation/localization";
+
+    export {withValidation} from "kitva/server";
     
     ${forms
 		.map((form) => {

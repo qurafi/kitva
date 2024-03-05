@@ -1,8 +1,8 @@
 import type { Actions } from "./$types2";
 import { setTimeout } from "timers/promises";
-import { withValidation } from "kitva/server";
+import { withValidation } from "./$form";
 
-export const actions: Actions = withValidation({
+export const actions = withValidation({
 	async default_action(event) {
 		const data = event.locals.validation.body.data;
 		console.log("submitted");

@@ -1,6 +1,5 @@
 import { localize } from "$lib/ajv/localization.js";
-import { objectMap } from "$lib/utils/index.js";
-import { getActionName } from "$lib/utils/svelte.js";
+import { KitvaError, objectMap } from "$lib/utils/index.js";
 import type { Actions } from "@sveltejs/kit";
 import type {
 	AnyError,
@@ -11,11 +10,7 @@ import type {
 } from "../types.js";
 import { GLOBAL_ERROR } from "$lib/ajv/index.js";
 
-type TGLOBAL_ERROR = typeof GLOBAL_ERROR;
-
-type WithValidation<T extends Record<string, any>> = T & FormResults<T>;
-
-export function withValidation<T extends Record<string, any>>(t: T) {
+export function withValidation<T extends Actions>(t: T) {
 	const out: Actions = {};
 	for (const [name, action] of Object.entries(t)) {
 		out[name] = async (event) => {
@@ -24,6 +19,7 @@ export function withValidation<T extends Record<string, any>>(t: T) {
 			if (validation && !validation.valid && validation.body?.valid === false) {
 				await localize(event, validation.body.errors);
 				return {
+					action: name,
 					[`__form_${name}`]: {
 						input: validation.body.input,
 						errors: validation.formErrors
@@ -31,23 +27,29 @@ export function withValidation<T extends Record<string, any>>(t: T) {
 				};
 			}
 
-			return action(event);
+			const result = await action(event);
+			return { action: name, ...result };
 		};
 	}
-	return out as WithValidation<T>;
+	return out;
 }
 
-type ExtractFields<T> = T extends EventWithValidation<ValidationParts<{ body: infer R }, any, any>>
+type ExtractFields<T> = T extends EventWithValidation<ValidationParts<{ body: infer R }>, any>
 	? R
 	: never;
 
-type ErrorOfFields<T> = Partial<Record<keyof ExtractFields<T> | TGLOBAL_ERROR, string>>;
+type ErrorOfFields<T> = Partial<Record<keyof ExtractFields<T> | typeof GLOBAL_ERROR, string>>;
+
+type ExtractActionName<T> = T extends EventWithValidation<any, infer R> ? R : never;
 
 export async function formFailure<T extends AnyRequestEvent = AnyRequestEvent>(
 	event: T,
 	errors: ErrorOfFields<T> | string
 ) {
-	const action = getActionName(event.url.search);
+	const action = event.locals.action as ExtractActionName<T>;
+	if (!action) {
+		throw KitvaError("formFailure called outside form action");
+	}
 
 	if (typeof errors == "string") {
 		errors = {
@@ -67,10 +69,10 @@ export async function formFailure<T extends AnyRequestEvent = AnyRequestEvent>(
 			input: event.locals.validation?.body?.input,
 			errors: error_map
 		}
-	};
+	} as FormResult<typeof action>;
 }
 
-/** Generate Ajv compatible custome error */
+/** Generate Ajv compatible custom error */
 export function errorObject(prop: string, message: string) {
 	return {
 		instancePath: prop == GLOBAL_ERROR ? "" : `/${prop}`,
@@ -84,12 +86,9 @@ export function errorObject(prop: string, message: string) {
 	};
 }
 
-type FormResults<T> = {
-	/** @deprecated */
-	__hacky_ts_prop_to_inject_form_errors_in_action_data: () => {
-		[k in `__form_${keyof T & string}`]: {
-			input: AnyMap;
-			errors: Record<string, AnyError>;
-		};
-	} & { action: keyof T };
-};
+export type FormResult<T extends string> = {
+	[k in `__form_${T}`]: {
+		input: AnyMap;
+		errors: Record<string, AnyError>;
+	};
+} & { action: T };

@@ -1,4 +1,4 @@
-export { withValidation, formFailure, errorObject } from "./forms/server.js";
+export { withValidation, formFailure, errorObject, type FormResult } from "./forms/server.js";
 
 export * from "./hooks/index.js";
 
