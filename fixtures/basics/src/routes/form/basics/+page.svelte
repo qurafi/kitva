@@ -28,6 +28,7 @@
 	const my_form = createValidate({
 		fields: fill_param ? (fill_param == "valid" ? valid : invalid) : {},
 		locale: use_locale,
+		use_storage: false,
 		use_enhance
 	});
 
@@ -37,14 +38,14 @@
 <div class="container">
 	{#if form?.success}
 		<div>
-			<p>Successfully sumbitted your response:</p>
+			<p>Successfully submitted your response:</p>
 			<a href="basics">Submit another forum</a>
 		</div>
 	{:else}
 		<div>
 			<pre>{JSON.stringify($fields, null, 2)}</pre>
 
-			<Form form={my_form} let:Input>
+			<Form form={my_form} autocomplete="off" let:Input>
 				<Input type="text" name="username" label="Username:" />
 				<Input name="email" label="Email:" />
 				<Input name="password" label="Password:" />
