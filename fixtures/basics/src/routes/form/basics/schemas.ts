@@ -20,7 +20,7 @@ export const actions = {
 		accept_tos: t.Optional(t.Boolean({ default: false }))
 	}),
 	another_action: t.Object({
-		foo: t.String({ minLength: 1, format: "email" }),
-		bar: t.String({ format: "date-time" })
+		foo: t.String({ format: "email", minLength: 1, maxLength: 10 }),
+		bar: t.String({ format: "date-time", maxLength: 10 })
 	})
 };
