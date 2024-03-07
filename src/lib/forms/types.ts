@@ -68,4 +68,9 @@ export type Localize = (
 export type GeneratedValidationClient<
 	Data extends AnyMap = AnyMap,
 	Errors extends AnyError = AnyError
-> = (options?: Omit<ClientOptions<Data>, "form_id">) => FormValidationClient<Data, Errors>;
+> = (options?: GeneratedClientOptions<Data>) => FormValidationClient<Data, Errors>;
+
+export type GeneratedClientOptions<Data extends AnyMap = AnyMap> = Omit<
+	ClientOptions<Data>,
+	"form_id"
+>;

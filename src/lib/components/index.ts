@@ -2,7 +2,6 @@ import type { HTMLAttributes, HTMLInputAttributes, HTMLLabelAttributes } from "s
 
 export { default as Input } from "./InputWrapper.svelte";
 export { default as Form } from "./Form.svelte";
-export { setKitvaComponentDefaults } from "./globals.js";
 
 export interface LabelProp {
 	attrs: HTMLLabelAttributes;

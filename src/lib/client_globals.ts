@@ -4,7 +4,8 @@ import type {
 	HTMLInputAttributes,
 	HTMLLabelAttributes
 } from "svelte/elements";
-import InputRenderer from "./Input.svelte";
+import InputRenderer from "./components/Input.svelte";
+import type { CreateClientOption, GeneratedClientOptions } from "./forms/types.js";
 
 interface ComponentConfig {
 	inputProps?: Record<string, any> & HTMLInputAttributes;
@@ -12,15 +13,20 @@ interface ComponentConfig {
 	errorProps?: Record<string, any> & HTMLAttributes<HTMLParagraphElement>;
 	formProps?: Record<string, any> & HTMLFormAttributes;
 	inputComponent?: typeof InputRenderer;
+	instanceDefaults?:
+		| GeneratedClientOptions
+		| ((options: CreateClientOption) => GeneratedClientOptions);
 }
 
-export let config: ComponentConfig = {
+const defaults: ComponentConfig = {
 	inputComponent: InputRenderer
 };
+
+export let config: ComponentConfig = defaults;
 
 /**
  * Set this before rendering. For example in layout
  */
-export function setKitvaComponentDefaults(defaults: ComponentConfig) {
-	config = defaults;
+export function setKitvaClientDefaults(new_defaults: ComponentConfig) {
+	config = { ...defaults, ...new_defaults };
 }

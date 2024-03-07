@@ -8,8 +8,13 @@ import { filterEmptyFields, objectMap } from "../utils/index.js";
 import { useStorage } from "./storage.js";
 import type { CreateClientOption, FormValidationClient } from "./types.js";
 import { BROWSER } from "esm-env";
+import { config } from "$lib/client_globals.js";
 
 export function createValidationClient(opts: CreateClientOption): FormValidationClient {
+	const defaults =
+		typeof config.instanceDefaults == "function"
+			? config.instanceDefaults(opts)
+			: config.instanceDefaults;
 	const {
 		validate,
 		getFormErrors,
@@ -21,7 +26,7 @@ export function createValidationClient(opts: CreateClientOption): FormValidation
 		form_id,
 		localize,
 		locale = "en"
-	} = opts;
+	} = { ...defaults, ...opts };
 
 	const lang =
 		typeof locale === "string" ? locale : BROWSER && locale && navigator.language.toLowerCase();

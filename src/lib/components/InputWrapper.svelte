@@ -1,5 +1,5 @@
 <script lang="ts" generics="FormDefs">
-	import { config } from "./globals.js";
+	import { config } from "$lib/client_globals.js";
 
 	/* global FormDefs */
 	import type { AjvError, ErrorLabelProp, LabelProp } from "$lib/index.js";
@@ -19,6 +19,7 @@
 		labelProps?: HTMLLabelAttributes;
 		errorClass?: string;
 		errorPosition?: "top" | "bottom";
+		componentProps?: Record<string, any> | undefined;
 	} & Omit<HTMLInputAttributes, "form" | "name" | `${"on" | "bind"}:${string}`>;
 
 	export let form: FormType = getContext("kitva:form");
@@ -27,6 +28,11 @@
 
 	export let label = name as string;
 	export let labelProps: $$Props["labelProps"] = undefined;
+
+	/**
+	 * Pass props to Custom input component
+	 */
+	export let componentProps: $$Props["componentProps"] = undefined;
 
 	export let errorClass = "error";
 
@@ -84,4 +90,5 @@
 	label={label_props}
 	error={error_props}
 	input={{ attrs: input_props }}
+	{...componentProps}
 />

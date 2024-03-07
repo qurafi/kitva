@@ -8,6 +8,7 @@ export {
 } from "./ajv/index.js";
 
 export { createValidationClient } from "./forms/client.js";
+export { setKitvaClientDefaults } from "./client_globals.js";
 
 export * from "./components/index.js";
 

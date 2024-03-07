@@ -6,7 +6,7 @@
 	import { SvelteComponent, setContext } from "svelte";
 	import type { HTMLFormAttributes } from "svelte/elements";
 	import Input from "./InputWrapper.svelte";
-	import { config } from "./globals.js";
+	import { config } from "../client_globals.js";
 
 	type InferProp<Cmp> = Cmp extends typeof SvelteComponent<infer Prop extends Record<string, any>>
 		? Prop
