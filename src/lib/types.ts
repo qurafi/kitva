@@ -1,7 +1,7 @@
 import type { RequestEvent } from "@sveltejs/kit";
-import type { HttpPart } from "./utils/index.js";
 
-export type { HttpPart, HttpMethod } from "./utils/index.js";
+import type { HttpPart } from "./shared/constants.js";
+import type { Localize } from "./index.js";
 
 export type JSONType = number | boolean | string | null | JSONType[] | AnyMap;
 
@@ -46,36 +46,32 @@ export type ValidationParts<
 	[k in keyof Data]: ValidationResult<Data[k], Error, Invalid>;
 };
 
+//TODO set it to non nullable when used with forms
+type injectFormErrors<Data extends AnyMap, Error = AnyError> = {
+	/**
+	 * @example
+	 * {
+	 *  valid: false,
+	 *  formErrors: {
+	 *      // global error message
+	 *      $$error: Error,
+	 *      // field erros
+	 *      user: Error,
+	 *      password: Error,
+	 *
+	 *  }
+	 * }
+	 *
+	 */
+	formErrors?: Record<keyof Data, Error>;
+};
+
 export type ValidationResults<
 	Data extends AnyDefaultData = AnyDefaultData,
 	Error extends AnyError = AnyError,
 	Valid extends boolean = boolean
-> = ValidationParts<Data, Error, Valid> &
-	(
-		| {
-				valid: false;
-
-				/**
-				 * @example
-				 * {
-				 *  valid: false,
-				 *  formErrors: {
-				 *      // global error message
-				 *      $$error: Error,
-				 *      // field erros
-				 *      user: Error,
-				 *      password: Error,
-				 *
-				 *  }
-				 * }
-				 *
-				 */
-				formErrors?: Record<keyof Data["body"], Error>;
-		  }
-		| {
-				valid: true;
-		  }
-	) & { valid: Valid };
+> = { localize?: Localize } & ValidationParts<Data, Error, Valid> &
+	injectFormErrors<Data["body"]> & { valid: Valid };
 
 export type AnyRequestEvent = RequestEvent<Partial<Record<string, string>>, any>;
 

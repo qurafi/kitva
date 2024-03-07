@@ -1,9 +1,12 @@
-// See https://kit.svelte.dev/docs/types#app
-// for information about these interfaces
+import type { Localize } from "$lib/index.ts";
+
 declare global {
 	namespace App {
 		// interface Error {}
-		// interface Locals {}
+		interface Locals {
+			validation?: import("./lib/types.js").ValidationResults;
+			action?: string;
+		}
 		// interface PageData {}
 		// interface Platform {}
 	}

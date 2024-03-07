@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync } from "fs";
-import { warn } from "../utils/server.js";
+import { warn } from "../runtime/server/utils/server.js";
 
 const import_statement = "import { vitePluginSvelteKitva } from 'kitva/vite';";
 

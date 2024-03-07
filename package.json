@@ -41,8 +41,8 @@
 			"default": "./dist/index.js"
 		},
 		"./vite": {
-			"types": "./dist/vite/index.d.ts",
-			"default": "./dist/vite/index.js"
+			"types": "./dist/compile/vite/index.d.ts",
+			"default": "./dist/compile/vite/index.js"
 		},
 		"./server": {
 			"types": "./dist/server.d.ts",

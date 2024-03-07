@@ -6,7 +6,7 @@ import { addVitePlugin } from "./edit_vite_config.js";
 import { setupTypes } from "./setup_types.js";
 import { addDeps } from "./add_deps.js";
 import { add_localization } from "./add_localization.js";
-import { KitvaError } from "$lib/utils/index.js";
+import { KitvaError } from "$lib/shared/utils.js";
 
 interface SetupOptions {
 	steps: string[];

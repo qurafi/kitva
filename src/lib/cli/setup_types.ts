@@ -1,5 +1,5 @@
-import { error } from "$lib/utils/server.js";
-import { TYPES_ROOT_DIR } from "$lib/vite/types_gen/type-gen.js";
+import { error } from "$lib/runtime/server/utils/server.js";
+import { TYPES_ROOT_DIR } from "$lib/compile/vite/types_gen/type-gen.js";
 import { appendFileSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 

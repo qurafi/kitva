@@ -1,6 +1,6 @@
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { warn } from "../utils/server.js";
+import { warn } from "../runtime/server/utils/server.js";
 
 export function hook_template(is_ts: boolean) {
 	const code = [

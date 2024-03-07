@@ -1,17 +1,15 @@
-export type * from "./forms/types.js";
+export type * from "./types/forms.js";
 
 export {
-	createValidateFn as createAjvValidateFn,
-	getFormErrors as getAjvFormErrors,
 	type AjvError,
-	type DefinedError
-} from "./ajv/index.js";
+	type DefinedError,
+	createValidateFn as createAjvValidateFn,
+	getFormErrors
+} from "./runtime/ajv/index.js";
 
-export { createValidationClient } from "./forms/client.js";
-export { setKitvaClientDefaults } from "./client_globals.js";
+export * from "./runtime/client/index.js";
+export * from "./types/forms.js";
 
-export * from "./components/index.js";
+export { default as ajvLocales } from "./runtime/ajv/locales.js";
 
-export { default as ajvLocales } from "./ajv/locales.js";
-
-export { localize, getRequestLang, getAjvLang } from "./ajv/localization.js";
+export { localize, getRequestLang, getAjvLang } from "./runtime/ajv/localization.js";

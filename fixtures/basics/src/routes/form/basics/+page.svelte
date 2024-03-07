@@ -1,10 +1,7 @@
 <script lang="ts">
 	import { page } from "$app/stores";
-	import type { actions_default_action } from "./schema_types";
 	import { createDefaultActionForm as createValidate } from "./$form";
 	import { Form } from "kitva";
-
-	type X = actions_default_action["accept_tos"];
 
 	const enhance_param = $page.url.searchParams.get("enhance") || "true";
 	const locale_param = $page.url.searchParams.get("test_use_locale");
