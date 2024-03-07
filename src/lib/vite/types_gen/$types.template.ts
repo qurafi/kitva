@@ -7,12 +7,17 @@ import type { Schemas } from "./schema_types";
 import { AjvError } from "kitva";
 
 import type { RequestEvent } from "@sveltejs/kit";
-import type { RequestHandler as RequestHandler_, RouteParams, RouteId } from "./$types";
+import type { RouteParams, RouteId } from "./$types";
 import { FormResult } from "kitva/server";
 
 export type RequestHandlers = {
 	[k in HttpMethod]: k extends keyof Schemas
-		? RequestHandlerWithValidation<RequestHandler_, Schemas[k], AjvError, true>
+		? RequestHandlerWithValidation<
+				(event: CurrentRequestEvent) => any,
+				Schemas[k],
+				AjvError,
+				true
+		  >
 		: never;
 };
 

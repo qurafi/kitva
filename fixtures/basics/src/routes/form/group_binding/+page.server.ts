@@ -1,4 +1,4 @@
-import { withValidation } from "kitva/server";
+import { withValidation } from "./$form";
 import type { Actions } from "./$types2";
 
 export const actions: Actions = withValidation({

@@ -22,7 +22,8 @@ const typescript = (config.kit.typescript ??= {});
 const set_config = typescript.config;
 
 typescript.config = function (config) {
-	(config.compilerOptions.rootDirs ??= []).push("../.schemas/types");
-	config.include.push("../.schemas/types");
+	const rootDir = "kitva-schemas/types";
+	(config.compilerOptions.rootDirs ??= []).push(rootDir);
+	config.include.push(rootDir);
 	return set_config?.(config);
 };

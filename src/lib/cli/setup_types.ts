@@ -1,8 +1,11 @@
 import { error } from "$lib/utils/server.js";
+import { TYPES_ROOT_DIR } from "$lib/vite/types_gen/type-gen.js";
 import { appendFileSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 const type_defs = `import "kitva/ambient";`;
+
+const ROOT_DIR = TYPES_ROOT_DIR.replace(".svelte-kit/", "");
 
 const svelte_config_typescript = `
 
@@ -11,8 +14,8 @@ const typescript = (config.kit.typescript ??= {});
 const set_config = typescript.config;
 
 typescript.config = function (config) {
-    (config.compilerOptions.rootDirs ??= []).push("../.schemas/types");
-    config.include.push("../.schemas/types");
+    (config.compilerOptions.rootDirs ??= []).push("${ROOT_DIR}");
+    config.include.push("${ROOT_DIR}");
     return set_config?.(config);
 };`;
 

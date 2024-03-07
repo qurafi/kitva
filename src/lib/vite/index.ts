@@ -24,7 +24,7 @@ export function vitePluginSvelteKitva(opts?: PluginOptions) {
 			"./src/lib/schemas/**/*.{ts,js,\\.d.ts}",
 			...(opts?.ajvTools?.include || [])
 		],
-		exclude: ["**/*.d.ts", ...(opts?.ajvTools?.exclude || [])],
+		exclude: ["**/*.d.ts", "**/*.types.ts", ...(opts?.ajvTools?.exclude || [])],
 		plugins: [
 			routeSchemasResolver(),
 			getRouteFormSchemasPlugin(),

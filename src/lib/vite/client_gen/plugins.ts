@@ -50,10 +50,8 @@ export async function viteSvelteFormClientGenPlugin(): Promise<VitePlugin> {
 						`Could not find actions for route "${route}", resolve id '${id}'`
 					);
 				}
-				// console.log(route, routes_form, route_action_names);
 
 				const code = generateClientCode(schema, route_action_names);
-
 				return code;
 			}
 		}

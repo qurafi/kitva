@@ -2,7 +2,7 @@ import { randomBytes } from "crypto";
 
 export function generate$formDts(forms: string[]) {
 	return `import { GeneratedValidationClient, AjvError } from "kitva";
-import { Schemas } from "./schema_types";
+import { Schemas } from "./schema.types";
 export {withValidation} from "./$types2"
 
 ${forms

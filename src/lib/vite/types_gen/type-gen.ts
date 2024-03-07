@@ -1,5 +1,5 @@
 import type { Plugin, SchemaBuilder } from "ajv-build-tools";
-import path from "node:path";
+import path, { dirname } from "node:path";
 import { generateTypes } from "../../typegen/index.js";
 import { generate$formDts } from "../client_gen/form.js";
 import { copyFile, mkdir, rm, writeFile } from "fs/promises";
@@ -7,12 +7,14 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
+export const TYPES_ROOT_DIR = ".svelte-kit/kitva-schemas/types";
+
 export function typeGenPlugin(): Plugin {
 	async function handleFile(builder: SchemaBuilder, file: string) {
 		const { root, baseDir } = builder.config;
 		const is_route_schema = file.startsWith("routes/");
 		const abs_file = path.resolve(root, baseDir, file);
-		const root_dir = path.resolve(root, ".schemas/types");
+		const root_dir = path.resolve(root, TYPES_ROOT_DIR);
 		const base_dir = path.resolve(root_dir, path.dirname(path.relative(root, abs_file)));
 		const $form_path = path.resolve(base_dir, "./$form.d.ts");
 
@@ -20,8 +22,8 @@ export function typeGenPlugin(): Plugin {
 		await mkdir(base_dir, { recursive: true });
 
 		const out = path.resolve(
-			base_dir,
-			is_route_schema ? "schema_types.d.ts" : `${path.basename(abs_file)}_types.d.ts`
+			dirname(abs_file),
+			is_route_schema ? "schemas.types.ts" : `${path.basename(abs_file)}.types.ts`
 		);
 
 		const { code, forms } = await generateTypes(builder, file, is_route_schema);
@@ -47,7 +49,7 @@ export function typeGenPlugin(): Plugin {
 		},
 
 		async buildEnd(builder) {
-			const root_dir = path.resolve(builder.config.root, ".schemas/types");
+			const root_dir = path.resolve(builder.config.root, TYPES_ROOT_DIR);
 
 			await rm(root_dir, { recursive: true, force: true });
 
