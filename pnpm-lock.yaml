@@ -123,14 +123,8 @@ importers:
       '@sinclair/typebox':
         specifier: ^0.32.15
         version: 0.32.15
-      ajv:
-        specifier: ^8.12.0
-        version: 8.12.0
-      ajv-formats:
-        specifier: 3.0.0-rc.0
-        version: 3.0.0-rc.0(ajv@8.12.0)
       kitva:
-        specifier: workspace:*
+        specifier: workspace:1.0.0-next.15
         version: link:../..
       zod:
         specifier: ^3.22.4
@@ -959,6 +953,7 @@ packages:
         optional: true
     dependencies:
       ajv: 8.12.0
+    dev: true
 
   /ajv-i18n@4.2.0(ajv@8.12.0):
     resolution: {integrity: sha512-v/ei2UkCEeuKNXh8RToiFsUclmU+G57LO1Oo22OagNMENIw+Yb8eMwvHu7Vn9fmkjJyv6XclhJ8TbuigSglPkg==}
