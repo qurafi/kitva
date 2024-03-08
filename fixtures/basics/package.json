@@ -23,8 +23,6 @@
 	},
 	"dependencies": {
 		"@sinclair/typebox": "^0.32.15",
-		"ajv": "^8.12.0",
-		"ajv-formats": "3.0.0-rc.0",
 		"kitva": "workspace:*",
 		"zod": "^3.22.4"
 	},
