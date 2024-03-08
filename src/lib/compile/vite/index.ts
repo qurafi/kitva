@@ -2,10 +2,7 @@ import { unpluginAjvTools, type PluginOptions as AjvToolsOptions } from "ajv-bui
 import type { PluginOption } from "vite";
 import { getRouteFormSchemasPlugin, viteSvelteFormClientGenPlugin } from "./client_gen/plugins.js";
 import { typeGenPlugin } from "./types_gen/type-gen.js";
-import { routeSchemasResolver } from "./helpers/resolve_route_schemas.js";
-import { resolveFormObjectType } from "./helpers/resolve_form_schema_type.js";
-import { resolveZodSchemas } from "./helpers/resolve_zod_schemas.js";
-
+import { routeSchemasResolver, resolveFormObjectType, resolveZodSchemas } from "./resolvers.js";
 interface PluginOptions {
 	ajvTools?: AjvToolsOptions;
 }
