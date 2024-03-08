@@ -13,3 +13,5 @@ export * from "./types/forms.js";
 export { default as ajvLocales } from "./runtime/ajv/locales.js";
 
 export { localize, getRequestLang, getAjvLang } from "./runtime/ajv/localization.js";
+
+export { withValidation } from "./runtime/server/forms.js";

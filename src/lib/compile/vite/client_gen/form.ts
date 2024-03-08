@@ -25,7 +25,7 @@ export function generateClientCode(schema_import: string, forms: string[]) {
     import { createValidationClient, createAjvValidateFn, getFormErrors } from "kitva";
     import {localize} from "/src/lib/validation/localization";
 
-    export {withValidation} from "kitva/server";
+    export {withValidation} from "kitva";
     
     ${forms
 		.map((form) => {
