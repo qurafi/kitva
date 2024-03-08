@@ -1,9 +1,10 @@
 import { readFileSync, writeFileSync } from "fs";
-import { warn } from "../runtime/server/utils/server.js";
+import { warn } from "$lib/shared/logger.server.js";
 
-const import_statement = "import { vitePluginSvelteKitva } from 'kitva/vite';";
+const plugin_fn = "vitePluginSvelteKitva";
+const import_statement = `import { ${plugin_fn} } from 'kitva/vite';`;
 
-export const plugin_call = `vitePluginSvelteKitva()`;
+const plugin_call = `${plugin_fn}()`;
 
 export function editViteConfig(content: string) {
 	const new_content = content.replace(/sveltekit\(\)/, (str) => {
@@ -22,6 +23,8 @@ export function addVitePlugin(config: string) {
 	const new_vite_config = editViteConfig(vite_config);
 	if (!new_vite_config.includes(plugin_call)) {
 		warn("Could not edit vite config");
+		console.log(import_statement);
+		return;
 	}
 	writeFileSync(config, new_vite_config);
 }

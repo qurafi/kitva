@@ -22,7 +22,10 @@ for (const fixture of fixtures /* .slice(0, 1) */) {
 	const name = basename(project);
 	it.concurrent(
 		`setup new kitva project: ${name}`,
+		{ timeout: process.env.CI ? 60000 : 20000, retry: 0 },
 		async () => {
+			await rm(project, { recursive: true, force: true });
+
 			await create(project, {
 				name: "test",
 				template: fixture.template as any,
@@ -46,8 +49,7 @@ for (const fixture of fixtures /* .slice(0, 1) */) {
 			await writeFile(pkg_path, JSON.stringify(pkg, null, 2));
 
 			await testFixture(project);
-		},
-		{ timeout: process.env.CI ? 60000 : 20000, retry: 2 }
+		}
 	);
 }
 

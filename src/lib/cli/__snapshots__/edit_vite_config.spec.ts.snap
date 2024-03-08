@@ -17,7 +17,7 @@ exports[`should edit vite config correctly: empty 1`] = `
 
 exports[`should edit vite config correctly: file_with_plugins_0 1`] = `
 "import { vitePluginSvelteKitva } from 'kitva/vite';
-import somePlugin from \\"vite-plugin\\"
+import somePlugin from "vite-plugin"
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
 
@@ -28,7 +28,7 @@ export default defineConfig({
 
 exports[`should edit vite config correctly: file_with_plugins_0_lines 1`] = `
 "import { vitePluginSvelteKitva } from 'kitva/vite';
-import somePlugin from \\"vite-plugin\\"
+import somePlugin from "vite-plugin"
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
 
@@ -42,7 +42,7 @@ export default defineConfig({
 
 exports[`should edit vite config correctly: file_with_plugins_1 1`] = `
 "import { vitePluginSvelteKitva } from 'kitva/vite';
-import somePlugin from \\"vite-plugin\\"
+import somePlugin from "vite-plugin"
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
 
@@ -53,7 +53,7 @@ export default defineConfig({
 
 exports[`should edit vite config correctly: file_with_plugins_1_lines 1`] = `
 "import { vitePluginSvelteKitva } from 'kitva/vite';
-import somePlugin from \\"vite-plugin\\"
+import somePlugin from "vite-plugin"
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
 

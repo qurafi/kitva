@@ -1,9 +1,4 @@
-import { warn } from "$lib/runtime/server/utils/server.js";
-import { existsSync } from "fs";
-import { mkdir, writeFile } from "fs/promises";
-import path from "path";
-
-const template = `import type { RequestEvent } from "@sveltejs/kit";
+import type { RequestEvent } from "@sveltejs/kit";
 import { type AjvError, getAjvLang, ajvLocales, type DefinedError } from "kitva";
 
 /**
@@ -22,7 +17,7 @@ export async function localize(
 
 	const localize = await ajvLocales[locale]();
 
-	localize(errors?.filter((err) =>  err.keyword !== "errorMessage"));
+	localize(errors?.filter((err) => err.keyword !== "errorMessage"));
 
 	// your own localization logic
 	if (!errors) return;
@@ -31,29 +26,12 @@ export async function localize(
 		if (error.keyword == "errorMessage") {
 			// custom error message
 		} else {
-			// ajv built-in:
-
+			// // ajv built-in:
 			// switch (error.keyword) {
 			// 	case "format":
-			// 		error.message = \`must be valid \${error.params.format}\`;
+			// 		error.message = `must be valid ${error.params.format}`;
 			// 		break;
 			// }
 		}
-
-
 	}
-}`;
-
-export async function add_localization(cwd: string) {
-	const dir = path.resolve(cwd, "src/lib/validation");
-	await mkdir(dir, { recursive: true });
-
-	//TODO support js files
-	const file = path.resolve(dir, "localization.ts");
-	if (existsSync(file)) {
-		warn(`Skipping ${file}, because it's already exists`);
-		return;
-	}
-
-	return writeFile(file, template);
 }

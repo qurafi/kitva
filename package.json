@@ -21,7 +21,8 @@
 	"bin": "./dist/cli/bin.js",
 	"scripts": {
 		"test:e2e": "DEBUG_COLORS=1 pnpm -r test",
-		"test:spec": "DEBUG_COLORS=1 pnpm vitest",
+		"test:spec": "DEBUG_COLORS=1 pnpm vitest src/lib",
+		"test:cli": "DEBUG_COLORS=1 pnpm vitest run tests/cli/setup",
 		"test": "export CI=true && pnpm run '/^test:/'",
 		"dev": "svelte-package -w",
 		"build": "svelte-package",
@@ -58,6 +59,7 @@
 	"files": [
 		"dist",
 		"src/lib",
+		"src/templates",
 		"ambient.d.ts",
 		"!dist/**/*.test.*",
 		"!dist/**/*.spec.*",
