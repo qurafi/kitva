@@ -5,14 +5,9 @@ import type { EventWithValidation, ValidationResults } from "$lib/types.js";
 import type { ValidationOptions } from "../../types/hooks.js";
 import { validation_hooks } from "./handleValidate.js";
 import { is_endpoint_request } from "./utils/http.js";
-import {
-	createDebug,
-	getActionName,
-	getRequestContent,
-	getRouteSrc,
-	type Modules
-} from "./utils/server.js";
+import { getActionName, getRequestContent, getRouteSrc, type Modules } from "./utils/server.js";
 import { KitvaError } from "$lib/shared/utils.js";
+import { createDebug } from "$lib/shared/logger.server.js";
 
 const debug = createDebug("hook:core");
 

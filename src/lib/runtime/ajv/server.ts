@@ -1,6 +1,6 @@
 /// <reference types="ajv-build-tools/types" />
 
-import { warn } from "../server/utils/server.js";
+import { warn } from "$lib/shared/logger.server.js";
 import { json } from "@sveltejs/kit";
 import { type AjvError, createValidateFn, generateErrorMap } from "./index.js";
 import type { ValidationOptions } from "$lib/types/hooks.js";
