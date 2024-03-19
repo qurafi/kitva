@@ -6,5 +6,8 @@ export default defineConfig({
 	server: {
 		port: 8180
 	},
+	build: {
+		minify: false
+	},
 	plugins: [sveltekit() as any, vitePluginSvelteKitva()]
 });
