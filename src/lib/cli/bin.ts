@@ -1,10 +1,11 @@
-import { blue, bold, green, yellow } from "kleur/colors";
+import { blue, bold, green, yellow, dim, red } from "kleur/colors";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import path, { dirname, join, resolve } from "node:path";
 import { addVitePlugin } from "./edit_vite_config.js";
 import { error, warn } from "$lib/shared/logger.server.js";
 import { cp, readdir } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
+import readline from "readline";
 
 const cwd = process.cwd();
 
@@ -13,7 +14,15 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const template_dir = resolve(__dirname, "../../src/templates");
 const init_template_dir = join(template_dir, "init");
 
+const confirmed = process.argv.includes("-y");
+
 export async function setup() {
+	const should_run = confirmed || (await confirmRun());
+	if (!should_run) {
+		console.log("Aborted");
+		return;
+	}
+
 	console.log(bold("Setting up Kitva..."));
 
 	const vite_config = getViteConfig();
@@ -32,6 +41,7 @@ export async function setup() {
 	const is_jsdoc = existsSync(resolve(cwd, "jsconfig.json"));
 	const ext = is_typescript ? ".ts" : ".js";
 	const template_files = await getFiles(init_template_dir);
+	const skipped: string[] = [];
 	for (const file of template_files) {
 		if (!file.endsWith(ext)) {
 			continue;
@@ -40,29 +50,62 @@ export async function setup() {
 		const relative_path = path.relative(init_template_dir, file);
 		const real_path = path.resolve(cwd, relative_path);
 		if (existsSync(real_path)) {
-			warn(`${real_path} already exists. skipping`);
+			skipped.push(relative_path);
 			continue;
 		}
 		await cp(file, real_path, { recursive: true });
 	}
 
-	console.log("Adding Vite plugin...");
+	const skipped_files = skipped.join(", ");
+	warn(
+		`Skipping. File ${bold(
+			dim(skipped_files)
+		)} already exists, you may need to configure this file manually`
+	);
+
 	addVitePlugin(vite_config);
 
 	if (is_typescript || is_jsdoc) {
-		console.log("Setting up Typescript...");
 		setupTypes();
+	} else {
+		warn(
+			"No tsconfig or jsconfig detected. It's recommended to use typescript or type checked javascript"
+		);
 	}
-	console.log(green("Setup done"));
 
-	console.log(yellow("\nDon't forget to install dependencies:"));
-	console.log("npm i kitva ajv-formats@3.0.0-rc.0 ajv@8");
+	console.log(green("\nSetup done"));
 
 	console.log(
-		blue(
-			"\nIf you have any issue in setup. Please see https://github.com/qurafi/kitva/tree/master#manual-setup"
-		)
+		"\nIf you have any issue in setup. Please refer to",
+		blue("https://github.com/qurafi/kitva/tree/master#manual-setup")
 	);
+}
+
+const confirm_text = `${bold("This will edit")}:
+    app.d.ts (add ambient types)
+    vite.config (add vite plugin)
+
+${bold("Reserved paths:")}
+    $lib/validation (configuration)
+    $lib/schemas (shared schemas)
+
+${bold(yellow("Are you sure you want to run this script?"))} (y/N)`;
+
+async function confirmRun() {
+	const rl = readline.createInterface({
+		input: process.stdin,
+		output: process.stdout
+	});
+
+	return new Promise<boolean>((resolve) => {
+		rl.question(confirm_text, (answer) => {
+			const length = confirm_text.split("\n").length;
+			readline.moveCursor(process.stdout, 0, -length);
+			readline.clearScreenDown(process.stdout);
+			rl.close();
+			resolve(answer.trim().toLowerCase() === "y");
+		});
+	});
 }
 
 function getViteConfig() {

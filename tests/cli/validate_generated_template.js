@@ -1,5 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-nocheck
 import { execSync } from "node:child_process";
 import { existsSync } from "node:fs";
 import { resolve } from "node:path";
@@ -11,12 +9,10 @@ log("validating vite project setup", cwd);
 
 install();
 
-execSync("pnpm kitva", {
+execSync("pnpm kitva -y", {
 	cwd: cwd,
-	stdio: ["ignore", "inherit", "inherit"]
+	stdio: ["inherit", "inherit", "inherit"]
 });
-
-install();
 
 const server = await createServer({
 	root: cwd
@@ -36,8 +32,8 @@ function log(...messages) {
 }
 
 function install() {
-	execSync("pnpm i --ignore-workspace --no-frozen-lockfile", {
+	execSync("pnpm i --ignore-workspace", {
 		cwd,
-		stdio: ["ignore", "inherit", "inherit"]
+		stdio: ["ignore", "ignore", "inherit"]
 	});
 }
