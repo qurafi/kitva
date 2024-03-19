@@ -73,7 +73,7 @@ export function createAjvValidateFn<Data = AnyValue>(
 }
 
 /** Generate Ajv compatible custom error */
-export function errorObject(prop: string, message: string) {
+export function createAjvErrorObject(prop: string, message: string) {
 	return {
 		instancePath: prop == GLOBAL_ERROR ? "" : `/${prop}`,
 		schemaPath: prop == GLOBAL_ERROR ? "#/errorMessage" : `#/properties/${prop}/errorMessage`,
