@@ -1,7 +1,6 @@
-import { withValidation } from "./$form";
-import type { Actions } from "./$types";
+import { withValidation } from "./schemas.out";
 
-export const actions: Actions = withValidation({
+export const actions = withValidation({
 	another() {
 		return { success: true };
 	},

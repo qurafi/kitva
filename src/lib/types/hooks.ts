@@ -1,12 +1,14 @@
-import type { Localize } from "$lib/index.js";
-import type { AnyError, AnyValue, JSONType, ValidationResult } from "../types.js";
+import type { AnyValue, ValidationResult } from "../types.js";
 import type { MaybePromise } from "../shared/utils.js";
 import type { Modules } from "$lib/runtime/server/utils/server.js";
 import type { HttpMethod, HttpPart } from "$lib/shared/constants.js";
+import type { JSONSchemaType } from "ajv";
+import type { AjvError } from "$lib/runtime/ajv/index.js";
+import type { Localize } from "$lib/runtime/ajv/localization.js";
 
-export type ValidateFn<Data = AnyValue, Error extends AnyError = AnyError> = {
-	(data: JSONType): ValidationResult<Data, Error>;
-	schema: Record<string, any>;
+export type ValidateFnCompiled<Data = AnyValue> = {
+	(data: unknown): ValidationResult<Data>;
+	schema: JSONSchemaType<Data>;
 };
 
 type ActionValidationContext = {
@@ -39,18 +41,14 @@ export interface ValidationOptions {
 	 */
 	getEndpointError: GetEndpointError;
 
-	/** Returns a map represet key-value pairs of form errors */
-	getFormErrors: GetFormErrors;
-
 	/** get a singular error used on standalone endpoints and global form errors */
-	getError(errors: any[], part: string): AnyError;
+	getError(errors: AjvError[], part: string): AjvError;
 
 	localize?: Localize;
 }
 
 export type GetValidationFunction = (
 	ctx: ValidationContext
-) => MaybePromise<ValidateFn | undefined>;
+) => MaybePromise<ValidateFnCompiled | undefined>;
 
-export type GetEndpointError = (error: any[], part: string) => Response;
-export type GetFormErrors<T extends AnyError = AnyError> = (error: T[]) => Record<string, T>;
+export type GetEndpointError = (error: AjvError[], part: string) => Response;

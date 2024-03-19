@@ -1,9 +1,5 @@
 import { delayed } from "$lib/shared/utils.js";
-
-import createDebugger from "debug";
 import { bold, red, yellow } from "kleur/colors";
-
-export const createDebug = (ns: string) => createDebugger(`kitva:${ns}`);
 
 export function warn(msg: string, ...args: any[]) {
 	console.warn(`${bold(yellow("warn:"))} ${msg}`, ...args);

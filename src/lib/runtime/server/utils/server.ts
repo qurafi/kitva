@@ -17,21 +17,23 @@ export async function getRequestContent({ request, params, url }: RequestEvent) 
 export async function getRequestBody(request: Request, clone = true) {
 	const content_type = request.headers.get("content-type");
 
-	if (content_type == "application/json") {
+	if (content_type?.startsWith("application/json")) {
 		/* prettier-ignore */
 		return clone_if(request, clone).json().catch((_) => {/*  */});
 	}
 
 	if (is_form_content_type(request)) {
-		const formdata = await clone_if(request, clone).formData();
+		const form_data = await clone_if(request, clone).formData();
 
-		return parseFormData(formdata);
+		return parseFormData(form_data);
 	}
+
+	return request.text();
 }
 
-export function parseFormData(formdata: FormData) {
+export function parseFormData(form_data: FormData) {
 	const data: Record<string, any> = {};
-	for (const [field, value] of formdata.entries()) {
+	for (const [field, value] of form_data.entries()) {
 		const is_string = typeof value == "string";
 		if (is_string && value !== "") {
 			if (data[field]) {

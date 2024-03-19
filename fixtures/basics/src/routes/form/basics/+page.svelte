@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from "$app/stores";
-	import { createDefaultActionForm as createValidate } from "./$form";
 	import { Form } from "kitva";
+	import { createDefaultActionForm } from "./schemas.out.js";
 
 	const enhance_param = $page.url.searchParams.get("enhance") || "true";
 	const locale_param = $page.url.searchParams.get("test_use_locale");
@@ -21,17 +21,42 @@
 		}
 	];
 
-	export let form;
-
 	const fill_param = $page.url.searchParams.get("fill");
-	const my_form = createValidate({
+	const my_form = createDefaultActionForm({
 		fields: fill_param ? (fill_param == "valid" ? valid : invalid) : {},
 		locale: use_locale,
 		use_storage: false,
 		use_enhance
 	});
 
-	const { fields, loading } = my_form;
+	const { fields, loading, errors, errs } = my_form;
+
+	export let form;
+
+	// type tests
+	form?.foo;
+	form?.success;
+	form?.action;
+	form?.errors;
+
+	if (form?.action == "default_action") {
+		form.errors?.accept_tos;
+	}
+	if (form?.action == "test") {
+		form.bar;
+	}
+
+	if (form?.action == "default_action") {
+		///@ts-expect-error should error as foo is undefined
+		let x: number = form.foo;
+
+		let y: boolean = form.success;
+	}
+
+	$fields.accept_tos;
+
+	//@ts-expect-error unknown property
+	$fields.unknown;
 </script>
 
 <div class="container">

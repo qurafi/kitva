@@ -14,8 +14,8 @@ interface ComponentConfig {
 	formProps?: Record<string, any> & HTMLFormAttributes;
 	inputComponent?: typeof InputRenderer;
 	instanceDefaults?:
-		| GeneratedClientOptions
-		| ((options: CreateClientOption) => GeneratedClientOptions);
+		| GeneratedClientOptions<any>
+		| ((options: CreateClientOption<any>) => GeneratedClientOptions<any>);
 }
 
 const defaults: ComponentConfig = {

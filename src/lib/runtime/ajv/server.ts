@@ -2,7 +2,7 @@
 
 import { warn } from "$lib/shared/logger.server.js";
 import { json } from "@sveltejs/kit";
-import { type AjvError, createValidateFn, generateErrorMap } from "./index.js";
+import { type AjvError, createAjvValidateFn } from "./index.js";
 import type { ValidationOptions } from "$lib/types/hooks.js";
 import { DEV } from "esm-env";
 import { validationHook } from "../server/hook.js";
@@ -37,11 +37,7 @@ export function createPreset(schemas: Schemas): ValidationOptions {
 				return;
 			}
 
-			return createValidateFn(validate, true);
-		},
-
-		getFormErrors(errors) {
-			return generateErrorMap(errors as AjvError[]);
+			return createAjvValidateFn(validate, true);
 		},
 
 		getError(errors: AjvError[], part: string) {

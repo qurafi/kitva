@@ -1,5 +1,5 @@
 import { text } from "@sveltejs/kit";
-import type { POSTHandler } from "./$types2";
+import type { POSTHandler } from "./schemas.out";
 
 export const POST: POSTHandler = async (event) => {
 	// data is fully typed

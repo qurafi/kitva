@@ -54,10 +54,9 @@ test("form submission: invalid data", async ({ baseURL, request }) => {
 	});
 
 	expect(response.headers()["content-type"]).toContain("text/html");
-	//
-	// too lazy to check
-	expect(await response.text()).toContain("__form_default");
-	expect(await response.text()).toContain('missingProperty:"a"');
+
+	const text = await response.text();
+	expect(text).toContain("must have required property");
 });
 
 test("form submission: valid", async ({ baseURL, request }) => {

@@ -1,6 +1,8 @@
 import { KitvaError, type MaybePromise } from "$lib/shared/utils.js";
-import type { AnyHandler, RequestHandlerWithValidation, ValidationResults } from "../../types.js";
+import type { AnyRequestEvent, EventWithValidation, ValidationResults } from "../../types.js";
 import type { getRequestContent } from "./utils/server.js";
+
+type AnyHandler = (event: any) => any;
 
 export const validation_hooks = new WeakMap<AnyHandler, HandleValidate>();
 
@@ -16,19 +18,21 @@ export const validation_hooks = new WeakMap<AnyHandler, HandleValidate>();
 export function handleValidate<T extends AnyHandler>(handler: T, callback: HandleValidate<T>) {
 	const old_hook = validation_hooks.get(handler);
 	if (old_hook && old_hook !== callback) {
-		throw KitvaError("handleValidate - already registered validate hook");
+		throw new KitvaError("handleValidate - already registered validate hook");
 	}
 	validation_hooks.set(handler, callback);
 }
 
 type Input = Awaited<ReturnType<typeof getRequestContent>>;
 
-type GetValidateOf<T> = T extends RequestHandlerWithValidation<any, infer Data, infer Error, any>
-	? () => Promise<ValidationResults<Data, Error, boolean>>
-	: () => Promise<ValidationResults>;
+type inferData<T> = T extends AnyRequestEvent
+	? T extends EventWithValidation<infer Data, boolean, any, T>
+		? Data
+		: never
+	: never;
 
 export type HandleValidate<T extends AnyHandler = AnyHandler> = (params: {
 	event: Parameters<T>["0"] & { locals: { validation: never } };
 	input: Input;
-	validate: GetValidateOf<T>;
+	validate: () => MaybePromise<ValidationResults<inferData<Parameters<T>["0"]>>>;
 }) => MaybePromise<boolean | void | undefined>;

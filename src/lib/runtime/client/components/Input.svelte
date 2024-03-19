@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { FormValidationClient } from "$lib/index.js";
+	import type { FormValidationClient } from "$lib/types/forms.js";
 	import type { ErrorLabelProp, LabelProp, InputProp } from "./index.js";
 
 	export let label: LabelProp;

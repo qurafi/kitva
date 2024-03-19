@@ -20,9 +20,9 @@
 	"types": "./dist/index.d.ts",
 	"bin": "./dist/cli/bin.js",
 	"scripts": {
-		"test:e2e": "DEBUG_COLORS=1 pnpm -r test",
-		"test:spec": "DEBUG_COLORS=1 pnpm vitest src/lib",
-		"test:cli": "DEBUG_COLORS=1 pnpm vitest run tests/cli/setup",
+		"test:e2e": "pnpm -r test",
+		"test:spec": "vitest",
+		"test:cli": "vitest run tests/cli/setup",
 		"test": "export CI=true && pnpm run '/^test:/'",
 		"dev": "svelte-package -w",
 		"build": "svelte-package",
@@ -42,8 +42,8 @@
 			"default": "./dist/index.js"
 		},
 		"./vite": {
-			"types": "./dist/compile/vite/index.d.ts",
-			"default": "./dist/compile/vite/index.js"
+			"types": "./dist/vite/index.d.ts",
+			"default": "./dist/vite/index.js"
 		},
 		"./server": {
 			"types": "./dist/server.d.ts",
@@ -54,6 +54,10 @@
 		},
 		"./types": {
 			"types": "./dist/types.d.ts"
+		},
+		"./generated": {
+			"default": "./dist/generated.js",
+			"types": "./dist/generated.d.ts"
 		}
 	},
 	"files": [
@@ -86,7 +90,6 @@
 		"eslint-config-prettier": "^8.10.0",
 		"eslint-plugin-svelte": "^2.35.1",
 		"esm-env": "^1.0.0",
-		"prettier": "^2.8.8",
 		"prettier-plugin-svelte": "^2.10.1",
 		"publint": "^0.1.16",
 		"svelte-check": "^3.6.6",
@@ -98,6 +101,7 @@
 		"zod": "^3.22.4"
 	},
 	"dependencies": {
+		"prettier": "^2.8.8",
 		"ajv-build-tools": "1.0.0-next.6",
 		"ajv-i18n": "^4.2.0",
 		"debug": "^4.3.4",

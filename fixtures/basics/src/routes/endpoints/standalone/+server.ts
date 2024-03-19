@@ -1,5 +1,5 @@
-import type { POSTHandler } from "./$types2";
+import type { POSTHandler } from "./generated/types";
 
-export const POST: POSTHandler = async () => {
+export const POST: POSTHandler = async (event) => {
 	return new Response("ok");
 };

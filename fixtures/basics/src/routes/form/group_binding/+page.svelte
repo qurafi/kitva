@@ -1,5 +1,5 @@
 <script>
-	import { createDefaultForm } from "./$form.js";
+	import { createDefaultForm } from "./schemas.out";
 
 	const default_form = createDefaultForm();
 

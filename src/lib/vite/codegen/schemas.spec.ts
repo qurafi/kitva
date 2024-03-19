@@ -1,6 +1,6 @@
 import { expect, test } from "vitest";
 import Ajv from "ajv";
-import { compileJsonSchemaTypes } from "./jschema2ts.js";
+import { compileJsonSchemaTypes } from "./schemas.js";
 
 const schemas = {
 	a: {

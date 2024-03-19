@@ -11,10 +11,10 @@ test("should add property to the input before validation", async ({ page }) => {
 
 	const json = JSON.parse(content ?? "{}");
 
-	expect(json).toHaveProperty("success");
-	expect(json?.input).toHaveProperty("filled_by_server");
-	expect(json?.input).not.toHaveProperty("password");
-	expect(json).not.toHaveProperty("__form_default");
+	expect(json.success).toBe(true);
+	expect(json.input2).toHaveProperty("filled_by_server");
+	expect(json.input2).not.toHaveProperty("password");
+	expect(json).not.toHaveProperty("errors");
 });
 
 test("should add property to the input before validation: invalid data", async ({ page }) => {
@@ -28,8 +28,8 @@ test("should add property to the input before validation: invalid data", async (
 	const json = JSON.parse(content ?? "{}");
 
 	expect(json).not.toHaveProperty("success");
-	expect(json?.__form_default?.input).toHaveProperty("filled_by_server");
-	expect(json?.__form_default?.errors).toHaveProperty("password");
+	expect(json.input).toHaveProperty("filled_by_server");
+	expect(json.errors).toHaveProperty("password");
 });
 
 test("should skip validation", async ({ page }) => {
@@ -39,12 +39,9 @@ test("should skip validation", async ({ page }) => {
 	await page.getByRole("button").click();
 
 	const content = await page.locator("pre").textContent();
-
 	const json = JSON.parse(content ?? "{}");
 
 	expect(json).toHaveProperty("success");
-	// expect(json?.__form_default?.input).toHaveProperty("filled_by_server");
-	// expect(json?.__form_default?.errors).toHaveProperty("password");
 });
 
 test("should return expected form failure message when password is 123456", async ({ page }) => {
@@ -58,7 +55,7 @@ test("should return expected form failure message when password is 123456", asyn
 
 	const json = JSON.parse(content ?? "{}");
 
-	expect(json?.__form_default?.errors).toMatchObject({
+	expect(json.errors).toMatchObject({
 		password: {
 			message: "password should not be 123456"
 		}
@@ -76,7 +73,7 @@ test("should return global form error message", async ({ page }) => {
 
 	const json = JSON.parse(content ?? "{}");
 
-	expect(json?.__form_default?.errors).toMatchObject({
+	expect(json.errors).toMatchObject({
 		$$error: {
 			message: "username or password is invalid"
 		}

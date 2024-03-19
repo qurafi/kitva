@@ -1,7 +1,8 @@
-import type { Actions } from "./$types2";
-import { formFailure, handleValidate, withValidation } from "kitva/server";
-export const actions: Actions = withValidation({
-	default(event) {
+import { formFailure, handleValidate } from "kitva/server";
+import { withValidation } from "./schemas.out";
+
+export const actions = withValidation({
+	default: (event) => {
 		const { data } = event.locals.validation.body;
 		if (data) {
 			if (data.password == "123456") {
@@ -15,11 +16,12 @@ export const actions: Actions = withValidation({
 			}
 		}
 
-		return { success: true, input: event.locals.validation.body.input };
+		return { success: true, input2: event.locals.validation.body.input };
 	}
 });
 
 handleValidate(actions.default, async ({ event, input, validate }) => {
+	event.locals.validation;
 	if (event.url.searchParams.has("novalidate")) {
 		return false;
 	}

@@ -1,8 +1,6 @@
 <script lang="ts" generics="FormDefs">
 	/* global FormDefs */
-
 	import type { FormValidationClient } from "$lib/types/forms.js";
-	import type { AjvError } from "$lib/index.js";
 	import { SvelteComponent, setContext } from "svelte";
 	import type { HTMLFormAttributes } from "svelte/elements";
 	import Input from "./InputWrapper.svelte";
@@ -14,7 +12,7 @@
 
 	type InputProps = InferProp<typeof Input<FormDefs>>;
 
-	type FormType = FormValidationClient<FormDefs, AjvError>;
+	type FormType = FormValidationClient<FormDefs>;
 
 	export let form: FormType;
 

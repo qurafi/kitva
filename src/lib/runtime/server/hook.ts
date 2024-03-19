@@ -7,9 +7,7 @@ import { validation_hooks } from "./handleValidate.js";
 import { is_endpoint_request } from "./utils/http.js";
 import { getActionName, getRequestContent, getRouteSrc, type Modules } from "./utils/server.js";
 import { KitvaError } from "$lib/shared/utils.js";
-import { createDebug } from "$lib/shared/logger.server.js";
-
-const debug = createDebug("hook:core");
+import { getFormErrors } from "../ajv/index.js";
 
 const routes = import.meta.glob("/src/routes/**/*.{ts,js,svelte}") as Modules;
 
@@ -27,7 +25,6 @@ async function validateRequest(
 	opts: ValidationOptions
 ): Promise<Response | undefined | void> {
 	const routeId = event.route.id;
-	debug({ routes, opts, routeId });
 	if (!routeId || event.isDataRequest) {
 		return;
 	}
@@ -54,7 +51,7 @@ async function validateRequest(
 	}
 	const action_name = is_form ? getActionName(event.url.search) : undefined;
 
-	const { getEndpointError, getFormErrors, getValidation } = opts;
+	const { getEndpointError, getValidation } = opts;
 
 	const inputs = await getRequestContent(event);
 
@@ -142,7 +139,7 @@ async function validateRequest(
 
 	if (!called && handle_result !== false) {
 		if (DEV && handle_validate) {
-			throw KitvaError("handleValidate didn't call validate()");
+			throw new KitvaError("handleValidate didn't call validate()");
 		}
 		await validate();
 	}

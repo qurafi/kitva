@@ -1,23 +1,35 @@
 import { enhance } from "$app/forms";
 import { beforeNavigate } from "$app/navigation";
 import { page } from "$app/stores";
+import { BROWSER } from "esm-env";
 import { onDestroy } from "svelte";
 import { derived, get, readonly, writable } from "svelte/store";
-import type { AnyError, AnyMap, ValidationResult } from "../../types.js";
-import { filterEmptyFields, objectMap } from "../../shared/utils.js";
-import { useStorage } from "./storage.js";
-import type { CreateClientOption, FormValidationClient } from "../../types/forms.js";
-import { BROWSER } from "esm-env";
+import { filterEmptyFields, objectMap } from "$lib/shared/utils.js";
+import type { AnyMap, ErrorMap } from "$lib/types.js";
+import type {
+	CreateClientOption,
+	FormResult,
+	FormValidationClient,
+	GeneratedClientOptions
+} from "$lib/types/forms.js";
+import {
+	getFormErrors,
+	type AjvCompiledValidationFunction,
+	type AjvError,
+	createAjvValidateFn
+} from "../ajv/index.js";
 import { config } from "./client_globals.js";
+import { useStorage } from "./storage.js";
+import type { Localize } from "../ajv/localization.js";
 
-export function createValidationClient(opts: CreateClientOption): FormValidationClient {
-	const defaults =
-		typeof config.instanceDefaults == "function"
-			? config.instanceDefaults(opts)
-			: config.instanceDefaults;
+export function createValidationClient<Data = any>(
+	opts: CreateClientOption<Data>
+): FormValidationClient<any> {
+	const defaults = config.instanceDefaults;
+	const default_opts = typeof defaults == "function" ? defaults(opts) : defaults;
+
 	const {
 		validate,
-		getFormErrors,
 		action,
 		fields: initial_fields = {},
 		use_storage = true,
@@ -26,7 +38,7 @@ export function createValidationClient(opts: CreateClientOption): FormValidation
 		form_id,
 		localize,
 		locale = "en"
-	} = { ...defaults, ...opts };
+	} = { ...default_opts, ...opts };
 
 	const lang =
 		typeof locale === "string" ? locale : BROWSER && locale && navigator.language.toLowerCase();
@@ -35,10 +47,7 @@ export function createValidationClient(opts: CreateClientOption): FormValidation
 	const set_fields = fields.set;
 	fields.set = (value) => set_fields(filterEmptyFields(value));
 
-	const validate_result = derived(
-		fields,
-		(values) => validate(values) as ValidationResult<AnyMap>
-	);
+	const validate_result = derived(fields, (values) => validate(values));
 
 	const errors = derived(validate_result, (result) => {
 		if (result.errors) {
@@ -48,14 +57,18 @@ export function createValidationClient(opts: CreateClientOption): FormValidation
 
 	const errs = writable<Record<string, string>>({});
 
-	function setErrors(new_errs: Record<string, AnyError> | undefined | null, use_localize = true) {
+	function apply_locale(lang: string, errors: ErrorMap, update: () => void) {
+		const result = localize(lang, Object.values(errors).filter(Boolean) as AjvError[]);
+		result?.finally(update);
+	}
+
+	function setErrors(new_errs: ErrorMap | undefined | null, use_localize = true) {
 		const update = () => {
 			errs.set(new_errs ? objectMap(new_errs, (err) => err?.message || "") : {});
 		};
 
 		if (BROWSER && lang && new_errs && use_localize) {
-			const result = localize(lang, Object.values(new_errs));
-			result?.finally(update);
+			apply_locale(lang, new_errs, update);
 			return;
 		}
 		update();
@@ -64,8 +77,8 @@ export function createValidationClient(opts: CreateClientOption): FormValidation
 	const loading = writable(false);
 
 	const unsubscribe_page = page.subscribe(({ form }) => {
-		const form_result = form?.[`__form_${action}`];
-		if (form_result) {
+		const form_result = form as FormResult;
+		if (form_result?.action == action) {
 			const { input, errors: form_errors } = form_result;
 			if (input) {
 				fields.set(input);
@@ -86,15 +99,17 @@ export function createValidationClient(opts: CreateClientOption): FormValidation
 		if (form_errors && field) {
 			const update = () => {
 				errs.update((errs) => {
-					errs[field] = form_errors[field]?.message;
+					const err = form_errors[field];
+					if (err) {
+						errs[field] = err.message;
+					}
 
 					return errs;
 				});
 			};
 
 			if (BROWSER && lang && form_errors) {
-				const result = localize(lang, Object.values(form_errors));
-				result?.finally(update);
+				apply_locale(lang, form_errors, update);
 				return;
 			}
 			update();
@@ -192,7 +207,24 @@ export function createValidationClient(opts: CreateClientOption): FormValidation
 		action_url: `${action == "default" ? "?" : `?/${action}`}${
 			locale ? `&locale=${locale}` : ""
 		}`,
-		schema: validate.schema,
+		schema: validate.schema as any,
 		id: form_id
+	};
+}
+
+export function defineGenerated<Data>(
+	action: string,
+	id: string,
+	validate: AjvCompiledValidationFunction,
+	localize: Localize
+) {
+	return (opts: GeneratedClientOptions<Data> = {}) => {
+		return createValidationClient({
+			validate: createAjvValidateFn<Data>(validate, true),
+			action,
+			form_id: id,
+			localize,
+			...opts
+		});
 	};
 }

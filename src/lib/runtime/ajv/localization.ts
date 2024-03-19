@@ -1,8 +1,24 @@
-import type { AnyError, AnyRequestEvent } from "$lib/types.js";
+import type { AnyRequestEvent } from "$lib/types.js";
 import type { RequestEvent } from "@sveltejs/kit";
 import ajvLocales from "./locales.js";
+import type { AjvError } from "./index.js";
+import type { MaybePromise } from "$lib/shared/utils.js";
 
-export function localize(event: AnyRequestEvent, errors: AnyError[], lang?: string | boolean) {
+export type Localize = (
+	lang: string,
+	errors: AjvError[] | undefined | null,
+	event?: RequestEvent
+) => MaybePromise<void>;
+
+export function localize(
+	event: AnyRequestEvent,
+	errors: AjvError[] | undefined | null,
+	lang?: string | boolean
+) {
+	if (!errors) {
+		return;
+	}
+
 	const locale = lang ? String(lang) : event.url.searchParams.get("locale");
 	const { validation } = event.locals;
 

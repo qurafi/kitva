@@ -5,9 +5,10 @@ import { errorMessages } from "./messages";
 export async function localize(
 	lang: string,
 	errors: AjvError[] | null | undefined,
-	event: RequestEvent
+	event?: RequestEvent
 ) {
-	// localize native ajv messages
+	if (!errors) return;
+
 	const locale = getAjvLang(lang);
 
 	const localize = await ajvLocales[locale]();
@@ -17,9 +18,6 @@ export async function localize(
 			return value.keyword !== "errorMessage";
 		})
 	);
-
-	// your own localization logic
-	if (!errors) return;
 
 	for (const error of errors as DefinedError[]) {
 		if (error.keyword == "errorMessage") {

@@ -6,7 +6,6 @@ export const POST = {
 
 export const actions = {
 	default: {
-		//TODO validate actions schema to only allow 1D objects
 		type: "object",
 		properties: {
 			a: { type: "string" }

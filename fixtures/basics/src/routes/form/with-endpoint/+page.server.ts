@@ -1,7 +1,6 @@
-import { withValidation } from "./$form";
-import type { Actions } from "./$types2";
+import { withValidation } from "./schemas.out";
 
-export const actions: Actions = withValidation({
+export const actions = withValidation({
 	default(event) {
 		console.log(event.locals.validation);
 		return { success: true };

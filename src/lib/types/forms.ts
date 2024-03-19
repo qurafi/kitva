@@ -1,20 +1,20 @@
-import type { GLOBAL_ERROR } from "$lib/runtime/ajv/index.js";
-import type { RequestEvent } from "@sveltejs/kit";
+import type { AjvError, GLOBAL_ERROR } from "$lib/runtime/ajv/index.js";
 import type { ActionReturn } from "svelte/action";
 import type { Readable, Writable } from "svelte/store";
-import type { AnyError, AnyMap, ValidationResult } from "../types.js";
-import type { GetFormErrors, ValidateFn } from "./hooks.js";
-import type { MaybePromise } from "$lib/shared/utils.js";
+import type { AnyMap, ValidationResult } from "../types.js";
+import type { ValidateFnCompiled } from "./hooks.js";
+import type { JSONSchemaType } from "ajv";
+import type { Localize } from "$lib/runtime/ajv/localization.js";
 
-type TGLOBAL_ERROR = typeof GLOBAL_ERROR;
+export type TGlobalError = typeof GLOBAL_ERROR;
 
-export interface FormValidationClient<Data = AnyMap, Error extends AnyError = AnyError> {
+export interface FormValidationClient<Data = AnyMap> {
 	/** Contains
 	 * ```typescript
 	 * {valid:boolean, data: Data, errors: Record<string, Error>, input: AnyMap}
 	 * ```
 	 **/
-	result: Readable<ValidationResult<Data, Error>>;
+	result: Readable<ValidationResult<Data>>;
 
 	loading: Readable<boolean>;
 
@@ -22,16 +22,16 @@ export interface FormValidationClient<Data = AnyMap, Error extends AnyError = An
 	fields: Writable<Partial<Record<keyof Data, any>>>;
 
 	/**
-	 * Optmized error messages for UI
-	 * - errors are set to the specific field user start typing into
-	 * - errors are delayed 250ms after the start of typing
+	 * UI Optimized error messages
+	 * - Appear when user start typing into the field
+	 * - Delayed 250ms
 	 *
 	 * NOTE: if you want to access directly the raw errors, use ${@link errors}
 	 *
 	 * */
-	errs: Readable<Partial<Record<keyof Data | TGLOBAL_ERROR, string>>>;
+	errs: Readable<Partial<Record<keyof Data | TGlobalError, string>>>;
 
-	errors: Readable<Partial<Record<keyof Data | TGLOBAL_ERROR, Error>> | undefined>;
+	errors: Readable<Partial<Record<keyof Data | TGlobalError, AjvError>> | undefined>;
 
 	validateForm(field?: string): void;
 
@@ -40,10 +40,10 @@ export interface FormValidationClient<Data = AnyMap, Error extends AnyError = An
 
 	id: string;
 
-	schema: Record<string, any>;
+	schema: JSONSchemaType<Data>;
 }
 
-export interface ClientOptions<Data extends AnyMap = AnyMap> {
+export interface ClientOptions<Data> {
 	fields?: Partial<Data>;
 	use_enhance?: boolean;
 	use_storage?: boolean;
@@ -52,25 +52,29 @@ export interface ClientOptions<Data extends AnyMap = AnyMap> {
 	locale?: string | boolean;
 }
 
-export interface CreateClientOption extends ClientOptions {
-	validate: ValidateFn;
+export interface CreateClientOption<Data> extends ClientOptions<Data> {
+	validate: ValidateFnCompiled<Data>;
 	action: string;
-	getFormErrors: GetFormErrors;
 	localize: Localize;
 }
 
-export type Localize = (
-	lang: string,
-	errors: AnyError[] | undefined | null,
-	event?: RequestEvent
-) => MaybePromise<void>;
+export type GeneratedClientOptions<Data> = Omit<ClientOptions<Data>, "form_id">;
 
-export type GeneratedValidationClient<
-	Data extends AnyMap = AnyMap,
-	Errors extends AnyError = AnyError
-> = (options?: GeneratedClientOptions<Data>) => FormValidationClient<Data, Errors>;
+export type GeneratedValidationClient<Data> = (
+	options?: GeneratedClientOptions<Data>
+) => FormValidationClient<Data>;
 
-export type GeneratedClientOptions<Data extends AnyMap = AnyMap> = Omit<
-	ClientOptions<Data>,
-	"form_id"
->;
+export type FormResult<Name extends string = string, Data = AnyMap> = {
+	action: Name;
+	input: Record<keyof Data, any>;
+	errors?: Record<keyof Data, AjvError | undefined>;
+};
+
+export type FormResults<T, Data> = {
+	[k in keyof T]: T[k] extends (...args: any) => any
+		? (
+				event: Parameters<T[k]>[0]
+		  ) => Awaited<ReturnType<T[k]>> &
+				FormResult<k & string, k extends keyof Data ? Data[k] : never>
+		: never;
+};

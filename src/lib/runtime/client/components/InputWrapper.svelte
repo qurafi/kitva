@@ -1,6 +1,4 @@
 <script lang="ts" generics="FormDefs">
-	import type { AjvError } from "$lib/index.js";
-
 	/* global FormDefs */
 	import type { ErrorLabelProp, LabelProp } from "./index.js";
 	import { getContext } from "svelte";
@@ -11,7 +9,7 @@
 
 	type ExtractWritable<T> = T extends Writable<infer R> ? R : never;
 
-	type FormType = FormValidationClient<FormDefs, AjvError>;
+	type FormType = FormValidationClient<FormDefs>;
 
 	type $$Props = {
 		form: FormType;

@@ -1,3 +1,5 @@
+import { LIB_NAME } from "./constants.js";
+
 export type AnyMap = Record<string, any>;
 export type MaybePromise<T> = Promise<T> | T;
 
@@ -28,9 +30,10 @@ export function objectMap(obj: AnyMap, map: (value: any, prop: string) => any) {
 
 	return new_obj;
 }
+export class KitvaError extends Error {
+	name = `${LIB_NAME}Error`;
+}
 
-export function KitvaError(message: string) {
-	const err = new Error(message);
-	err.name = "KitvaError";
-	return err;
+export function isObject(x: unknown): x is Record<string, any> {
+	return !!x && typeof x == "object" && !Array.isArray(x);
 }
