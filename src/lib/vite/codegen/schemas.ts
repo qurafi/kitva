@@ -102,7 +102,11 @@ export async function generateTypes(
 
 			body.push(
 				CLIENT_STATIC_CODE,
-				forms.map((form) => generateFormClientFunction(form)).join("\n\n")
+				forms.map((form) => generateFormClientFunction(form)).join("\n\n"),
+				`export const Forms = {\n${forms
+					.map((form) => `${form}: "${form}"`)
+					.join(",\n")}\n} as const;`,
+				`export type Forms = keyof typeof Forms;`
 			);
 		}
 	}
