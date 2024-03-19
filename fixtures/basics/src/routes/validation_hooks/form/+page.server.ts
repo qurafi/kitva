@@ -5,9 +5,12 @@ export const actions = withValidation({
 	default: (event) => {
 		const { data } = event.locals.validation.body;
 		if (data) {
+			//TODO test passing formFailure with extra data
 			if (data.password == "123456") {
 				return formFailure(event, {
-					password: "password should not be 123456"
+					errors: {
+						password: "password should not be 123456"
+					}
 				});
 			}
 

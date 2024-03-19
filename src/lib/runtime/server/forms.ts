@@ -1,5 +1,5 @@
 import { dev } from "$app/environment";
-import { GLOBAL_ERROR, errorObject } from "$lib/runtime/ajv/index.js";
+import { GLOBAL_ERROR, createAjvErrorObject } from "$lib/runtime/ajv/index.js";
 import { localize } from "$lib/runtime/ajv/localization.js";
 import { warn } from "$lib/shared/logger.server.js";
 import { KitvaError, objectMap } from "$lib/shared/utils.js";
@@ -47,15 +47,17 @@ const FormFailureSymbol = Symbol("FormFailureSymbol");
 
 export async function formFailure<T extends AnyRequestEvent = AnyRequestEvent>(
 	event: T,
-	errors: ErrorOfFields<T> | string
+	errors_or_res: { errors: ErrorOfFields<T> | string; data?: Record<string, any> } | string
 ) {
 	const action = event.locals.action! as ExtractActionName<T>;
 
 	if (!action) {
 		throw new KitvaError(
-			"event.locals.action is undefined. Make sure to call formFailure inside action or set up validation hook correctly"
+			"event.locals.action is undefined. Make sure to call formFailure inside action or set up the hook correctly"
 		);
 	}
+
+	let errors = typeof errors_or_res == "string" ? errors_or_res : errors_or_res.errors;
 
 	if (typeof errors == "string") {
 		errors = {
@@ -64,7 +66,7 @@ export async function formFailure<T extends AnyRequestEvent = AnyRequestEvent>(
 	}
 
 	const error_map = objectMap(errors, (value, prop) => {
-		return errorObject(prop, value);
+		return createAjvErrorObject(prop, value);
 	});
 
 	await localize(event, Object.values(error_map));
@@ -72,7 +74,8 @@ export async function formFailure<T extends AnyRequestEvent = AnyRequestEvent>(
 	const result = {
 		action,
 		input: event.locals.validation?.body?.input,
-		errors: error_map
+		errors: error_map,
+		...(typeof errors_or_res == "object" && errors_or_res.data)
 	} as FormResult<typeof action>;
 
 	Object.defineProperty(result, FormFailureSymbol, {
