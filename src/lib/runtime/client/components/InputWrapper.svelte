@@ -76,7 +76,7 @@
 		attrs: {
 			...config.labelProps,
 			...labelProps,
-			id: input_id
+			for: input_id
 		}
 	};
 
