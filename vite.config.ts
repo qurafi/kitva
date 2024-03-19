@@ -4,8 +4,6 @@ import { defineConfig } from "vitest/config";
 export default defineConfig({
 	plugins: [sveltekit()],
 	test: {
-		// singleThread: true,
-		threads: true,
 		include: ["{src,tests}/**/*.{test,spec}.{js,ts}"]
 	}
 });
