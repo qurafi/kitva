@@ -5,12 +5,11 @@ import { getAjvLang, ajvLocales } from "kitva";
  * Mutate the error directly (error.message = "message")
  * lang is provided by the client instance, if true provided it will be the auto detected language
  * Discard lang arg if you want to use custom language detection
- * @param {string} lang
- * @param {import("kitva").AjvError} errors
- * @param {import("@sveltejs/kit").RequestEvent} event
- */
+ * @type {import("kitva").Localize}
+ * */
+export const localize = async (lang, errors, _event) => {
+	if (!errors) return;
 
-export async function localize(lang, errors, event) {
 	// localize native ajv messages
 	const locale = getAjvLang(lang);
 
@@ -19,18 +18,17 @@ export async function localize(lang, errors, event) {
 	localize(errors?.filter((err) => err.keyword !== "errorMessage"));
 
 	// your own localization logic
-	if (!errors) return;
 
-	for (const error of /** @type {import("kitva").DefinedError[]} errors */ (errors)) {
+	for (const error of /** @type {import("kitva").DefinedError[]} errors */ errors) {
 		if (error.keyword == "errorMessage") {
 			// custom error message
 		} else {
-			// ajv built-in:
-			switch (error.keyword) {
-				case "format":
-					error.message = `must be valid ${error.params.format}`;
-					break;
-			}
+			// // ajv built-in:
+			// switch (error.keyword) {
+			// 	case "format":
+			// 		error.message = `must be valid ${error.params.format}`;
+			// 		break;
+			// }
 		}
 	}
-}
+};

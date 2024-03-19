@@ -1,5 +1,4 @@
-import type { RequestEvent } from "@sveltejs/kit";
-import { type AjvError, getAjvLang, ajvLocales, type DefinedError } from "kitva";
+import { getAjvLang, ajvLocales, type DefinedError, type Localize } from "kitva";
 
 /**
  * Runs on both client and server
@@ -7,11 +6,7 @@ import { type AjvError, getAjvLang, ajvLocales, type DefinedError } from "kitva"
  * lang is provided by the client instance, if true provided it will be the auto detected language
  * Discard lang arg if you want to use custom language detection
  * */
-export async function localize(
-	lang: string,
-	errors: AjvError[] | null | undefined,
-	event: RequestEvent
-) {
+export const localize: Localize = async (lang, errors, _event) => {
 	// localize native ajv messages
 	const locale = getAjvLang(lang);
 
@@ -34,4 +29,4 @@ export async function localize(
 			// }
 		}
 	}
-}
+};
