@@ -24,7 +24,7 @@ import type { Localize } from "../ajv/localization.js";
 
 export function createValidationClient<Data = any>(
 	opts: CreateClientOption<Data>
-): FormValidationClient<any> {
+): FormValidationClient<Data> {
 	const defaults = config.instanceDefaults;
 	const default_opts = typeof defaults == "function" ? defaults(opts) : defaults;
 
@@ -119,7 +119,9 @@ export function createValidationClient<Data = any>(
 	}
 
 	let timeout: any;
+	let modified = false;
 	function onInput(e: Event) {
+		modified = true;
 		const target = e.target as HTMLElement;
 		const name = target?.getAttribute("name");
 		if (!name) return;
@@ -140,11 +142,11 @@ export function createValidationClient<Data = any>(
 
 	if (warn_user) {
 		beforeNavigate((nav) => {
-			if (!current_form || vite_hmr_reload) {
+			if (!submitting || !modified || !current_form || vite_hmr_reload) {
 				return;
 			}
 
-			if (!confirm("Are sure you want to leave?") && !submitting) {
+			if (!confirm("Are sure you want to leave?")) {
 				nav.cancel();
 			}
 		});
@@ -180,7 +182,7 @@ export function createValidationClient<Data = any>(
 					await update();
 
 					if (result.type == "success") {
-						fields.set({});
+						fields.set(initial_fields);
 					}
 				};
 			});
@@ -198,10 +200,10 @@ export function createValidationClient<Data = any>(
 
 	return {
 		result: validate_result,
-		fields,
+		fields: fields as any,
 		loading: readonly(loading),
-		errs: readonly(errs),
-		errors,
+		errs: readonly(errs) as any,
+		errors: errors as any,
 		validateForm,
 		action: svelte_action,
 		action_url: `${action == "default" ? "?" : `?/${action}`}${
