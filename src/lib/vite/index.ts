@@ -1,5 +1,4 @@
 import { unpluginAjvTools, type PluginOptions as AjvToolsOptions } from "ajv-build-tools";
-import type { Plugin } from "vite";
 import { typeGenPlugin } from "./codegen/index.js";
 import { routeSchemasResolver, resolveZodSchemas, resolveLibSchemas } from "./resolvers.js";
 
@@ -7,7 +6,7 @@ interface PluginOptions {
 	ajvTools?: Partial<AjvToolsOptions>;
 }
 
-export function vitePluginSvelteKitva(opts?: PluginOptions): Plugin[] {
+export function vitePluginSvelteKitva(opts?: PluginOptions) {
 	const ajvTools = unpluginAjvTools.vite({
 		...opts?.ajvTools,
 		ajvOptions: {
@@ -31,5 +30,5 @@ export function vitePluginSvelteKitva(opts?: PluginOptions): Plugin[] {
 		]
 	});
 
-	return [ajvTools].flat();
+	return ajvTools;
 }
