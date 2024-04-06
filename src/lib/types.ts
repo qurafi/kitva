@@ -1,17 +1,17 @@
 import type { RequestEvent } from "@sveltejs/kit";
 
-import type { HttpPart } from "./shared/constants.js";
+import type { HttpPart, HttpMethod } from "./shared/constants.js";
 import type { AjvError } from "./index.js";
 import type { GLOBAL_ERROR } from "./runtime/ajv/index.js";
 import type { Localize } from "./runtime/ajv/localization.js";
+
+export type { AjvError, HttpMethod, HttpPart };
 
 export type JSONType = number | boolean | string | null | JSONType[] | AnyMap;
 
 export type AnyValue = JSONType;
 export type AnyMap = { [key: string]: JSONType };
 
-/** default type for parsed request parts */
-export type DefaultData = Record<HttpPart, any>;
 export type AnyDefaultData = Partial<Record<HttpPart, any>>;
 
 export type ErrorMap = Record<string, AjvError | null | undefined>;
