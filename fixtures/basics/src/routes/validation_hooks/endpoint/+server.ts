@@ -1,8 +1,8 @@
 import { json } from "@sveltejs/kit";
 import { handleValidate } from "kitva/server";
-import type { POSTHandler } from "./schemas.out";
+import type { POSTEvent } from "./schemas.out";
 
-export const POST: POSTHandler = async (event) => {
+export const POST = async (event: POSTEvent) => {
 	const result = {
 		your_input: event.locals.validation.body.input
 	};
@@ -10,7 +10,6 @@ export const POST: POSTHandler = async (event) => {
 	return json(result);
 };
 
-//TODO fix typing
 handleValidate(POST, async ({ input, validate, event }) => {
 	if (event.url.searchParams.has("novalidate")) {
 		return false;

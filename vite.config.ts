@@ -3,7 +3,12 @@ import { defineConfig } from "vitest/config";
 
 export default defineConfig({
 	plugins: [sveltekit()],
+	clearScreen: false,
 	test: {
-		include: ["{src,tests}/**/*.{test,spec}.{js,ts}"]
+		typecheck: {
+			include: ["fixtures/basics/src/**/*.test-d.ts"]
+		},
+		include: ["{src,tests}/**/*.{test,spec}.{js,ts}"],
+		watchExclude: ["tests/cli/fixtures/**", "**/node_modules/**, **/dist/**"]
 	}
 });

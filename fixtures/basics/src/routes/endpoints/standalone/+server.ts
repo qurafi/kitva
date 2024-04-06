@@ -1,5 +1,5 @@
-import type { POSTHandler } from "./generated/types";
+import type { POSTEvent } from "./schemas.out";
 
-export const POST: POSTHandler = async (event) => {
+export const POST = async (event: POSTEvent) => {
 	return new Response("ok");
 };

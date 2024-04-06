@@ -6,8 +6,14 @@ export default defineConfig({
 	server: {
 		port: 8180
 	},
+	preview: {
+		port: 8180
+	},
 	build: {
 		minify: false
 	},
-	plugins: [sveltekit() as any, vitePluginSvelteKitva()]
+	plugins: [sveltekit() as any, vitePluginSvelteKitva()],
+	resolve: {
+		dedupe: ["@sveltejs/kit"]
+	}
 });
