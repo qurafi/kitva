@@ -1,4 +1,4 @@
-import { blue, bold, green, yellow, dim, red } from "kleur/colors";
+import { blue, bold, green, yellow, dim } from "kleur/colors";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import path, { dirname, join, resolve } from "node:path";
 import { addVitePlugin } from "./edit_vite_config.js";
