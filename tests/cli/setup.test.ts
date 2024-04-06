@@ -1,8 +1,8 @@
 import { afterAll, beforeAll, it } from "vitest";
 import { create } from "create-svelte";
-import { readFile, rm, writeFile } from "node:fs/promises";
+import { rm } from "node:fs/promises";
 import path, { basename, relative, resolve } from "node:path";
-import { ChildProcess, spawn } from "node:child_process";
+import { ChildProcess, execSync, spawn } from "node:child_process";
 
 const fixtures = <const>[
 	{ types: null, template: "default" },
@@ -22,6 +22,7 @@ for (const fixture of fixtures /* .slice(0, 1) */) {
 		{ timeout: process.env.CI ? 60000 : 20000, retry: 0 },
 		async () => {
 			await rmProject(project);
+
 			await create(project, {
 				name: "test",
 				template: fixture.template,
@@ -33,18 +34,11 @@ for (const fixture of fixtures /* .slice(0, 1) */) {
 				svelte5: false
 			});
 
-			const pkg_path = resolve(project, "package.json");
-			const pkg = JSON.parse(await readFile(pkg_path, "utf-8"));
-			(pkg.dependencies ??= {}).kitva = "latest";
-			pkg.dependencies.ajv = "8";
+			const kitva_path = relative(project, process.cwd());
 
-			pkg.pnpm = {
-				overrides: {
-					kitva: "link:" + relative(project, process.cwd())
-				}
-			};
-
-			await writeFile(pkg_path, JSON.stringify(pkg, null, 2));
+			execSync(`pnpm link ${kitva_path} && pnpm kitva -y`, {
+				cwd: project
+			});
 
 			await testFixture(project);
 
@@ -71,8 +65,10 @@ function testFixture(project: string) {
 	return new Promise<void>((resolve, reject) => {
 		const script = path.resolve(__dirname, "./validate_generated_template.js");
 		const subprocess = spawn("node", [script], {
-			cwd: project,
-			stdio: "inherit"
+			cwd: project
+		});
+		subprocess.stdout.on("data", (chunk) => {
+			console.log("Subprocess:", chunk.toString("utf-8"));
 		});
 		processes.push(subprocess);
 		subprocess.on("error", reject);
