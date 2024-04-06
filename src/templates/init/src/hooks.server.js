@@ -1,5 +1,4 @@
-import schemas from "$schemas?t=all";
-import { getValidationHook } from "kitva/server";
+import { validationHook } from "kitva/server";
 import { sequence } from "@sveltejs/kit/hooks";
 import { localize } from "./lib/validation/localization.js";
 
@@ -8,5 +7,5 @@ const mainHandle = async ({ event, resolve }) => {
 	return resolve(event);
 };
 
-const validationHook = getValidationHook(schemas, { localize });
-export const handle = sequence(validationHook, mainHandle);
+const handleValidation = validationHook({ localize });
+export const handle = sequence(handleValidation, mainHandle);

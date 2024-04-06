@@ -85,3 +85,8 @@ export function createAjvErrorObject(prop: string, message: string) {
 		message
 	};
 }
+export function getSingleError(errors: AjvError[], part: string) {
+	const e = errors?.[0];
+	const message = e ? `${part}${e.instancePath || ""} ${e.message}` : `${part} validation error`;
+	return { ...e, message };
+}

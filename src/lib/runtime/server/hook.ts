@@ -1,5 +1,5 @@
 import { HTTP_PARTS, type HttpMethod, type HttpPart } from "$lib/shared/constants.js";
-import type { Handle, RequestEvent } from "@sveltejs/kit";
+import { json, type Handle, type RequestEvent } from "@sveltejs/kit";
 import { DEV } from "esm-env";
 import type { EventWithValidation, ValidationResults } from "$lib/types.js";
 import type { ValidationOptions } from "../../types/hooks.js";
@@ -7,7 +7,9 @@ import { validation_hooks } from "./handleValidate.js";
 import { is_endpoint_request } from "./utils/http.js";
 import { getActionName, getRequestContent, getRouteSrc, type Modules } from "./utils/server.js";
 import { KitvaError } from "$lib/shared/utils.js";
-import { getFormErrors } from "../ajv/index.js";
+import { getFormErrors, getSingleError } from "../ajv/index.js";
+import { endpointValidationResponse } from "./endpoints.js";
+import { getValidationFunction } from "./index.js";
 
 const routes = import.meta.glob("/src/routes/**/*.{ts,js,svelte}") as Modules;
 
@@ -51,8 +53,6 @@ async function validateRequest(
 	}
 	const action_name = is_form ? getActionName(event.url.search) : undefined;
 
-	const { getEndpointError, getValidation } = opts;
-
 	const inputs = await getRequestContent(event);
 
 	const validation = <ValidationResults>{
@@ -68,7 +68,7 @@ async function validateRequest(
 	event.locals.action = action_name;
 
 	async function validatePart(part: HttpPart) {
-		const validate = await getValidation({
+		const validate = await getValidationFunction({
 			isEndpoint: is_endpoint as any,
 			routeId: routeId!,
 			module: schema_module!,
@@ -101,7 +101,10 @@ async function validateRequest(
 			for (const part of HTTP_PARTS) {
 				const result = await validatePart(part);
 				if (result && !result.valid) {
-					response = getEndpointError(result.errors, part);
+					response = json(
+						endpointValidationResponse(getSingleError(result.errors, part)),
+						{ status: 400 }
+					);
 					return;
 				}
 			}
