@@ -5,6 +5,7 @@ import { warn } from "$lib/shared/logger.server.js";
 import { KitvaError, objectMap } from "$lib/shared/utils.js";
 import type { FormResult } from "$lib/types/forms.js";
 import type { ErrorOfFields, ExtractActionName } from "$lib/types/utils.js";
+import { fail } from "@sveltejs/kit";
 import type { AnyActions, AnyRequestEvent } from "../../types.js";
 
 const reserved = ["action", "input", "errors"];
@@ -18,11 +19,11 @@ export function withValidation<T extends AnyActions = AnyActions>(actions: T) {
 			if (validation && !validation.valid && validation.body?.valid === false) {
 				await localize(event, validation.body.errors);
 
-				return {
+				return fail(400, {
 					action: name,
 					input: validation.body.input,
 					errors: validation.formErrors
-				};
+				});
 			}
 
 			const result = await action(event as never);
@@ -37,7 +38,8 @@ export function withValidation<T extends AnyActions = AnyActions>(actions: T) {
 					)} are reserved.`
 				);
 			}
-			return { action: name, ...result };
+			result.action = name;
+			return result;
 		};
 	}
 	return new_actions as T;
@@ -71,12 +73,12 @@ export async function formFailure<T extends AnyRequestEvent = AnyRequestEvent>(
 
 	await localize(event, Object.values(error_map));
 
-	const result = {
+	const result = fail(400, {
 		action,
 		input: event.locals.validation?.body?.input,
 		errors: error_map,
 		...(typeof errors_or_res == "object" && errors_or_res.data)
-	} as FormResult<typeof action>;
+	} as FormResult<typeof action>);
 
 	Object.defineProperty(result, FormFailureSymbol, {
 		enumerable: false,
